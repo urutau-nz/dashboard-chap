@@ -1,292 +1,330 @@
+/* ==== MODULAR IMPORTS (EXPERIMENTAL!) ==== */
 
-elos_list = [['No change - business as usual', 'As stored in individual homes, provided by FMCG suppliers who are still operating, or emergency food supply brought in with priority to vulnerable people', 'Access to a supplied supermarket or distribution point  within 2km  following an event for urban areas', '', 'Access to a supplied supermarket or distribution point within 2km in urban areas', 'At least 80% of individuals receive at least 80% of ‘BAU’ delivery'],
-['No change - business as usual', 'Minimum of 3 litres per person per day , but recommended 20 litres per person per day, as stored at homes by individuals', '15-20 litres of potable  water per person per day  within 1km of the house', '', '80% of supply of potable water to 80% of customers', 'At least 80% of individuals receive at least 80% of ‘BAU’ delivery'],
-['No change - business as usual', 'Walking access available', 'Walking access available, mobile phone charging & limited wifi', '', 'Walking access available, mobile phone charging & limited wifi', 'Walking access available, mobile phone charging & limited wifi'],
-['No change - business as usual', 'Walking access available', 'Walking access available', '', 'Walking access available','Walking access available'],
-['No change - business as usual', 'Access to priority users only', 'Access to priority users only', '', 'Walking access available to priority fuel stations','At least 80% of individuals receive at least 80% of ‘BAU’ delivery']]
-
-
-
-
-/* ==== LOAD DISTANCES DATA ==== */
-
-var distances = [];
-var distances_loaded = false;
-
-var blocks = [];
-var blocks_loaded = false;
-
-var destinations = [];
-var destinations_loaded = false;
-
-var islands;
-var islands_loaded = false;
-
-function checkLoaded() {
-  return distances_loaded && blocks_loaded && destinations_loaded && islands_loaded;
-}
-
-var url = 'https://raw.githubusercontent.com/urutau-nz/wremo/master/data/results/distances.csv'; 
-d3.csv(url, ({geoid, dest_type, distance, time}) => ({geoid: geoid, dest_type: dest_type, distance: +distance/1000, time:+time}), function(error, json) 
-  {
-    if(error)
-    {
-      return console.error(error);
-    }
-    distances = json;
-    distances_loaded = true;
-
-    if (DEBUGGING) {
-        console.log("Distances Imported");
-        console.log(distances);
-    };
-    
-    if (checkLoaded()) {
-        updateMap("supermarket", "0");
-    }
-  });
-
-
-/* ==== LOAD BLOCKS DATA ==== */
-
-var url = 'https://raw.githubusercontent.com/urutau-nz/wremo/master/data/results/blocks.topojson'; 
-d3.json(url, function(error, json) 
-  {
-    if(error)
-    {
-      return console.error(error);
-    }
-    blocks = json;
-    blocks_loaded = true;
-
-    // This removes the duplicate geometry ids, by finding the point at which it starts looping,
-    // and cutting the geometries off there.
-    var prev = [];
-    var filtered_geometries = [];
-    for (geometry_id in blocks.objects.data.geometries){
-        prop_id = blocks.objects.data.geometries[geometry_id].properties.id;
-        if (!prev.includes(prop_id)) {
-            prev.push(prop_id);
-            filtered_geometries.push(blocks.objects.data.geometries[geometry_id]);
-        }
-    }
-    blocks.objects.data.geometries = filtered_geometries;
-
-    if (DEBUGGING) {
-        console.log("Blocks Imported");
-        console.log(blocks);
-    };
-    
-    if (checkLoaded()) {
-        updateMap("supermarket", "0");
-    }
-  });
-
-  
-
-/* ==== LOAD ISLANDS DATA ==== */
-
-var url = "https://raw.githubusercontent.com/urutau-nz/wremo/master/data/results/islands2.json";
-d3.json(url, function(error, json) {
-  if(error)
-  {
-    return console.error(error);
+class ImportManager {
+  constructor () {
+    this.checks = {};
+    this.outputs = {};
+    this.imports = {};
+    this.has_imports = false;
+    this.oncomplete = (d) => (null);
   }
-  islands = json;
-  islands_loaded = true;
-
-  if (DEBUGGING) {
-      console.log("Islands Imported");
-      console.log(islands);
-  };
-    
-  if (checkLoaded()) {
-      updateMap("supermarket", "0");
-  }
-})
-
-
-
-
-/* ==== LOAD DESTINATIONS DATA ==== */
-
-var url = 'https://raw.githubusercontent.com/urutau-nz/wremo/master/data/results/destinations.csv';
-d3.csv(url, d3.autoType, function(error, json) {
-  if(error)
-  {
-    return console.error(error);
-  }
-  destinations = json;
-  destinations_loaded = true;
-
-  if (DEBUGGING) {
-      console.log("Destinations Imported");
-      console.log(destinations);
-  };
-    
-    if (checkLoaded()) {
-        updateMap("supermarket", "0");
+  isFinished() {
+    for (var id in this.checks) {
+      if (!this.checks[id]) return false;
     }
-})
-
-
-
-
-
-
-
-
-/* ==== LOAD HISTROGRAM DATA ==== */
-var histogram_data = [];
-var temp_all_regions = [];
-var url = "https://raw.githubusercontent.com/urutau-nz/wremo/master/data/results/access_bars.csv?";
-d3.csv(url, d3.autoType, function(error, json) {
-    if(error)
-    {
-      return console.error(error);
-    }
-    histogram_data = json;
-  
-    if (DEBUGGING) {
-        console.log("Histogram Data Imported");
-        console.log(histogram_data);
-
-        var all_demos = [];
-        for (data of histogram_data) {
-          if (!all_demos.includes(data.group)) {
-            all_demos.push(data.group);
-          }
-        }
-        console.log(">> Demographics Found: ", all_demos);
-        
-        var all_demos = [];
-        for (data of histogram_data) {
-          if (!all_demos.includes(data.region)) {
-            all_demos.push(data.region);
-            if (!Object.keys(city_bounds).includes(data.region)) {
-              temp_all_regions.push(data.region);
+    return true;
+  }
+  addImport(id, title, type, url, csv_typing = d3.autoType) {
+    this.imports[id] = {'id': id, 'title': title, 'type': type, 'url': url, 'csv_typing': csv_typing};
+    this.checks[id] = false;
+    this.outputs[id] = null;
+    this.has_imports = true;
+  }
+  onComplete(func) {
+    this.oncomplete = func;
+  }
+  runImports() {
+    var onImports = {};
+    var impmod = this;
+    if (this.has_imports) {
+      for (var imp_id in this.imports) {
+        var imp = this.imports[imp_id];
+        var gen = function(imp) {
+          return function(error, json) {
+            if (error) return console.error(error);
+            impmod.outputs[imp.id] = json;
+            impmod.checks[imp.id] = true;
+            if (DEBUGGING) {
+              console.log(imp.title + " Imported");
+              console.log(json);
             }
+            if (impmod.isFinished()) impmod.oncomplete(impmod.outputs);
           }
+        };
+        onImports[imp_id] = gen(imp);
+        if (imp.type == 'csv') {
+          d3.csv(imp.url, imp.csv_typing, onImports[imp_id]);
+        } else if (imp.type == 'json') {
+          d3.json(imp.url, onImports[imp_id]);
         }
-        console.log(">> Regions Found: ", all_demos);
-        console.log(">> New Regions Found: ", temp_all_regions);
-    };
-
-    updateFilteredHistogramData("supermarket", "0", "population");
-})
-
-
-
-/* ==== LOAD PARCEL DESTINATIONS DATA ==== */
-
-var parcel_dists;
-var url = 'https://projects.urbanintelligence.co.nz/wremo/data/parcel_distances.csv';
-d3.csv(url, d3.autoType, function(error, json) {
-  if(error)
-  {
-    return console.error(error);
+      }
+    } else {
+      this.oncomplete({});
+    }
   }
-  parcel_dists = json;
+}
 
-  if (DEBUGGING) {
-      console.log("Parcel destinations Imported");
-      console.log(parcel_dists);
-  };
 
-  $("#simulate_button").addClass("active");
-})
 
-/* ==== LOAD ORIGINS DATA ==== */
+/* MODULAR IMPORTS */
 
-var origins;
-var url = 'https://raw.githubusercontent.com/urutau-nz/wremo/master/data/results/origins.csv';
-d3.csv(url, d3.autoType, function(error, json) {
-  if(error)
-  {
-    return console.error(error);
-  }
-  origins = json;
+var import_manager = new ImportManager();
+/*
+import_manager.addImport('isolation_county', 'Isolated County Pops', 'csv', 
+    'https://raw.githubusercontent.com/urutau-nz/dashboard-slr-usa/master/data/results/isolation_county.csv',
+    (d) => ({geoid: d.geoid_county, year: +d.year, rise: +d.rise, pop: +d.count}));
+*/
+import_manager.addImport('ses_public', 'Sites of Eco Sig Public', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/ses_a.json');
 
-  if (DEBUGGING) {
-      console.log("Origins Imported");
-      console.log(origins);
-  };
-})
+import_manager.addImport('ses_private', 'Sites of Eco Sig Private', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/ses_b.json'); 
+
+import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/adaptation_priority_areas.json');
+
+
+import_manager.onComplete(importsComplete);
+import_manager.runImports();
+
+var ses_public;
+var ses_private;
+var priority_areas;
+
+function importsComplete(imports) {
+  ses_public = imports['ses_public'];
+  ses_private = imports['ses_private'];
+  priority_areas = imports['priority_areas'];
+
+
+  new DataLayer('temp1',
+      'Placeholder',
+      'Built',
+      '#B40',
+      null
+    );
+
+  new DataLayer('ses_public',
+        'Public Sites of E.S.',
+        'Nature',
+        '#0B8',
+        ses_public
+      );
+  new DataLayer('ses_private',
+        'Private Sites of E.S.',
+        'Nature',
+        '#8B0',
+        ses_private
+      );
+  new DataLayer('priority_areas',
+        'Adaptation Priority Areas',
+        'Nature',
+        '#B40',
+        priority_areas
+      );
+
+
+  new DataLayer('temp2',
+      'Placeholder',
+      'Social',
+      '#B40',
+      null
+    );
+
+  new DataLayer('temp3',
+    'Placeholder',
+    'Cultural',
+    '#B40',
+    null
+  );
+
+  initMap();
+}
+
 
 
 
 
   
 
-/* Updates filtered_distances to distances filtered by the user's current selections.
-Params:
-  amenity - String code for an amenity.
-  time - String of integer 0-6, representing time passed after the disaster.
+/* ==== DATALAYER DEFINITION ==== */
+/* - Used to control adding & removing layers of topojson data 
 */
-var filtered_distances = [];
-var distances_by_geoid = {};
-function updateFilteredDistances(amenity, time) {
-    filtered_distances = distances.filter(d => d.dest_type == amenity && d.time == time);
-    distances_by_geoid = Object.assign({}, ...filtered_distances.map((d) => ({[d.geoid]: d.distance})));
+var available_layers = {};
 
-    if (DEBUGGING) {
-        console.log("Updated Filtered Distances");
-        console.log(">> " + amenity);
-        console.log(">> " + time);
-        console.log(filtered_distances);
-    };
+class DataLayer {
+  constructor(id, name, category, color, topojson, style_func=null) {
+    available_layers[id] = this;
+
+    this.id = id;
+    this.name = name;
+    this.category = category;
+    this.topojson = topojson;
+    this.color = color;
+
+    this.layer = null;
+    this.style_func = style_func;
+
+    this.opacity = 0.2;
+
+    this.default_style = this.default_style_generator();
+    this.onEachFeature = this.onEachFeatureGenerator();
+  }
+  onEachFeatureGenerator() {
+    var myself = this;
+    return function (feature, layer) { 
+      layer.on({
+          mouseover: function() {
+              myself.layer.setStyle({
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0.5
+              });
+          },
+          mouseout: function() {
+            myself.layer.setStyle({
+              weight: 2,
+              opacity: myself.opacity,
+              fillOpacity: myself.opacity
+            });
+          }
+      });
+    }
+  }
+  default_style_generator () {
+    var myself = this;
+    return function (feature) { return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; }
+  }
+  display () {
+    if (!this.layer && this.topojson) {
+      // Find GeometryCollection in topojson
+      var geomCollection = this.topojson.objects[Object.keys(this.topojson.objects)[0]];
+      //Create layer, converting topojson to geojson
+      this.layer = L.geoJSON(topojson.feature(this.topojson, geomCollection), 
+                {style : (this.style_func ? this.style_func : this.default_style), onEachFeature : this.onEachFeature}
+                );
+      this.layer.addTo(map);
+    }
+  }
+  remove () {
+    if (this.layer) {
+      map.removeLayer(this.layer);
+      this.layer = null;
+    }
+  }
+  update () {
+    if (this.layer) {
+      this.layer.setStyle((this.style_func ? this.style_func : this.default_style));
+    }
+  }
+  blur () {
+    // For Image Layers
+  }
 }
 
+var all_hazards = {};
 
-/* Updates filtered_destinations to destinations filtered by the user's current selections.
-Params:
-  amenity - String code for an amenity.
-*/
-var filtered_destinations = [];
-function updateFilteredDestinations(amenity) {
-    filtered_destinations = destinations.filter(d => d.dest_type == amenity);
+class HazardLayer {
+  constructor (id, name, aspect_width, aspect_height, center_lat, center_lng, aspect_lat, aspect_lng) {
+    all_hazards[id] = this;
 
-    if (DEBUGGING) {
-        console.log("Updated Filtered Destinations");
-        console.log(">> " + amenity);
-        console.log(filtered_destinations);
-    };
+    this.id = id;
+    this.name = name;
+
+    this.visible = false;
+
+    this.aspect_width = aspect_width;
+    this.aspect_height = aspect_height;
+
+    this.opacity = 0.2;
+
+    this.center_lat = center_lat;
+    this.center_lng = center_lng;
+
+    this.aspect_lat = aspect_lat;
+    this.aspect_lng = aspect_lng;
+
+    this.last_zoom = null;
+  }
+  calculateTransform() {
+    var bounds = map.getBounds();
+    var lat = bounds._northEast.lat;
+    var lng = bounds._southWest.lng;
+    var zoom = map.getZoom();
+    console.log(bounds, zoom);
+
+    var element = document.getElementById(this.id);
+    console.log(element);
+
+    if (this.last_zoom != zoom) {
+      element.style.width = 2**zoom * this.aspect_width + 'px';
+      element.style.height = 2**zoom * this.aspect_height + 'px';
+      this.last_zoom = zoom;
+    }
+
+    element.style.top = 2**zoom * (lat - this.center_lat) * this.aspect_lat + 'px';
+    element.style.left = 2**zoom * (lng - this.center_lng) * this.aspect_lng + 'px';
+  }
+  display() {
+    // Show this.element
+    this.calculateTransform();
+    var element = document.getElementById(this.id);
+    element.style.display = 'block';
+    this.visible = true;
+  }
+  remove() {
+    // Hide this.element
+    var element = document.getElementById(this.id);
+    element.style.display = 'none';
+    this.visible = false;
+  }
+  blur () {
+    if (this.visible) {
+      var element = document.getElementById(this.id);
+      element.style.filter = 'blur(6px)';
+    }
+  }
+  update () {
+    // Called on map zoom or move end
+    if (this.visible) {
+      var element = document.getElementById(this.id);
+      this.calculateTransform();
+      element.style.filter = '';
+    }
+  }
 }
 
+// Hazards
 
-var filtered_histogram_data = [];
-function updateFilteredHistogramData(amenity, time, demographic, region="All") {
-    filtered_histogram_data = histogram_data.filter(d => d.service == amenity && d.time == time &&
-                                                    d.region == region && d.distance < 10 &&
-                                                    d.group == demographic); // Add Demographics && Region
-
-    if (DEBUGGING) {
-        console.log("Updated Filtered Histrogram Data");
-        console.log(">> " + amenity);
-        console.log(">> " + time);
-        console.log(filtered_histogram_data);
-    };
-}
+new HazardLayer('test_image',
+  'Test Image',
+  1.23291, 0.9399,
+  -43.03477, 171.65863,
+  0.9813737, -0.7093915
+  );
 
 
-/* Updates entire map */
-function updateMap(amenity, time) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* First update to map */
+function initMap() {
   if (!LOADED) {
       var wait_to_load = setInterval(function() {
           if (LOADED) {
               clearInterval(wait_to_load); 
-              updateMap(amenity, time);
+              initMap();
           }
       }, 100);
   } else {
-      updateFilteredDistances(amenity, time);
-      updateFilteredDestinations(amenity);
-      updateFilteredHistogramData(amenity, time, demographicMenu.value, locMenu.value);
-
-      updateBlocks();
-      updateMarkers();
-      updateIsland();
-      updateGraph();
-      setAvailabilityLegend();
+    initSelectionPanel();
+    updateMap();
   }
+}
+
+
+
+/* Updates entire map */
+function updateMap() {
+  null;
 }

@@ -1,16 +1,9 @@
 <!DOCTYPE html>
-<head>    
-
-    <!-- These get blocked, potentially because they receive text/html in response. Do these files exist?
-      
-    <link rel="icon" type="image/png" href="fav/16.png" sizes="16x16">
-    <link rel="icon" type="image/png" href="fav/32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="fav/96.png" sizes="96x96">
-     -->
+<head>
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <script>L_PREFER_CANVAS = false; L_NO_TOUCH = false; L_DISABLE_3D = false;</script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.0/dist/leaflet.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
 
@@ -18,6 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.0.1/d3.min.js" integrity="sha512-1e0JvdNhUkvFbAURPPlFKcX0mWu/b6GT9e0uve7BW4MFxJ15q4ZCd/Llz+B7/oh+qhw7/l6Q1ObPt6aAuR01+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js" integrity="sha512-4UKI/XKm3xrvJ6pZS5oTRvIQGIzZFoXR71rRBb1y2N+PbwAsKa5tPl2J6WvbEvwN3TxQCm8hMzsl/pO+82iRlg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <link rel="icon" href="https://urbanintelligence.co.nz/wp-content/uploads/2021/07/logo_white_315_favicon.png" sizes="32x32">
+    <link rel="icon" href="https://urbanintelligence.co.nz/wp-content/uploads/2021/07/logo_white_315_favicon.png" sizes="192x192">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.css" />
 
@@ -47,106 +42,12 @@
     
   <div class="folium-map" id="map" ></div>
   <div id="footer">
-    <a href="https://urbanintelligence.co.nz/" target="_blank"><img src="https://urbanintelligence.co.nz/wp-content/uploads/2021/07/logo_white_315_favicon.png"></img></a>
+    <img src="https://urbanintelligence.co.nz/wp-content/uploads/2021/07/logo_white_315_favicon.png"></img>
     <div class="attribution">© 2021 Urban Intelligence.</div>
   </div>
-  <div id="popup-backdrop"></div>
-
   <div id="help-popup"></div>
-
-  <div id="expect-popup">
-    <h2>Input your address and weekly trips to calculate an approximate household weekly walking distance</h2>
-    <form>
-      <table style="width: 100%">
-        <tr>
-          <td style="text-align: left;vertical-align: top;width: 351px;">
-            <div class="data-label" style="padding: 5px 0 5px 0;text-align:left;">Your Address:</div>
-            <input type="text" id="expect-address" name="expect-address" placeholder="Type your address"><br>
-            <span id="expect-address-tooltip">Input your address (e.g. '123 Queen St, Wellington')</span><br>
-          </td>
-          <td>
-            <table style="width: 100%; ">
-              <tr>
-                <td colspan="3" class="data-label" style="text-align: center;padding-bottom: 0.5rem">Your weekly trips to... </td>
-              </tr>
-              <tr>
-                <td class="data-label-2"> ...fetch water </td>
-                <td class="data-label-2"> ...a supermarket </td>
-                <td class="data-label-2"> ...an EMHub </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="number" class="expect-numinput" id="expect-watertrips" name="expect-watertrips" min="0" max="10" value="8">
-                </td>
-                <td>
-                  <input type="number" class="expect-numinput" id="expect-supermarkettrips" name="expect-supermarkettrips" min="0" max="10" value="5">
-                </td>
-                <td>
-                  <input type="number" class="expect-numinput" id="expect-emhubtrips" name="expect-emhubtrips" min="0" max="10" value="8">
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align: left;position:relative;">
-            <table id="expect-results">
-              <tr>
-                <td></td>
-                <td><h3>Before</h3></td>
-                <td><h3>0-7 Days</h3></td>
-                <td><h3>8-14 Days</h3></td>
-                <td><h3>15-30 Days</h3></td>
-                <td><h3>31-90 Days</h3></td>
-                <td><h3>90+ Days</h3></td>
-              </tr>
-              <tr>
-                <td><h3>Water</h3></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><h3>Supermarket</h3></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><h3>EMHub</h3></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td><h3>Total</h3></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </table>
-            <div id="expect-error-backdrop"></div>
-            <div id="expect-error"></div>
-          </td>
-        </tr>
-      </table>
-      <div id="expect-reload" onclick="reloadExpectedWalkingDistance()"><div style="margin: -0.21em 0 0 0.07em;">&#11118;</div></div>
-    </form>
-    <span id="expect-address-tooltip">* Note: All distances are for round trips, in kilometers.</span>
-    <button onclick="hideExpectPopup()">&#10006;</button>
-  </div>
+  <div id="dist-graph"></div>
+  <img id="test_image" src='https://projects.urbanintelligence.co.nz/chap/data/chch_ari100_200.png' style="position:absolute;top:0;left:0;pointer-events: none;z-index: 700;opacity: 0.6;transition: top 0.5s 0s ease-in-out, left 0.5s 0s ease-in-out, width 0.5s 0s ease-in-out, height 0.5s 0s ease-in-out;"/>
 </body>
 <script>
     
@@ -157,15 +58,11 @@
 </script> 
 
 <script type="text/javascript" src="js/colors.js"></script>
-<script type="text/javascript" src="js/bounds.js"></script>
 
 <script type="text/javascript" src="js/load_data.js"></script>
 
-<script type="text/javascript" src="js/graph.js"></script>
-
 <script type="text/javascript" src="js/map.js"></script>
 <script type="text/javascript" src="js/interface.js"></script>
-<script type="text/javascript" src="js/expect.js"></script>
 
 
 <script type="text/javascript" src="js/intro.js"></script>

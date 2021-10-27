@@ -18,14 +18,12 @@ body {
 .legend   { text-align: left; line-height: 18px; color: #555; } 
 .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
 
-.legend   { font-size: 12px; text-align: left; line-height: 15px; color: #555; 
-
-}
+.legend   { font-size: 12px; text-align: left; line-height: 15px; color: #555; }
 .legend table { padding: 0px; border-spacing: 0px; }
 
 .legend .cblock { padding: 0px; margin: 0px;  width: 25px; opacity: 0.7; }
 
-h3 {
+.legend h3 {
   text-align: center;
   font: 15px/16px Arial, Helvetica, sans-serif;
   color: #777;
@@ -123,6 +121,7 @@ a.dl_link {
 }
 
 
+
 .qimg {
   height: 15px;
   margin-bottom: -1px;
@@ -176,12 +175,12 @@ button {
   display:inline-block;
 }
 
-#location_drop_div {
+.location_drop_div {
   display:inline-block;
-  width: 150px;
+  width: 98%;
 }
 
-#amenityDropDown {
+#regionDropDown {
   text-align-last: center; 
   text-align: center;
   align-self: center;
@@ -189,9 +188,8 @@ button {
   /* width: 7.5em; Removed to fit EM Hub */
   font-size: 16px;
   width: 100%;
+  margin: 0;
 }
-
-
 
 
 #map {
@@ -225,9 +223,6 @@ button {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
-
-
 .info {
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
@@ -246,6 +241,7 @@ button {
 }
 td { 
 	padding: 0 5px;
+	width: 14px;
 }
 
 a {
@@ -298,17 +294,17 @@ div.intro_tour .introjs-button {
 #help-popup {
   position: absolute;
   font-size: 18px;
-  padding: 10px 20px;
+  padding: 8px 40px;
   border-radius: 10px;
   box-shadow: 0 0 15px rgb(0 0 0 / 20%);
   font-family: Arial, Helvetica, sans-serif;
   background: rgb(255,255,255);
   left: 50%; 
   top: 50%; 
-  margin-left: -335px; 
+  margin-left: -355px; 
   width: 670px;
-  margin-top: -192px;
-  z-index: 700;
+  margin-top: -290px;
+  z-index: 2000;
   display: none;
 }
 
@@ -354,42 +350,24 @@ div.intro_tour .introjs-button {
 
 
 
-@keyframes expect-pulse {
-  0% {
-    background-color: #CCC;
-  }
-  100% {
-    background-color: #A8A8A8;
-  }
+
+.rightControlPanel {
+  width: 250px;
+  padding: 10px 10px;
 }
 
-
-#simulate_button {
-  background-color: #CCC;
-  margin: 5px 5%;
-  color: #FFF;
-  width: 90%;
-  padding: 0.5rem;
-  font-size: 1.2rem;
-  border-width: 0;
-  border-radius: 5px;
-  transition: background-color 0.1s 0s ease-in-out;
-  animation: expect-pulse 0.7s ease-in-out 0s infinite alternate;
-}
-#simulate_button.active {
-  animation: none;
-  background-color: #696;
-}
-
-#simulate_button.active:hover {
-  background-color: #363;
-}
 
 
 
 
 #dist-graph {
   border-radius: 1rem;
+  padding-top: 2rem;
+  width: 460px;
+  height: 300px;
+  transition: height 0.2s ease-in-out, width 0.2s ease-in-out, padding-top 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
 
@@ -402,246 +380,221 @@ div.intro_tour .introjs-button {
 }
 
 
+#simulate_button {
+  background-color: #777;
+  margin: 5px 5%;
+  color: #FFF;
+  width: 90%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border-width: 0;
+  border-radius: 5px;
+  transition: background-color 0.1s 0s ease-in-out;
+}
 
-#popup-backdrop {
-  z-index: 1100;
-  background-color: rgba(40,40,40,0.4);
-  position:absolute;
-  top:0;
-  left:0;
-  height: 100%;
-  width: 100%;
-  display: none;
+#simulate_button:hover {
+  background-color: #555;
+}
+
+#simulate_button.active {
+  background-color: #B55;
+}
+
+#simulate_button.active:hover {
+  background-color: #844;
 }
 
 
 
-
-#expect-popup {
-  position: absolute;
-  font-size: 18px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgb(0 0 0 / 20%);
-  font-family: Arial, Helvetica, sans-serif;
-  background: rgb(255,255,255);
-  left: 50%; 
-  top: 50%; 
-  margin-left: -380px; 
-  width: 760px;
-  margin-top: -235px;
-  z-index: 1200;
-  display: none;
-}
-
-#expect-popup h2 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #AAA;
-  margin: 0.7rem 0 2rem 0;
-}
-
-#expect-popup button {
-  background-color: #F9F9F9;
-  color: #999;
-  border-color: #999;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 16px;
-  border-radius: 12px;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-}
-#expect-popup button:hover {
-  background-color: #EEE;
-  color: black;
-  border-color: black;
-}
-
-
-
-
-.data-label {
-  text-align: center;
-  font: 15px/16px Arial, Helvetica, sans-serif;
-  color: #777;
-  font-size: 16px;
-  font-weight: bold;
-  margin: 0px 0px 5px 0;
-}
-
-.data-label-2 {
-  text-align: center;
-  font: 15px/16px Arial, Helvetica, sans-serif;
-  color: #777;
-  font-size: 16px;
-  font-style: italic;
-  margin: 10px 0px 5px 0;
-  padding-bottom: 0.2rem
-}
-
-
-
-
-
-
-.expect-numinput {
-  font-size: 1.5em;
-  color: #777;
-  width: 2em;
-  text-align: center;
-}
-
-
-#expect-address {
-  width: 350px;
-  font-size: 1.1em;
-  color: #777;
-}
-
-#expect-address::placeholder {
-  opacity: 0.1;
-  font-style: italic;
-}
-
-#expect-address-tooltip {
-  font-size: 0.8rem;
-  color: #AAA;
-  font-style: italic;
-  user-select: text;
-}
-
-#expect-address-location {
-  font-size: 0.8rem;
-  color: #777;
-  font-weight: bold;
-  padding-top: 8px;
-}
-
-
-@keyframes wiggle {
-  0% {transform: rotate(-10deg);}
-  100% {transform: rotate(10deg);}
-}
-@keyframes spin {
-  0% {transform: rotate(0deg);}
-  100% {transform: rotate(360deg);}
-}
-
-#expect-reload {
-  position: absolute;
-  right:0.5rem;
-  bottom:0.5rem;
-  width: 1.8rem;
-  height: 1.8rem;
-  font-size: 1.8rem;
+#selectionPanel {
+  max-height: 400px;
+  padding-bottom: 1rem;
   overflow: hidden;
-  color: #DDD;
-  transform: rotate(0deg);
-  transform-origin: center center;
-  transition: font-size 0.2s ease-in-out, transform 0.5s ease-in-out;
 }
 
-#expect-reload.active {
-  cursor: pointer;
-  color: #00B000;
-  animation: wiggle 0.2s ease-in-out 0s infinite alternate;
-}
-
-#expect-reload.active:hover {
-  color: #008000;
-}
-
-#expect-reload.spinning {
-  animation: spin 0.4s ease-in-out 0s infinite normal;
+#layerPanel {
+  max-height: 270px;
 }
 
 
-
-#expect-results {
-  border-spacing: 0px;
-  margin: 2rem 0 0.8rem 0;
-  width: 98%;
-  color: #666;
-}
-#expect-results h3 {
-  font-size: 14px;
-}
-#expect-results td {
-  padding: 5px 12px;
-}
-#expect-results tr:nth-of-type(1n+2) td:nth-of-type(1n+2) {
-  border: 1px solid #888;
-  text-align: center;
-  font-size: 16px;
-  user-select: text;
-  font-weight: bold;
-}
-#expect-results tr:nth-of-type(1) td:nth-of-type(1n+2) {
-  border: 1px solid #888;
-  border-width: 0 1px 1px 1px;
-}
-#expect-results tr:nth-of-type(1n+2) td:nth-of-type(1) {
-  border: 1px solid #888;
-  border-width: 1px 1px 1px 0;
-}
-#expect-results tr:nth-of-type(1) td:nth-of-type(1) {
-  border: 1px solid #888;
-  border-width: 0 1px 1px 0;
-}
-#expect-results tr:nth-of-type(1n+1) td:nth-of-type(7) {
-  border-right-width: 2px;
+#scale_legend {
+  width: 149px;
 }
 
 
-#expect-results tr:nth-of-type(even) td {
-  background-color: #f8f8f8;
+#hazard_notes {
+  color: #777;
+  font-size: 12px;
+  max-width: 400px;
+  font-style: italic;
+  margin-top: 2px;
 }
-#expect-results tr:nth-of-type(odd) td:nth-of-type(1n+2) {
-  background-color: #EEE;
-}
-#expect-results tr:nth-of-type(3) td:nth-of-type(1) {
-  background-color: #EEE;
-}
-
-#expect-results tr:nth-of-type(5) td {
-  border-width: 1px 0 0 0 !important;
-  background-color: #FFF !important;
+#hazard_notes.active {
+  color: #B55;
 }
 
-
-
-
-#elosLegend {
-  max-width: 450px;
-  padding: 0 8px;
+#intro-logo {
+  background-color: white;
+  height: 4rem;
+  width: 2rem;
+  margin: 0;
 }
-#elosLegend h3 {
-  text-align: left;
-}
-
-
-
-
-#expect-error {
-  position: absolute;
-  top: 30%;
-  left: 0;
-  width: 100%;
-  font-size: 5rem;
-  text-align: center;
-  color: #B224;
-  font-weight: bold;
-  display: none;
-}
-#expect-error-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
+#intro-logo img {
   width: 100%;
   height: 100%;
-  background-color: #FFFA;
-  display: none;
+  object-fit: contain;
 }
+
+
+
+
+#hazardDropDown {
+  width: 100%;
+}
+
+
+
+
+.expandingHeader {
+  padding: 1rem 0.6rem 0.4rem 0.4rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.expandingContents {
+  overflow: hidden;
+  transition: height 0.1s 0s ease-in-out;
+}
+.expandingContents td {
+  height: 30px;
+  font-size: 16px;
+}
+.expandingContents input {
+  margin-left: 1rem;
+}
+
+.expandingHeader .icon {
+  height: 0.7em;
+  margin-left: 0.4em;
+  margin-bottom: 0.1em;
+}
+
+
+
+
+
+#graph-legend {
+  width: 460px;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  margin-bottom: -10px;
+}
+#graph-legend td {
+  width: 17%;
+}
+#graph-legend td td {
+  width: auto;
+}
+#graph-legend .prehazard {
+  width: 35%;
+}
+#graph-legend .posthazard {
+  width: 35%;
+}
+#graph-legend .colorbox {
+  width: 40px;
+  height: 0.8rem;
+  border-radius: 0.2rem;
+  opacity: 0.8;
+}
+#graph-legend .greybox {
+  width: 40px;
+  height: 0.8rem;
+  border-radius: 0.2rem;
+  opacity: 0.8;
+}
+#graph-legend .colorbox {
+  background: linear-gradient(-90deg, rgba(68,1,84,1) 0%, rgba(68,1,84,1) 20%, rgba(64,67,135,1) 40%, rgba(41,120,142,1) 60%, rgba(34,167,132,1) 80%, rgba(121,209,81,1) 100%);
+}
+
+#graph-legend .greybox {
+  background: #CCC;
+}
+
+
+
+
+
+
+#graph_expansion_button {
+  border-radius: 2rem;
+  font-weight: bold;
+  margin-top: 2px;
+  padding: 0.3rem;
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  color: rgba(0,0,0,0.5);
+  background-color: rgba(255,255,255,0);
+  cursor: pointer;
+  font-size: 24px;
+} 
+
+#graph_expansion_button:hover {
+  color: rgba(0,0,0,1);
+}
+
+
+
+
+#layerTable {
+  width: 100%;
+  background-color: #9994;
+  border: 1px solid #4444;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#layerTable td {
+  height: 46px;
+  padding: 0;
+  width: 100%;
+}
+
+#layerTable td.active div.contents {
+  background-color: #FFF;
+  border: 1px solid #4444;
+  border-top-width: 0;
+  width: calc(100% + 2px);
+  position: relative;
+  left: -1px;
+  padding: 15px;
+  padding-left: 30px;
+  font-size: 18px;
+  top: 0px;
+}
+#layerTable td.active .colorbar {
+  height: 100%;
+  width: 10px;
+  position: absolute;
+  left:0;
+  top:0;
+}
+
+
+
+
+#hazardLayerText {
+  padding: 0.4rem 0rem;
+  font-size: 17px;
+  font-weight: bold;
+  color: #A55A;
+  width: 100%;
+  text-align: center;
+}
+#hazardText {
+  font-style: italic;
+}
+
+
+
+

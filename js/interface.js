@@ -4,40 +4,24 @@ var amenity_legend = L.control({position: 'topright'});
 
 amenity_legend.onAdd = function (map) {
 
-    var div = L.DomUtil.create('div', 'info legend');
+    var div = L.DomUtil.create('div', 'info legend rightControlPanel');
 
-    title = '<h4 id="time_header">Level of Service ' + 
-            '<a id="helpLink" title="Help!" href="#" onclick="showHelpPopup();return false;"><img class="qimg" src="qmark.svg"></a>' + 
+    title = '<h4 id="time_header">CHAP ' + 
+            '<a id="helpLink" title="Help!" href="#" onclick="showHelpPopup();return false;"><img class="qimg" src="icons/qmark.svg"></a>' + 
             '</h4>';
-
-
-    amenity_drop = '<h3>Amenity/Service:</h3>' + 
-                  '<select name="amenity" id="amenityDropDown">' +
-                  '  <option value="supermarket">Supermarkets</option>' +
-                  '  <option value="water">Water Points</option>' +
-                  '  <option value="EM_hubs">Emergency Management Hubs</option>' +
-                  '  <option value="health_services">Health Services</option>' +
-                  '  <option value="fuel_station">Fuel Stations</option>' +
-                  '</select>';
     
-    location_drop = '<td><h3 style="display:inline">Region:</h3></td>' + 
-                    '<td><div id="location_drop_div" style="float: right"><select class="location_drop" id="regionDropDown">';
-    for (bound_name in city_bounds) {
-        location_drop += '<option value="' + bound_name + '">' + bound_name + '</option>';
+    amenity_drop = '<td><h3 style="display:inline">Hazard:</h3></td>' + 
+                    '<td><div class="location_drop_div" style="float: right;min-width:120px;"><select class="location_drop" id="hazardDropDown">'
+    amenity_drop += '<option value="none" selected>No Hazard</option>';
+    for (hazard_id in all_hazards){
+        var hazard = all_hazards[hazard_id];
+        amenity_drop += '<option value="' + hazard.id + '">' + hazard.name + '</option>"';
     }
-    location_drop += '</select></div></td>';
+    amenity_drop += '</select></div></td>';
 
-    simulate_button = '<button id="simulate_button" onclick="showExpectPopup()">What can I expect?</button>';
 
-    demographic_drop = '<td><h3 style="display:inline">Sociodemographic:</h3></td>' + 
-                    '<td><div id="location_drop_div" style="float: right"><select class="location_drop" id="demographicDropDown">' + 
-                    '<option value="population">Population</option>' +
-                    '<option value="difficulty_walking">Difficulty Walking</option>' +
-                    '<option value="social_deprivation_1-5">Social Deprivation Index 1-5</option>' +
-                    '<option value="social_deprivation_6-10">Social Deprivation Index 6-10</option>' +
-                    '</select></div></td>';
-
-    div.innerHTML = title + '<hr>'  + amenity_drop + '<hr><table><tr>' + location_drop + '</tr><tr>' + demographic_drop + '</tr></table><hr>' + simulate_button;// + '<hr>' + docsUploader + '<hr>' + submit + '</form><hr>' + download;
+    div.innerHTML = title + '<hr>'  + '<table style="width:100%;"><tr>' + 
+                     amenity_drop + '</tr></table>';
     
     return div;
 };
@@ -45,120 +29,206 @@ amenity_legend.onAdd = function (map) {
 amenity_legend.addTo(map);
 
 
-/* Updates the map on changing amenity selection.
+/* Updates the map on changing the hazard
 */
-var amenityMenu = document.getElementById("amenityDropDown");
-amenityMenu.onchange = function() {
+var hazardMenu = document.getElementById("hazardDropDown");
+hazardMenu.onchange = function() {
+    for (hazard_id in all_hazards) {
+        all_hazards[hazard_id].remove();
+    }
+    if (hazardMenu.value != 'none') {
+        var hazard = all_hazards[hazardMenu.value];
+        hazard.display();
+        $('#hazardText').text('Hazard: ' + hazard.name);
+        $('#hazardText').css('color', '#D55')
+    } else {
+        $('#hazardText').text('No Hazard Overlay');
+        $('#hazardText').css('color', '#A55A')
+    }
+}
 
-    // Change legend if amenity is Water Points (half it)
-    if (amenityMenu.value == "water") {
-        for (colset of cmap) {
-            colset.lower = colset.default / 2;
-            colset.upper = colset.default / 2 + 1;
+
+
+
+
+
+
+
+/* ==== TOP RIGHT SELECTION BOX ==== */
+
+var layers = [];
+
+var selection_panel = L.control({position: 'topright'});
+var expanded_headers = [];
+
+selection_panel.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend rightControlPanel');
+    div.id = 'selectionPanel';
+    
+    return div;
+};
+
+selection_panel.addTo(map);
+
+
+
+function initSelectionPanel() {
+    var div = document.getElementById('selectionPanel');
+
+    contents = '<h4 id="time_header">Layer Selection' + 
+            '</h4><hr>';
+
+    var all_categories = [];
+    for (layer_key in available_layers) {
+        if (!all_categories.includes(available_layers[layer_key].category)) all_categories.push(available_layers[layer_key].category);
+    }
+
+    console.log(all_categories);
+
+    contents += '<table style="width:100%">';
+    var i = 0;
+    for (category of all_categories) {
+        i ++;
+        var matching_layers = Object.keys(available_layers).filter(d => available_layers[d].category == category);
+        expanded_headers.push(false);
+        contents += '<tr><td class="expandingHeader" onclick="expandingHeader(\''+category+'\','+matching_layers.length+')">' + category + 
+                    '<img class="icon" src="icons/DropdownArrow.svg"></td></tr><tr><td><div class="expandingContents" style="height:0px;" id="expandingContents' + category + '"><table style="width:100%;">';
+        for (layer_id of matching_layers) {
+            var layer = available_layers[layer_id];
+            contents += '<tr><td><div style="width:2px;"><input type="checkbox" id="sel' + layer.id + '" name="selItem" onclick="selectionMade(\''+layer.id+'\');"></div></td><td>' + layer.name + '</td></tr>';
+        }
+        contents += '</table></div></td></tr>';
+    }
+    contents += '</table>';
+    
+    div.innerHTML = contents;
+}
+
+
+function expandingHeader(category, length) {
+    var div = document.getElementById('expandingContents'+category);
+    if (expanded_headers[category]) {
+        div.style.height = '0px';
+    } else {
+        div.style.height = (length * 30) + 'px';
+    }
+    expanded_headers[category] = !expanded_headers[category];
+};
+
+function selectionMade(layer_id) {
+    var layer = available_layers[layer_id];
+    var div = document.getElementById('sel'+layer_id);
+    if (div.checked) {
+        if (layers.length < 4) {
+            /*
+            var colors = ["#b2d8d8", '#66b2b2', '#008080', '#006666', '#004c4c'];
+            for (var i in layers) {
+                colors = colors.filter(d => d != layers[i][1]);
+            }
+            var color = colors[Math.floor(Math.random()*colors.length)];*/
+            layers.unshift([layer_id, layer.name, layer.color]);
+
+            if (layers.length == 4) {
+                // Fade out other layer options
+                $(".expandingContents input:not(:checked)").attr("disabled", true);
+            }
+            
+            var opacity = 0.5;
+            for (layer_item of layers) {
+                var curr_layer = available_layers[layer_item[0]];
+                console.log(curr_layer, available_layers, layer_item);
+                curr_layer.opacity = opacity;
+                opacity *= 0.5;
+                curr_layer.update();
+            }
+
+            layer.display();
+
+        } else {
+            div.checked = false;
         }
     } else {
-        for (colset of cmap) {
-            colset.lower = colset.default;
-            colset.upper = colset.default + 2;
+        for (var i in layers) {
+            if (layers[i][0] == layer_id) layers.splice(i, 1);
+        }
+
+        if (layers.length == 3) {
+            // Un-fade-out other layer options
+            $(".expandingContents input:not(:checked)").removeAttr("disabled");
+        }
+        
+        layer.remove();
+    }
+    updateLayers();
+};
+
+
+
+
+
+
+
+/* ==== TOP RIGHT LAYER PANEL ==== */
+
+var layers_legend = L.control({position: 'topright'});
+
+layers_legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend rightControlPanel');
+    div.id = 'layerPanel';
+    
+    return div;
+};
+
+layers_legend.addTo(map);
+
+var last_length = 0;
+function updateLayers() {
+    var div = document.getElementById('layerPanel');
+
+    content = '<div id="hazardLayerText"><span id="hazardText">No Hazard Overlay</span></div>';
+    content += '<table id="layerTable">';
+    
+    var style = '';
+    if (last_length < layers.length) style = 'top: -46px; transition: top 0.1s ease-in-out';
+    for (i = 0; i < 4; i++) {
+        if (i < layers.length) {
+            content += '<tr><td class="active"><div class="contents" style="'+style+'"><div class="colorbar" style="background-color:'+layers[i][2]+'"></div>'+layers[i][1]+'</div></td></tr>';
+        } else {
+            content += '<tr><td><td></tr>';
         }
     }
 
-    updateELOS();
-    setScaleLegend();
-    updateMap(amenityMenu.value, timeValue);
-}
-
-/* Relocates map to focus on region selected, when region is selected. 
-*/
-var locMenu = document.getElementById("regionDropDown");
-locMenu.onchange = function() {
-    map.fitBounds(city_bounds[locMenu.value]);
-    updateFilteredHistogramData(amenityMenu.value, timeValue, demographicMenu.value, locMenu.value);
-    updateGraph();
-    updateIsland();
-}
-
-/* Updates the graph on changing demographic selection.
-*/
-var demographicMenu = document.getElementById("demographicDropDown");
-demographicMenu.onchange = function() {
-    updateFilteredHistogramData(amenityMenu.value, timeValue, demographicMenu.value, locMenu.value);
-    updateGraph();
-}
-
-
-
-
-
-
-
-/* ==== TOP LEFT UI ELEMENT ==== */
-
-var time_legend = L.control({position: 'topleft'});
-
-time_legend.onAdd = function (map) {
-
-    var div = L.DomUtil.create('div', 'info legend');
-    div.id = "timeRadioButtons";
-
-    time_slider = '<h3 style="text-align:left;margin:6px 0;">Time since disruption:</h3>' +
-              '<label><input type="radio" name="timeRadio" class="radio" value="0" checked="checked"/> Before</label> ' +
-                '<label><input type="radio" name="timeRadio" class="radio" value="1"/> 0-7 days</label> ' +
-                '<label><input type="radio" name="timeRadio" class="radio" value="2"/> 8-14</label> ' +
-                '<label><input type="radio" name="timeRadio" class="radio" value="3"/> 15-30</label> ' +
-                '<label><input type="radio" name="timeRadio" class="radio" value="4"/> 31-90</label> ' +
-                '<label><input type="radio" name="timeRadio" class="radio" value="5"/> 90+</label> <br>';
-
-    div.innerHTML = time_slider;
+    content += '</table>';
     
-    return div;
-};
+    if (layers.length == 0) {
+        content += '<div style="font-style:italic;color:grey;position:absolute;top:50%;width:250px;text-align:center;font-size:16px;">Add some layers!</div>';
+    }
 
-time_legend.addTo(map);
+    div.innerHTML = content;
 
- // When Radio Button clicked, sets timeValue to its value, and updates map.
-var timeRadio = document.getElementById("timeRadioButtons");
-var timeValue = 0;
-timeRadio.onchange = function(e) {
-    var target = e.target;
-    timeValue = target.value;
-    updateELOS();
-    updateMap(amenityMenu.value, timeValue);
-}
-
-// ELOS Element
-
-var elos_legend = L.control({position: 'topleft'});
-
-elos_legend.onAdd = function (map) {
-
-    var div = L.DomUtil.create('div', 'info legend');
-    div.id = "elosLegend";
-
-    time_slider = `<h3>ELOS: <span style="font-weight:normal">${getELOS()} <span></h3>`;
-
-    div.innerHTML = time_slider;
+    if (last_length < layers.length) {
+        setTimeout(function() {
+            $("#layerTable .contents").css('top', '0px');
+        }, 50);
+    }
     
-    return div;
-};
-
-elos_legend.addTo(map);
-
-function getELOS() {
-
-    var amenity_ids = {"supermarket": 0,
-                        "water": 1,
-                        "EM_hubs": 2,
-                        "health_services": 3,
-                        "fuel_station": 4};
-    
-    return `${elos_list[amenity_ids[amenityMenu.value]][(timeValue == 3 ? 2 : timeValue)]}`;
+    last_length = layers.length;
 }
+updateLayers();
 
-function updateELOS() {
-    var elem  = $("#elosLegend span").get(0);
-    elem.innerHTML = getELOS();
-}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -183,7 +253,7 @@ scale_legend.onAdd = function(map) {
 scale_legend.addTo(map);
 
 /* Generates the contents of the Scale Legend in the bottom right.
-*/
+*//*
 function setScaleLegend(div = null) {
     if (!div) div = document.getElementById("scale_legend");
 
@@ -194,17 +264,54 @@ function setScaleLegend(div = null) {
     cmap.forEach( function(v) {
       labels.push('<tr>' + 
           '<td class="legend cblock" id="leg' + v.idx + '" style="color:' + v.text + '; background:' + v.fill + '"></td>' +
-          '<td class="ltext">' + v.lower + (v.idx == 0 ? '+' : '-' + v.upper) + ' km</td></tr>');
+          '<td class="ltext">' + v.label + '</td></tr>');
     });
     labels.reverse();
 
     table = '<table id="legend_table">' + labels.join('') + '</table>';
     
-    div.innerHTML = '<h3 style="font-size:0.9rem;margin:0.2rem;">Walking Distance:</h3>' + table;
+    div.innerHTML = '<h3 style="font-size:0.9rem;margin:0.2rem;">Driving Distance:</h3>' + table;
+}
+/* FOR MANUALLY SETTING STATE ZOOMS & CENTERS */ /*
+document.getElementById('scale_legend').onclick = function () {
+    console.log({'center': map.getCenter(), 'zoom': map.getZoom()});
+}
+
+/* Roads Legend
+*//*
+let roads_legend = L.control({ position: 'bottomleft' });
+roads_legend.onAdd = function(map) {
+    var div = L.DomUtil.create('div', 'info legend');
+    div.id = "roads_legend";
+
+    return div;
+};
+roads_legend.addTo(map);
+
+function setRoadsLegend(div = null) {
+    if (!div) div = document.getElementById("roads_legend");
+    
+    var closed_roads_length = 0;
+    for (object of road_lengths) {
+        if (simulateHazard && object.city == locMenu.value && object.hazard == hazardMenu.value) {
+            closed_roads_length = object.total;
+        }
+    }
+
+    var labels = [];
+    labels.push('<tr>' + 
+        '<td class="legend cblock" style="padding-left:4px;font-weight:bold;font-size: 16px;color: #f54242">―</td>' +
+        '<td class="ltext" style="width: 3.2rem;padding-right:0;">Closed</td>' +
+        '<td style="width:3.2rem; font-size: 14px; text-align: center; font-weight: bold;padding:0;">' + closed_roads_length + 'km</td></tr>');
+
+
+    table = '<table id="legend_table">' + labels.join('') + '</table>';
+    
+    div.innerHTML = '<h3 style="font-size:0.9rem;margin:0.2rem;">Roads:</h3>' + table;
 }
 
 /* Availability Legend
-*/
+*//*
 let availability_legend = L.control({ position: 'bottomleft' });
 availability_legend.onAdd = function(map) {
     var div = L.DomUtil.create('div', 'info legend');
@@ -217,53 +324,40 @@ availability_legend.addTo(map);
 function setAvailabilityLegend(div = null) {
     if (!div) div = document.getElementById("availability_legend");
     
-    var counts = [0,0,0];
+    var counts = [0,0];
     for (dest of filtered_destinations) {
-        counts[dest[timeValue]-1] += 1;
+        if (dest.operational.toLowerCase() != "false" && simulateHazard) {
+            counts[1] += 1;
+        } else {
+            counts[0] += 1;
+        }
     }
 
     var labels = [];
     labels.push('<tr>' + 
-        '<td class="legend cblock" style="padding-left:4px;font-size: 16px;color: ' + cdest[1] + '">	⬤</td>' +
-        '<td class="ltext" style="width: 3.2rem;">Open </td>' +
-        '<td style="width:1rem; font-size: 14px; text-align: center; font-weight: bold;">' + counts[0] + '</td></tr>');
+        '<td class="legend cblock" style="padding-left:4px;font-size: 16px;color: #55F">	⬤</td>' +
+        '<td class="ltext" style="width: 3.2rem;padding-right:0;">Open </td>' +
+        '<td style="width:1rem; font-size: 14px; text-align: center; font-weight: bold;padding:0;">' + counts[0] + '</td></tr>');
     labels.push('<tr>' + 
-        '<td class="legend cblock" style="padding-left:4px;font-size: 16px;color: ' + cdest[2] + '">	⬤</td>' +
-        '<td class="ltext" style="width: 3.2rem;">Open*  </td>' +
-        '<td style="width:1rem; font-size: 14px; text-align: center; font-weight: bold;">' + counts[1] + '</td></tr>');
-    labels.push('<tr>' + 
-        '<td class="legend cblock" style="padding-left:4px;font-size: 16px;color: ' + cdest[3] + '">	⬤</td>' +
-        '<td class="ltext" style="width: 3.2rem;">Closed  </td>' +
-        '<td style="width:1rem; font-size: 14px; text-align: center; font-weight: bold;">' + counts[2] + '</td></tr>');
+        '<td class="legend cblock" style="padding-left:4px;font-size: 16px;color: #000">	⬤</td>' +
+        '<td class="ltext" style="width: 3.2rem;padding-right:0;">Closed  </td>' +
+        '<td style="width:3.2rem; font-size: 14px; text-align: center; font-weight: bold;padding:0;">' + counts[1] + '</td></tr>');
     
 
     table = '<table id="legend_table">' + labels.join('') + '</table>';
-    table += '<span style="font-style:italic;font-size:11px;line-height:0px;">*Priority customers<br>and stock dependent.</span>'
     
     div.innerHTML = '<h3 style="font-size:0.9rem;margin:0.2rem;">Destinations:</h3>' + table;
 }
 
-
-
-/* Lower-Right Graph
 */
-let graph_legend = L.control({ position: 'bottomright' });
-graph_legend.onAdd = function(map) {
-    var div = L.DomUtil.create('div', 'info legend');
-    div.id = "dist-graph";
 
-    return div;
-};
-graph_legend.addTo(map);
 
-/*
-// REMOVE THIS !!!!!!!!!!!    A TOOL TO GET THE BOUNDS OF THE CURRENT VIEWPORT
-document.getElementById("dist-graph").onclick = function() {
-    var b = map.getBounds();
-    console.log('"' + temp_all_regions.pop() + '"  : [[' + b._northEast.lat + ', ' +  b._northEast.lng + '], [' + 
-                                                           b._southWest.lat + ', ' + b._southWest.lng + ']],');
-}
-*/
+
+
+
+
+
+
 
 
 
@@ -276,13 +370,15 @@ function showHelpPopup(){
     // If Help Popup isn't populated yet, populate.
     if (popup.innerHTML == "") {
 
-        var content = "<h2>Additional Information</h2>" +
-            "This pop up will provide additional information.<br>" + 
-            "We just haven't determined what that information will be yet.<br>" + 
-            "<br>" +
-            "However, it's important to have a decent amount of text here, in anticipation of the large amount of text that we may, or may not, eventually add to this rather helpful help box.<br>" + 
-            "<br>" +
-            "Truly, the possibilities are endless.<br>" + 
+        var content = '<h2>Service Access Resilience</h2>' +
+        "<p>Although local communities urgently need to build their resilience to natural hazards, very few analytical tools exist to support them in doing so. It is well understood that equitable access to amenities is vital to community function and inherent resilience. However, to measure this we must acknowledge that access is dependent on the operability of both the road network and amenities.<br>" +
+        "<br>This tool enables local and national governments to build equity and resilience by:<br><ul>" +
+        "<li>Guiding investment prioritization to maximize access equity and performance within pre & post hazard scenarios<br>" +
+        "<li>Guiding disaster response preparedness<br>" +
+        "<li>Identifying critical nodes within amenity networks (food resources, health care, etc.)<br>" +
+        "<li>Identifying critical links within the transport network<br>" +
+        "<li>Identifying vulnerable geographic areas and demographic groups<br>" +
+        '</ul><br><span style="font-style: italic; font-size: 80%;">M. J. Anderson, D. A. F. Kiddle, & T. M. Logan (2021). The Underestimated Role of the Transportation Network: Improving Disaster & Community Resilience. Transportation Research Part D : Transport and Environment. (Under Review)</span></p>' +
             "<br><br>" +
             '<span class="contact">Have suggestions or feedback? Contact us at <a href="mailto:info@urbanintelligence.co.nz?subject=About Your WREMO Project...">info@urbanintelligence.co.nz</a></span>';
         
@@ -303,29 +399,6 @@ function hideHelpPopup() {
 
 
 
-
-// Gives Expectation by Address
-function showExpectPopup(){
-    var popup = document.getElementById("expect-popup");
-    popup.style.display = "block";
-
-    var backdrop = document.getElementById("popup-backdrop");
-    backdrop.style.display = "block";
-
-    var mouse_info = document.getElementById("mouseInfo");
-    mouse_info.style.visibility = "hidden";
-}
-function hideExpectPopup() {
-    var popup = document.getElementById("expect-popup");
-    popup.style.display = "none";
-
-    var backdrop = document.getElementById("popup-backdrop");
-    backdrop.style.display = "none";
-}
-
-
-
-
 // Region Info Follows Mouse (Also known as the distance pop-up)
 let info_legend = L.control({position: 'topleft'});
 info_legend.onAdd = function(map) {
@@ -334,6 +407,7 @@ info_legend.onAdd = function(map) {
     div.style.position = "absolute";
     div.style.whiteSpace = "nowrap";
     div.style.fontSize = "15px";
+    div.style.visibility = "hidden";
     div.innerHTML = 'Distance: 0km';
     
     return div;
@@ -365,4 +439,3 @@ for (element of document.getElementsByClassName("legend")) {
         map.boxZoom.enable();
      });
 }
-
