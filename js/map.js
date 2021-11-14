@@ -66,20 +66,6 @@ function resetHighlight(e) {
 
 
 
-/*
-map.on('movestart', function (e) {
-    for (var hazard_id in all_hazards) {
-        all_hazards[hazard_id].blur();
-    }
-});*/
-
-
-map.on('moveend', function (e) {
-    for (var hazard_id in all_hazards) {
-        all_hazards[hazard_id].update();
-    }
-});
-
 
 
 /* Styles individual blocks. Called by Leaflet API.

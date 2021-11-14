@@ -11,23 +11,27 @@ amenity_legend.onAdd = function (map) {
             '</h4>';
     
     amenity_drop = '<td><h3 style="display:inline">Hazard:</h3></td>' + 
-                    '<td><div class="location_drop_div" style="float: right;min-width:120px;"><select class="location_drop" id="hazardDropDown">'
-    amenity_drop += '<option value="none" selected>No Hazard</option>';
-    for (hazard_id in all_hazards){
-        var hazard = all_hazards[hazard_id];
-        amenity_drop += '<option value="' + hazard.id + '">' + hazard.name + '</option>"';
-    }
+                    '<td><div class="location_drop_div" style="float: right;min-width:150px;"><select class="location_drop" id="hazardDropDown">'
     amenity_drop += '</select></div></td>';
 
+    hazard_text = '<td colspan="2" style="padding:0;"><div id="hazard_text"></div></td>';
 
     div.innerHTML = title + '<hr>'  + '<table style="width:100%;"><tr>' + 
-                     amenity_drop + '</tr></table>';
+                     amenity_drop + '</tr><tr>' + hazard_text + '</tr></table>';
     
     return div;
 };
 
 amenity_legend.addTo(map);
 
+function setHazardMenu() {
+    amenity_drop = '<option value="none" selected>No Hazard</option>';
+    for (hazard_id in all_hazards){
+        var hazard = all_hazards[hazard_id];
+        amenity_drop += '<option value="' + hazard.id + '">' + hazard.name + '</option>"';
+    }
+    $('#hazardDropDown').html(amenity_drop);
+}
 
 /* Updates the map on changing the hazard
 */
@@ -92,8 +96,9 @@ function initSelectionPanel() {
         i ++;
         var matching_layers = Object.keys(available_layers).filter(d => available_layers[d].category == category);
         expanded_headers.push(false);
-        contents += '<tr><td class="expandingHeader" onclick="expandingHeader(\''+category+'\','+matching_layers.length+')">' + category + 
+        contents += '<tr><td class="expandingHeader" onclick="expandingHeader(\''+category+'\','+matching_layers.length+')">' + category_titles[category] + 
                     '<img class="icon" src="icons/DropdownArrow.svg"></td></tr><tr><td><div class="expandingContents" style="height:0px;" id="expandingContents' + category + '"><table style="width:100%;">';
+        
         for (layer_id of matching_layers) {
             var layer = available_layers[layer_id];
             contents += '<tr><td><div style="width:2px;"><input type="checkbox" id="sel' + layer.id + '" name="selItem" onclick="selectionMade(\''+layer.id+'\');"></div></td><td>' + layer.name + '</td></tr>';
@@ -107,14 +112,24 @@ function initSelectionPanel() {
 
 
 function expandingHeader(category, length) {
-    var div = document.getElementById('expandingContents'+category);
     if (expanded_headers[category]) {
-        div.style.height = '0px';
+        $('#expandingContents'+category).css('height', '0px');
     } else {
-        div.style.height = (length * 30) + 'px';
+        $('#expandingContents'+category).css('height', (length * 30) + 'px');
     }
     expanded_headers[category] = !expanded_headers[category];
 };
+
+function updateLayerOpacities() {
+    var opacity = 0.5;
+    for (layer_item of layers) {
+        var curr_layer = available_layers[layer_item[0]];
+        console.log(curr_layer, available_layers, layer_item);
+        curr_layer.opacity = opacity;
+        opacity *= 0.5;
+        curr_layer.update();
+    }
+}
 
 function selectionMade(layer_id) {
     var layer = available_layers[layer_id];
@@ -134,14 +149,6 @@ function selectionMade(layer_id) {
                 $(".expandingContents input:not(:checked)").attr("disabled", true);
             }
             
-            var opacity = 0.5;
-            for (layer_item of layers) {
-                var curr_layer = available_layers[layer_item[0]];
-                console.log(curr_layer, available_layers, layer_item);
-                curr_layer.opacity = opacity;
-                opacity *= 0.5;
-                curr_layer.update();
-            }
 
             layer.display();
 
@@ -161,6 +168,7 @@ function selectionMade(layer_id) {
         layer.remove();
     }
     updateLayers();
+    updateLayerOpacities();
 };
 
 
@@ -244,9 +252,7 @@ updateLayers();
 let scale_legend = L.control({ position: 'bottomleft' });
 scale_legend.onAdd = function(map) {
     var div = L.DomUtil.create('div', 'info legend');
-    div.id = "scale_legend";
-    
-    setScaleLegend(div);
+    div.id = "hazard_legend";
     
     return div;
 };
@@ -369,7 +375,7 @@ function showHelpPopup(){
 
     // If Help Popup isn't populated yet, populate.
     if (popup.innerHTML == "") {
-
+        /*
         var content = '<h2>Service Access Resilience</h2>' +
         "<p>Although local communities urgently need to build their resilience to natural hazards, very few analytical tools exist to support them in doing so. It is well understood that equitable access to amenities is vital to community function and inherent resilience. However, to measure this we must acknowledge that access is dependent on the operability of both the road network and amenities.<br>" +
         "<br>This tool enables local and national governments to build equity and resilience by:<br><ul>" +
@@ -380,11 +386,11 @@ function showHelpPopup(){
         "<li>Identifying vulnerable geographic areas and demographic groups<br>" +
         '</ul><br><span style="font-style: italic; font-size: 80%;">M. J. Anderson, D. A. F. Kiddle, & T. M. Logan (2021). The Underestimated Role of the Transportation Network: Improving Disaster & Community Resilience. Transportation Research Part D : Transport and Environment. (Under Review)</span></p>' +
             "<br><br>" +
-            '<span class="contact">Have suggestions or feedback? Contact us at <a href="mailto:info@urbanintelligence.co.nz?subject=About Your WREMO Project...">info@urbanintelligence.co.nz</a></span>';
-        
+            '<span class="contact">Have suggestions or feedback? Contact us at <a href="mailto:info@urbanintelligence.co.nz?subject=About Your CHAP Project...">info@urbanintelligence.co.nz</a></span>';
+        */
         var button = '<button onclick="hideHelpPopup()">&#10006;</button>';
         
-        popup.innerHTML = button + content;
+        popup.innerHTML = button + '<br><br><br>';// + content;
     }
     popup.style.display = "block";
 

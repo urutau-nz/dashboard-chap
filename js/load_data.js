@@ -73,45 +73,69 @@ import_manager.addImport('ses_private', 'Sites of Eco Sig Private', 'json',
 import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/adaptation_priority_areas.json');
 
+import_manager.addImport('wildife_significance', 'Sites of Wildlife Sig.', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/sites_of_special_wildlife_significance.json');
+
+import_manager.addImport('coastal_protection', 'Coastal Protection', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/coastal_protection.json');
+
+import_manager.addImport('DOC_conservation', 'DOC Conservation Areas', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/DOC_public_conservation_land.json');
+
+
+
+
+import_manager.addImport('banks_groundwater', 'Banks Peninsula Groundwater', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/banks_gw1.json');
+
 
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
 
-var ses_public;
-var ses_private;
-var priority_areas;
 
 function importsComplete(imports) {
-  ses_public = imports['ses_public'];
-  ses_private = imports['ses_private'];
-  priority_areas = imports['priority_areas'];
 
 
-  new DataLayer('temp1',
-      'Placeholder',
-      'Built',
-      '#B40',
-      null
-    );
+  new DataLayer('coastal_protection',
+        'Coastal Protection',
+        'Built',
+        '#80B',
+        imports['coastal_protection']
+      ).addToLayers();
 
+
+  new DataLayer('temp3',
+        'Placeholder',
+        'Cultural',
+        '#B40',
+        null
+      ).addToLayers();
+
+    
   new DataLayer('ses_public',
         'Public Sites of E.S.',
-        'Nature',
+        'Natural',
         '#0B8',
-        ses_public
-      );
+        imports['ses_public']
+      ).addToLayers();
   new DataLayer('ses_private',
         'Private Sites of E.S.',
-        'Nature',
+        'Natural',
         '#8B0',
-        ses_private
-      );
-  new DataLayer('priority_areas',
-        'Adaptation Priority Areas',
-        'Nature',
-        '#B40',
-        priority_areas
-      );
+        imports['ses_private']
+      ).addToLayers();
+  new DataLayer('wildife_significance',
+        'Sites of Wildlife Sig.',
+        'Natural',
+        '#DD0',
+        imports['wildife_significance']
+      ).addToLayers();
+  new DataLayer('DOC_conservation',
+        'DOC Conservation Areas',
+        'Natural',
+        '#0DD',
+        imports['DOC_conservation']
+      ).addToLayers();
 
 
   new DataLayer('temp2',
@@ -119,14 +143,31 @@ function importsComplete(imports) {
       'Social',
       '#B40',
       null
-    );
+    ).addToLayers();
 
-  new DataLayer('temp3',
-    'Placeholder',
-    'Cultural',
+    
+
+  new DataLayer('priority_areas',
+    'Adaptation Priority Areas',
+    'Misc',
     '#B40',
-    null
-  );
+    imports['priority_areas']
+    ).addToLayers();
+
+
+
+  // HAZARDS
+  new DataLayer('banks_groundwater',
+      'Groundwater Rise (Banks Peninsula)',
+      null,
+      '#018',
+      imports['banks_groundwater'],
+      function (feature) {
+        var col = (feature.properties.DN == 1 ? "#018" : "#2AF")
+        return { fillColor: col, weight: 1, color: col, opacity: 0.2, fillOpacity: 0.2}
+      }
+    ).addToHazards("Expected groundwater levels with 1.9m SLR")
+    .addLegend('Depth to Groundwater', 'm', ["GW is at or above ground", "GW is within 0.7m of ground"], ["#018", "#2AF"]);
 
   initMap();
 }
@@ -136,16 +177,22 @@ function importsComplete(imports) {
 
 
   
+var category_titles = {'Built': 'Built Domain',
+'Cultural': 'Cultural Domain',
+'Natural': 'Natural Domain',
+'Social': 'Social Domain',
+'Misc': 'Misc Layers',
+};
+
 
 /* ==== DATALAYER DEFINITION ==== */
 /* - Used to control adding & removing layers of topojson data 
 */
 var available_layers = {};
+var all_hazards = {};
 
 class DataLayer {
   constructor(id, name, category, color, topojson, style_func=null) {
-    available_layers[id] = this;
-
     this.id = id;
     this.name = name;
     this.category = category;
@@ -160,46 +207,114 @@ class DataLayer {
     this.default_style = this.default_style_generator();
     this.onEachFeature = this.onEachFeatureGenerator();
   }
+  addToHazards(hazard_description) {
+    all_hazards[this.id] = this;
+    this.hazard_description = hazard_description;
+    return this;
+  }
+  addToLayers() {
+    available_layers[this.id] = this;
+    return this;
+  }
   onEachFeatureGenerator() {
     var myself = this;
     return function (feature, layer) { 
+      feature.datalayer = myself;
       layer.on({
-          mouseover: function() {
-              myself.layer.setStyle({
+          mouseover: function(e) {
+              e.target.setStyle({
                 weight: 3,
                 opacity: 1,
                 fillOpacity: 0.5
               });
+
+              // Update Mouse Info
+              var mouse_info = document.getElementById("mouseInfo");
+              mouse_info.style.visibility = "visible";
+              mouse_info.style.background = "rgb(255,255,255)";
+              mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + e.target.feature.properties.title + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
+              console.log(e);
           },
-          mouseout: function() {
-            myself.layer.setStyle({
+          mouseout: function(e) {
+            e.target.setStyle({
               weight: 2,
               opacity: myself.opacity,
               fillOpacity: myself.opacity
             });
+            
+            // Update Mouse Info
+            var mouse_info = document.getElementById("mouseInfo");
+            mouse_info.style.visibility = "hidden";
+            mouse_info.style.background = "rgba(255,255,255, 0.8)";
           }
       });
     }
   }
   default_style_generator () {
     var myself = this;
-    return function (feature) { return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; }
+    return function (feature) { 
+      return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
+    }
+  }
+  displayLegend() {    
+    content = '<table id="legend_table">';
+    for (var i=0; i < this.legend_values.length; i++) {
+      var color = this.legend_colors[i];
+      content += '<tr><td class="cblock" style="background: ' + color + ';)"></td><td class="ltext">' + this.legend_values[i] + '</td></tr>';
+    }
+    content += '</table>';
+
+    $('#hazard_legend').html('<h3 style="font-size:0.9rem;margin:0.2rem;">' + this.legend_header + ' (' + this.legend_unit + ')</h3>' + content);
+    $('#hazard_legend').css('display', 'block');
+  }
+  removeLegend() {
+    $('#hazard_legend').css('display', 'none');
+  }
+  addLegend(header, unit, values, colors=null) {
+    this.legend_header = header;
+    this.legend_unit = unit;
+    this.legend_values = values;
+    if (colors) {
+      this.legend_colors = colors;
+    } else {
+      this.legend_colors = [];
+      for (var i in values) {
+        var alpha = 1/(values.length) * (i+1);
+        this.legend_colors.push('rgba(0,30,140,'+alpha+')');
+      }
+    }
+    return this;
   }
   display () {
     if (!this.layer && this.topojson) {
       // Find GeometryCollection in topojson
       var geomCollection = this.topojson.objects[Object.keys(this.topojson.objects)[0]];
+      console.log(geomCollection);
       //Create layer, converting topojson to geojson
       this.layer = L.geoJSON(topojson.feature(this.topojson, geomCollection), 
-                {style : (this.style_func ? this.style_func : this.default_style), onEachFeature : this.onEachFeature}
+                {style : (this.style_func ? this.style_func : this.default_style), onEachFeature : (this.hazard_description ? null : this.onEachFeature)}
                 );
       this.layer.addTo(map);
+      
+      
+      if (this.legend_header) {
+        this.displayLegend();
+      }
+      if (this.hazard_description) {
+        $("#hazard_text").text(this.hazard_description);
+      }
     }
   }
   remove () {
     if (this.layer) {
       map.removeLayer(this.layer);
+      if (this.legend_header) {
+        this.removeLegend();
+      }
       this.layer = null;
+      if (this.hazard_description) {
+        $("#hazard_text").text('');
+      }
     }
   }
   update () {
@@ -207,97 +322,131 @@ class DataLayer {
       this.layer.setStyle((this.style_func ? this.style_func : this.default_style));
     }
   }
-  blur () {
-    // For Image Layers
-  }
 }
 
-var all_hazards = {};
 
-class HazardLayer {
-  constructor (id, name, aspect_width, aspect_height, center_lat, center_lng, aspect_lat, aspect_lng) {
-    all_hazards[id] = this;
+class ImageLayer {
+  constructor (id, name, category, url, nw_lat, nw_lng, se_lat, se_lng) {
 
     this.id = id;
     this.name = name;
+    this.category = category;
+    this.url = url;
 
     this.visible = false;
 
-    this.aspect_width = aspect_width;
-    this.aspect_height = aspect_height;
+    this.bounds = [[nw_lat, nw_lng], [se_lat, se_lng]];
 
-    this.opacity = 0.2;
-
-    this.center_lat = center_lat;
-    this.center_lng = center_lng;
-
-    this.aspect_lat = aspect_lat;
-    this.aspect_lng = aspect_lng;
-
-    this.last_zoom = null;
+    this.layer = null;
   }
-  calculateTransform() {
-    var bounds = map.getBounds();
-    var lat = bounds._northEast.lat;
-    var lng = bounds._southWest.lng;
-    var zoom = map.getZoom();
-    console.log(bounds, zoom);
-
-    var element = document.getElementById(this.id);
-    console.log(element);
-
-    if (this.last_zoom != zoom) {
-      element.style.width = 2**zoom * this.aspect_width + 'px';
-      element.style.height = 2**zoom * this.aspect_height + 'px';
-      this.last_zoom = zoom;
+  addToHazards(hazard_description) {
+    all_hazards[this.id] = this;
+    this.hazard_description = hazard_description;
+    return this;
+  }
+  addToLayers() {
+    available_layers[this.id] = this;
+    return this;
+  }
+  displayLegend() {    
+    content = '<table id="legend_table">';
+    for (var i=0; i < this.legend_values.length; i++) {
+      var alpha = 1/(this.legend_values.length) * (i+1);
+      var color = this.legend_colors[i];
+      content += '<tr><td class="cblock" style="background: ' + color + ';opacity:' +alpha+';)"></td><td class="ltext">' + this.legend_values[i] + '</td></tr>';
     }
+    content += '</table>';
 
-    element.style.top = 2**zoom * (lat - this.center_lat) * this.aspect_lat + 'px';
-    element.style.left = 2**zoom * (lng - this.center_lng) * this.aspect_lng + 'px';
+    $('#hazard_legend').html('<h3 style="font-size:0.9rem;margin:0.2rem;">' + this.legend_header + ' (' + this.legend_unit + ')</h3>' + content);
+    $('#hazard_legend').css('display', 'block');
+  }
+  removeLegend() {
+    $('#hazard_legend').css('display', 'none');
+  }
+  addLegend(header, unit, values, colors=null) {
+    this.legend_header = header;
+    this.legend_unit = unit;
+    this.legend_values = values;
+    if (colors) {
+      this.legend_colors = colors;
+    } else {
+      this.legend_colors = [];
+      for (var i in values) {
+        this.legend_colors.push('#018');
+      }
+    }
+    return this;
   }
   display() {
     // Show this.element
-    this.calculateTransform();
-    var element = document.getElementById(this.id);
-    element.style.display = 'block';
-    this.visible = true;
+    if (!this.visible) {
+      this.layer = L.imageOverlay(this.url, this.bounds).addTo(map);
+      if (this.hazard_description) {
+        $("#hazard_text").text(this.hazard_description);
+      }
+      if (this.legend_header) {
+        this.displayLegend();
+      }
+      this.visible = true;
+    }
   }
   remove() {
     // Hide this.element
-    var element = document.getElementById(this.id);
-    element.style.display = 'none';
-    this.visible = false;
-  }
-  blur () {
     if (this.visible) {
-      var element = document.getElementById(this.id);
-      element.style.filter = 'blur(6px)';
-    }
-  }
-  update () {
-    // Called on map zoom or move end
-    if (this.visible) {
-      var element = document.getElementById(this.id);
-      this.calculateTransform();
-      element.style.filter = '';
+      map.removeLayer(this.layer);
+      if (this.hazard_description) {
+        $("#hazard_text").text('');
+      }
+      if (this.legend_header) {
+        this.removeLegend();
+      }
+      this.visible = false;
     }
   }
 }
 
 // Hazards
 
-new HazardLayer('test_image',
-  'Test Image',
-  1.23291, 0.9399,
-  -43.03477, 171.65863,
-  0.9813737, -0.7093915
-  );
+new ImageLayer('coastal_erosion',
+  'Coastal Erosion (Detailed)',
+  null,
+  'https://projects.urbanintelligence.co.nz/chap/data/tif5_2.png',
+  -43.8175583203575, 172.68006589048363,
+  -43.38980174324621, 172.97179259824534,
+  ).addToHazards("Probabilistic Erosion by 2150 with 2.0m of SLR")
+  .addLegend("Probability of Erosion", '%', [0, 25, 50, 75, 100]);
+
+new ImageLayer('slr_2m',
+  'Coastal Inundation',
+  null,
+  'https://projects.urbanintelligence.co.nz/chap/data/slr_2m.png',
+  -43.910311494073454, 172.370005888,
+  -43.387693258, 173.1430543875895,
+  ).addToHazards("Expected inundation depth during a 1 in 100year event with 2.0m SLR")
+  .addLegend("Inundation Depth", 'm', [0, 1, 2, 3, 4, 5, 6]);
+
+new ImageLayer('ch_gw',
+  'Groundwater Rise (Christchurch)',
+  null,
+  'https://projects.urbanintelligence.co.nz/chap/data/ch_gw_2.png',
+  -43.598523872449995, 172.53134737505002,
+  -43.39146096005, 172.77043032545,
+  ).addToHazards("Expected groundwater levels 85% of the time with 2.4m SLR")
+  .addLegend("Depth to Groundwater", 'm', [2, 1, 0, -1, -2, -3, -4, -5, -6]);
+
+
+  
+  
+  
 
 
 
+  
 
-
-
+  
+  
+  
+  
 
 
 
@@ -318,6 +467,7 @@ function initMap() {
       }, 100);
   } else {
     initSelectionPanel();
+    setHazardMenu();
     updateMap();
   }
 }
