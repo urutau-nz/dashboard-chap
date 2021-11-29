@@ -82,6 +82,46 @@ import_manager.addImport('coastal_protection', 'Coastal Protection', 'json',
 import_manager.addImport('DOC_conservation', 'DOC Conservation Areas', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/DOC_public_conservation_land.json');
 
+import_manager.addImport('cemetery', 'Cemeteries', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/cemetery.json');
+
+import_manager.addImport('water_pipes', 'Water Pipes', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/potable_water_pipes_in_service.json');
+
+import_manager.addImport('landfill', 'Landfills', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/landfill.json');
+
+import_manager.addImport('port_access', 'Port Access', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/port_access.json');
+
+import_manager.addImport('port_land_claim', 'Port Land Claim', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/port_land_claim.json');
+
+import_manager.addImport('port_operations', 'Port Operations', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/port_operations.json');
+
+import_manager.addImport('port_storage', 'Port Storage', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/port_storage.json');
+
+import_manager.addImport('potable_water_strcutures_in_service', 'Potable Water Structures', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/potable_water_strcutures_in_service.json');
+
+
+
+
+import_manager.addImport('community_facilities', 'Community Facilities', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/clipped_community_facilities.csv');
+
+import_manager.addImport('transfer_stations', 'Transfer Stations', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/transfer_stations.csv');
+
+import_manager.addImport('potable_water_pumps', 'Potable Water Pumps', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/potable_water_pumps.csv');
+
+import_manager.addImport('tanks', 'Tanks', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/tanks.csv');
+
+
 
 
 
@@ -97,11 +137,85 @@ function importsComplete(imports) {
 
 
   new DataLayer('coastal_protection',
-        'Coastal Protection',
-        'Built',
-        '#80B',
-        imports['coastal_protection']
-      ).addToLayers();
+      'Coastal Protection',
+      'Built',
+      '#D0D',
+      imports['coastal_protection']
+    ).addToLayers();
+  new DataLayer('cemetery',
+      'Cemetery',
+      'Built',
+      '#B88',
+      imports['cemetery']
+    ).addToLayers();
+  new DataLayer('water_pipes',
+      'Potable Water Pipes',
+      'Built',
+      '#88B',
+      imports['water_pipes'],
+      true // LARGE - needs to be tiled
+    ).addToLayers();
+  new MarkerLayer('community_facilities',
+      'Community Facilities',
+      'Built',
+      '#4B4',
+      imports['community_facilities']
+    ).addToLayers();
+  new MarkerLayer('transfer_stations',
+      'Transfer Stations',
+      'Built',
+      '#B44',
+      imports['transfer_stations']
+    ).addToLayers();
+  new MarkerLayer('tanks',
+      'Tanks',
+      'Built',
+      '#8B0',
+      imports['tanks']
+    ).addToLayers();
+  new DataLayer('potable_water_strcutures_in_service',
+      'Potable Water Structures',
+      'Built',
+      '#B80',
+      imports['potable_water_strcutures_in_service']
+    ).addToLayers();
+  new DataLayer('landfill',
+      'Landfills',
+      'Built',
+      '#44B',
+      imports['landfill']
+    ).addToLayers();
+  new DataLayer('port_access',
+      'Port Access',
+      'Built',
+      '#44F',
+      imports['port_access']
+    ).addToLayers();
+  new DataLayer('port_land_claim',
+      'Port land Claim',
+      'Built',
+      '#F44',
+      imports['port_land_claim']
+    ).addToLayers();
+  new DataLayer('port_operations',
+    'Port Operations',
+    'Built',
+    '#4F4',
+    imports['port_operations']
+  ).addToLayers();
+  new DataLayer('port_storage',
+    'Port Storage',
+    'Built',
+    '#0B8',
+    imports['port_storage']
+  ).addToLayers();
+  new MarkerLayer('potable_water_pumps',
+    'Potable Water Pumps',
+    'Built',
+    '#08B',
+    imports['potable_water_pumps']
+  ).addToLayers();
+
 
 
   new DataLayer('temp3',
@@ -112,6 +226,7 @@ function importsComplete(imports) {
       ).addToLayers();
 
     
+
   new DataLayer('ses_public',
         'Public Sites of E.S.',
         'Natural',
@@ -138,6 +253,8 @@ function importsComplete(imports) {
       ).addToLayers();
 
 
+
+
   new DataLayer('temp2',
       'Placeholder',
       'Social',
@@ -162,6 +279,7 @@ function importsComplete(imports) {
       null,
       '#018',
       imports['banks_groundwater'],
+      false,
       function (feature) {
         var col = (feature.properties.DN == 1 ? "#018" : "#2AF")
         return { fillColor: col, weight: 1, color: col, opacity: 0.2, fillOpacity: 0.2}
@@ -191,22 +309,18 @@ var category_titles = {'Built': 'Built Domain',
 var available_layers = {};
 var all_hazards = {};
 
-class DataLayer {
-  constructor(id, name, category, color, topojson, style_func=null) {
+class Layer {
+  constructor(id, name, category) {
     this.id = id;
     this.name = name;
     this.category = category;
-    this.topojson = topojson;
-    this.color = color;
+
+    this.visible = false;
 
     this.layer = null;
-    this.style_func = style_func;
-
-    this.opacity = 0.2;
-
-    this.default_style = this.default_style_generator();
-    this.onEachFeature = this.onEachFeatureGenerator();
   }
+
+
   addToHazards(hazard_description) {
     all_hazards[this.id] = this;
     this.hazard_description = hazard_description;
@@ -216,46 +330,7 @@ class DataLayer {
     available_layers[this.id] = this;
     return this;
   }
-  onEachFeatureGenerator() {
-    var myself = this;
-    return function (feature, layer) { 
-      feature.datalayer = myself;
-      layer.on({
-          mouseover: function(e) {
-              e.target.setStyle({
-                weight: 3,
-                opacity: 1,
-                fillOpacity: 0.5
-              });
 
-              // Update Mouse Info
-              var mouse_info = document.getElementById("mouseInfo");
-              mouse_info.style.visibility = "visible";
-              mouse_info.style.background = "rgb(255,255,255)";
-              mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + e.target.feature.properties.title + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
-              console.log(e);
-          },
-          mouseout: function(e) {
-            e.target.setStyle({
-              weight: 2,
-              opacity: myself.opacity,
-              fillOpacity: myself.opacity
-            });
-            
-            // Update Mouse Info
-            var mouse_info = document.getElementById("mouseInfo");
-            mouse_info.style.visibility = "hidden";
-            mouse_info.style.background = "rgba(255,255,255, 0.8)";
-          }
-      });
-    }
-  }
-  default_style_generator () {
-    var myself = this;
-    return function (feature) { 
-      return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
-    }
-  }
   displayLegend() {    
     content = '<table id="legend_table">';
     for (var i=0; i < this.legend_values.length; i++) {
@@ -279,121 +354,33 @@ class DataLayer {
     } else {
       this.legend_colors = [];
       for (var i in values) {
-        var alpha = 1/(values.length) * (i+1);
+        var alpha = 1/(values.length) * (parseInt(i)+1);
         this.legend_colors.push('rgba(0,30,140,'+alpha+')');
       }
     }
     return this;
   }
-  display () {
-    if (!this.layer && this.topojson) {
-      // Find GeometryCollection in topojson
-      var geomCollection = this.topojson.objects[Object.keys(this.topojson.objects)[0]];
-      console.log(geomCollection);
-      //Create layer, converting topojson to geojson
-      this.layer = L.geoJSON(topojson.feature(this.topojson, geomCollection), 
-                {style : (this.style_func ? this.style_func : this.default_style), onEachFeature : (this.hazard_description ? null : this.onEachFeature)}
-                );
-      this.layer.addTo(map);
-      
-      
-      if (this.legend_header) {
-        this.displayLegend();
-      }
-      if (this.hazard_description) {
-        $("#hazard_text").text(this.hazard_description);
-      }
-    }
-  }
-  remove () {
-    if (this.layer) {
-      map.removeLayer(this.layer);
-      if (this.legend_header) {
-        this.removeLegend();
-      }
-      this.layer = null;
-      if (this.hazard_description) {
-        $("#hazard_text").text('');
-      }
-    }
-  }
-  update () {
-    if (this.layer) {
-      this.layer.setStyle((this.style_func ? this.style_func : this.default_style));
-    }
-  }
-}
 
 
-class ImageLayer {
-  constructor (id, name, category, url, nw_lat, nw_lng, se_lat, se_lng) {
-
-    this.id = id;
-    this.name = name;
-    this.category = category;
-    this.url = url;
-
-    this.visible = false;
-
-    this.bounds = [[nw_lat, nw_lng], [se_lat, se_lng]];
-
-    this.layer = null;
-  }
-  addToHazards(hazard_description) {
-    all_hazards[this.id] = this;
-    this.hazard_description = hazard_description;
-    return this;
-  }
-  addToLayers() {
-    available_layers[this.id] = this;
-    return this;
-  }
-  displayLegend() {    
-    content = '<table id="legend_table">';
-    for (var i=0; i < this.legend_values.length; i++) {
-      var alpha = 1/(this.legend_values.length) * (i+1);
-      var color = this.legend_colors[i];
-      content += '<tr><td class="cblock" style="background: ' + color + ';opacity:' +alpha+';)"></td><td class="ltext">' + this.legend_values[i] + '</td></tr>';
-    }
-    content += '</table>';
-
-    $('#hazard_legend').html('<h3 style="font-size:0.9rem;margin:0.2rem;">' + this.legend_header + ' (' + this.legend_unit + ')</h3>' + content);
-    $('#hazard_legend').css('display', 'block');
-  }
-  removeLegend() {
-    $('#hazard_legend').css('display', 'none');
-  }
-  addLegend(header, unit, values, colors=null) {
-    this.legend_header = header;
-    this.legend_unit = unit;
-    this.legend_values = values;
-    if (colors) {
-      this.legend_colors = colors;
-    } else {
-      this.legend_colors = [];
-      for (var i in values) {
-        this.legend_colors.push('#018');
-      }
-    }
-    return this;
-  }
   display() {
-    // Show this.element
     if (!this.visible) {
-      this.layer = L.imageOverlay(this.url, this.bounds).addTo(map);
-      if (this.hazard_description) {
-        $("#hazard_text").text(this.hazard_description);
-      }
+      this.visible = true;
+      
       if (this.legend_header) {
         this.displayLegend();
       }
-      this.visible = true;
+      if (this.hazard_description) {
+        $("#hazard_text").text(this.hazard_description);
+      }
     }
   }
   remove() {
     // Hide this.element
-    if (this.visible) {
+    if (this.layer) {
       map.removeLayer(this.layer);
+      this.layer = null;
+    }
+    if (this.visible) {
       if (this.hazard_description) {
         $("#hazard_text").text('');
       }
@@ -403,7 +390,224 @@ class ImageLayer {
       this.visible = false;
     }
   }
+  update() {
+  }
 }
+
+
+class DataLayer extends Layer {
+  constructor(id, name, category, color, topojson, tiling=false, style_func=null) {
+    super(id, name, category);
+
+    this.color = color;
+    this.topojson = topojson;
+
+    this.style_func = style_func;
+
+    this.opacity = 0.2;
+
+    this.tiled = tiling;
+
+    this.default_style = this.default_style_generator();
+    this.onEachFeature = this.onEachFeatureGenerator();
+  }
+  onEachFeatureGenerator() {
+    var myself = this;
+    return function (feature, layer) { 
+      feature.datalayer = myself;
+      layer.on({
+          mouseover: function(e) {
+            console.log(e);
+              e.target.setStyle({
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0.5
+              });
+
+              // Update Mouse Info
+              var mouse_info = document.getElementById("mouseInfo");
+              mouse_info.style.visibility = "visible";
+              mouse_info.style.background = "rgb(255,255,255)";
+              
+              var hover_val = "";
+              if (e.target.feature.properties.title) {
+                hover_val = e.target.feature.properties.title;
+              } else if (e.target.feature.properties.name) {
+                hover_val = e.target.feature.properties.name;
+              }
+              mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
+              console.log(e);
+          },
+          mouseout: function(e) {
+            e.target.setStyle({
+              weight: 2,
+              opacity: myself.opacity,
+              fillOpacity: myself.opacity
+            });
+            
+            // Update Mouse Info
+            var mouse_info = document.getElementById("mouseInfo");
+            mouse_info.style.visibility = "hidden";
+            mouse_info.style.background = "rgba(255,255,255, 0.8)";
+          }
+      });
+    }
+  }
+  default_style_generator () {
+    var myself = this;
+    return function (feature) { 
+      return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
+    }
+  }
+  display () {
+    super.display();
+
+    if (!this.layer && this.topojson) {
+      // Find GeometryCollection in topojson
+      var geomCollection = this.topojson.objects[Object.keys(this.topojson.objects)[0]];
+      console.log(geomCollection);
+
+      //Create layer, converting topojson to geojson
+      
+      if (this.tiled) {
+        // Tile the layer using geojson-vt (i.e. it's large)
+        var options = {
+          maxZoom: 16,
+          tolerance: 3,
+          debug: 0,
+          style: {
+            fillColor: this.color,
+            color: this.color,
+            weight: 2,
+            opacity: this.opacity,
+            fillOpacity: this.opacity
+          },
+        };
+        this.layer = L.geoJson.vt(topojson.feature(this.topojson, geomCollection), options).addTo(map);
+      
+      } else {
+        // No tiling (faster if small)
+        this.layer = L.geoJSON(topojson.feature(this.topojson, geomCollection), 
+                  {style : (this.style_func ? this.style_func : this.default_style), onEachFeature : (this.hazard_description ? null : this.onEachFeature)}
+                  );
+        this.layer.addTo(map);
+      }
+    }
+  }
+  update () {
+    super.update();
+
+    if (this.layer) {
+      if (this.tiled) {
+        this.layer.setStyle(this.layer, (this.style_func ? this.style_func : this.default_style));
+      } else {
+        this.layer.setStyle((this.style_func ? this.style_func : this.default_style));
+      }
+    }
+  }
+}
+
+
+class ImageLayer extends Layer {
+  constructor (id, name, category, url, nw_lat, nw_lng, se_lat, se_lng) {
+    super(id, name, category);
+    this.url = url;
+
+    this.bounds = [[nw_lat, nw_lng], [se_lat, se_lng]];
+  }
+  display() {
+    super.display();
+    // Show this.element
+    if (this.visible) {
+      this.layer = L.imageOverlay(this.url, this.bounds).addTo(map);
+    }
+  }
+}
+
+class MarkerLayer extends Layer {
+  constructor (id, name, category, color, csv, style_func=null) {
+    super(id, name, category);
+
+    this.color = color;
+    this.csv = csv;
+
+    this.style_func = style_func;
+
+    this.default_style = this.default_style_generator();
+    this.onEachFeature = this.onEachFeatureGenerator();
+  }
+  onEachFeatureGenerator() {
+    var myself = this;
+    return {
+          mouseover: function(e) {
+              e.target.setStyle({
+                radius: 6
+              });
+
+              // Update Mouse Info
+              var mouse_info = document.getElementById("mouseInfo");
+              mouse_info.style.visibility = "visible";
+              mouse_info.style.background = "rgb(255,255,255)";
+              
+              var hover_val = "";
+              console.log(e.target);
+              if (e.target.destination.title) {
+                hover_val = e.target.destination.title;
+              } else if (e.target.destination.name) {
+                hover_val = e.target.destination.name;
+              }
+              mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.destination.markerlayer.name + '</td></tr></table>';
+              console.log(e);
+          },
+          mouseout: function(e) {
+            e.target.setStyle({
+              radius: 3
+            });
+            
+            // Update Mouse Info
+            var mouse_info = document.getElementById("mouseInfo");
+            mouse_info.style.visibility = "hidden";
+            mouse_info.style.background = "rgba(255,255,255, 0.8)";
+          }
+      };
+  }
+  default_style_generator () {
+    var myself = this;
+    return function (feature) { 
+      return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
+    }
+  }
+  display () {
+    super.display();
+
+    if (!this.layer && this.csv) {
+      var markers = [];
+      for (var d of this.csv) {
+          var marker = L.circleMarker([d.Y, d.X]).setStyle({
+              radius: 3,
+              fillColor: this.color,
+              color: "#000",
+              weight: 0,
+              opacity: 1,
+              fillOpacity: 1
+          }).on({
+              mouseover: this.onEachFeature.mouseover,
+              mouseout: this.onEachFeature.mouseout
+          });
+          d.markerlayer = this;
+          marker.destination = d;
+          markers.push(marker);
+      }
+      this.layer = L.layerGroup(markers);
+      this.layer.addTo(map);
+    }
+  }
+}
+
+
+
+
+
 
 // Hazards
 
