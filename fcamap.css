@@ -98,6 +98,11 @@ div.shadow {
   padding: 0.5rem;
 }
 
+body .vl-select-head {
+  background-color: white;
+  border-radius: 0.2rem;
+}
+
 
 
 

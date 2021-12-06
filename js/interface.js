@@ -113,10 +113,15 @@ function initFilterPanels() {
     $(".filters-td").html(contents);
 
     $("#page-map .region-dropdown").attr('id', 'map-region-dropdown');
-    $("#page-map .region-dropdown").attr('id', 'map-region-dropdown');
-    
-    regionMenu = new vlDropDown("map-region-dropdown");
-    regionMenu = new vlDropDown("map-region-dropdown");
+    $("#page-report .region-dropdown").attr('id', 'report-region-dropdown');
+
+    $("#page-map .hazard-dropdown").attr('id', 'map-hazard-dropdown');
+    $("#page-report .hazard-dropdown").attr('id', 'report-hazard-dropdown');
+
+    mapRegionMenu = new vlDropDown("map-region-dropdown");
+    reportRegionMenu = new vlDropDown("report-region-dropdown");
+    mapHazardMenu = new vlDropDown("map-hazard-dropdown");
+    reportHazardMenu = new vlDropDown("report-hazard-dropdown");
 }
 
 
