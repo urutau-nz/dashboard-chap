@@ -670,8 +670,7 @@ function initMap() {
           }
       }, 100);
   } else {
-    initSelectionPanel();
-    setHazardMenu();
+    initFilterPanels();
     updateMap();
   }
 }
@@ -679,6 +678,112 @@ function initMap() {
 
 
 /* Updates entire map */
+var map = null;
 function updateMap() {
-  null;
+  
+  if (map != null) {
+    map.remove();
+  }
+  /* ==== INITIALISE LEAFLET MAP & TILE LAYER ==== */
+
+  map = L.map('map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
+  //attr = L.control.attribution().addAttribution('<a href="https://urbanintelligence.co.nz/">Urban Intelligence</a>');
+  //attr.addTo(map);
+
+  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
+                              {"attributionControl": false, "detectRetina": false, "maxZoom": 16, "minZoom": 4,
+                                "noWrap": false, "subdomains": "abc"}).addTo(map);
+
+  map.createPane('labels');
+  map.getPane('labels').style.zIndex = 650;
+  map.getPane('labels').style.pointerEvents = 'none';
+
+  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}{r}.png',
+              {pane: 'labels'}).addTo(map);
+  
+  
+
+
+
+  var category_colors = {'Built': ['#FFC400', '#885400'],
+  'Cultural': ['#82003D', '#390009'],
+  'Natural': ['#8FD760', '#1F8324'],
+  'Social': ['#495CB1', '#2A284F'],
+  'Misc': ['#00A9A7', '#004B57'],
+  };
+  
+
+  // Generate Asset Menu
+  var asset_menu = [];
+  for (var category in category_titles) {
+    var items = [];
+    for (var layer_id in available_layers) {
+      var layer = available_layers[layer_id];
+      if (layer.category == category) {
+        items.push([layer.id, layer.name]);
+      }
+    }
+    asset_menu.push({'header': category_titles[category], 'category': category,  'items': items});
+  }
+  asset_menu.sort(function(a, b) { // Larger length to smaller. If equal, put in original order.
+    var len = a.items.length - b.items.length;
+    if (len == 0) {
+      var keys = Object.values(category_titles);
+      var out = keys.indexOf(b.header) - keys.indexOf(a.header);
+      return out;
+    } else {
+      return len;
+    }
+  });
+
+  $("#map-asset-table").html("");
+
+  var content = "";
+  var looping = true;
+  var left = [];
+  var right = [];
+  var left_cat = null;
+  var right_cat = null;
+
+  while(looping) {
+    if (left.length + right.length + asset_menu.length == 0) {
+      looping = false;
+      break;
+    }
+    
+    content += '<tr>';
+
+    if (left.length == 0 && asset_menu.length > 0) {
+      var asset = asset_menu.pop();
+      content += `<td class="header">${asset.header}</td>`;
+      left = asset.items;
+      left_cat = asset.category;
+
+    } else if (left.length > 0) {
+      var item = left.pop(); // Add clickability & use item[0]
+      content += `<td class="item ${left_cat}">${item[1]}</td>`;
+
+    } else {
+      content += '<td></td>';
+    }
+
+
+    if (right.length == 0 && asset_menu.length > 0) {
+      var asset = asset_menu.pop();
+      content += `<td class="header">${asset.header}</td>`;
+      right = asset.items;
+      right_cat = asset.category;
+
+    } else if (right.length > 0) {
+      var item = right.pop(); // Add clickability & use item[0]
+      content += `<td class="item ${right_cat}">${item[1]}</td>`;
+      
+    } else {
+      content += '<td></td>';
+    }
+    
+    content += '</tr>';
+  }
+
+  $("#map-asset-table").html(content);
 }

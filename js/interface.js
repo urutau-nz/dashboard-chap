@@ -1,4 +1,126 @@
-/* ==== TOP RIGHT UI ELEMENT ==== */
+
+var current_page = "overview";
+function setPage(page) {
+    if (current_page != page) {
+        $("#menu-table td").removeClass("active");
+        $(`#page-${current_page}`).removeClass("active");
+
+        current_page = page;
+        $(`#menu-table td[value="${page}"]`).addClass("active");
+        $(`#page-${page}`).addClass("active");
+
+        if (page == "map") {
+            initMap();
+        }
+    }
+}
+
+
+var current_report_tab = "overview";
+function setReportTab(tab) {
+    if (tab != current_report_tab) {
+        $(`#report-menu-${current_report_tab}-td`).removeClass("active");
+
+        current_report_tab = tab;
+
+        // Set Report Info BG to color of tab
+        $("#report-info-td").css("background-color", $(`#report-menu-${tab}-td`).css("background-color"));
+        $(`#report-menu-${current_report_tab}-td`).addClass("active");
+    }
+}
+
+
+
+
+
+
+var regionMenu;
+function initFilterPanels() {
+    var contents = `
+    <div class="filters-div">
+        <table style="height:100%;width:100%;">
+            <tr>
+                <td>
+                    <h2>Filters</h2>
+                </td>
+            </tr>
+            <tr style="height: 100%;">
+                <td style="border-right: 2px dashed;width:50%;">
+                    <table style="height:100%">
+                        <tr>
+                            <td>
+                                <div class="region-dropdown"></div>
+                                <div>This is a description for a region, if that is needed.</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="hazard-dropdown"></div>
+                                <div>This is a description for a hazard, if that is needed.</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table style="height:100%">
+                        <tr>
+                            <td>
+                                <h3>SLR</h3>
+                            </td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="slr-slider"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Frequency</h3>
+                            </td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="frequency-slider"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Year</h3>
+                            </td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="year-slider"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div class="filters-expanding-icon"><img src="./icons/expand_arrow.svg"></div>
+    </div>
+    `;
+
+    $(".filters-td").html(contents);
+
+    regionMenu = new vlDropDown("region-dropdown");
+}
+
+
+
+
+
+
+/* ==== TOP RIGHT UI ELEMENT ==== 
 
 var amenity_legend = L.control({position: 'topright'});
 
@@ -34,7 +156,7 @@ function setHazardMenu() {
 }
 
 /* Updates the map on changing the hazard
-*/
+
 var hazardMenu = document.getElementById("hazardDropDown");
 hazardMenu.onchange = function() {
     for (hazard_id in all_hazards) {
@@ -58,7 +180,7 @@ hazardMenu.onchange = function() {
 
 
 
-/* ==== TOP RIGHT SELECTION BOX ==== */
+/* ==== TOP RIGHT SELECTION BOX ==== 
 
 var layers = [];
 
@@ -141,7 +263,7 @@ function selectionMade(layer_id) {
             for (var i in layers) {
                 colors = colors.filter(d => d != layers[i][1]);
             }
-            var color = colors[Math.floor(Math.random()*colors.length)];*/
+            var color = colors[Math.floor(Math.random()*colors.length)];
             layers.unshift([layer_id, layer.name, layer.color]);
 
             if (layers.length == 4) {
@@ -177,7 +299,7 @@ function selectionMade(layer_id) {
 
 
 
-/* ==== TOP RIGHT LAYER PANEL ==== */
+/* ==== TOP RIGHT LAYER PANEL ==== 
 
 var layers_legend = L.control({position: 'topright'});
 
@@ -247,7 +369,7 @@ updateLayers();
 
 
 
-/* ==== BOTTOM LEFT UI ELEMENTS ==== */
+/* ==== BOTTOM LEFT UI ELEMENTS ==== 
 
 let scale_legend = L.control({ position: 'bottomleft' });
 scale_legend.onAdd = function(map) {
@@ -355,7 +477,7 @@ function setAvailabilityLegend(div = null) {
     div.innerHTML = '<h3 style="font-size:0.9rem;margin:0.2rem;">Destinations:</h3>' + table;
 }
 
-*/
+
 
 
 
@@ -387,7 +509,7 @@ function showHelpPopup(){
         '</ul><br><span style="font-style: italic; font-size: 80%;">M. J. Anderson, D. A. F. Kiddle, & T. M. Logan (2021). The Underestimated Role of the Transportation Network: Improving Disaster & Community Resilience. Transportation Research Part D : Transport and Environment. (Under Review)</span></p>' +
             "<br><br>" +
             '<span class="contact">Have suggestions or feedback? Contact us at <a href="mailto:info@urbanintelligence.co.nz?subject=About Your CHAP Project...">info@urbanintelligence.co.nz</a></span>';
-        */
+        
         var button = '<button onclick="hideHelpPopup()">&#10006;</button>';
         
         popup.innerHTML = button + '<br><br><br>';// + content;
@@ -444,4 +566,4 @@ for (element of document.getElementsByClassName("legend")) {
         map.doubleClickZoom.enable();
         map.boxZoom.enable();
      });
-}
+}*/

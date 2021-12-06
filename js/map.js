@@ -1,25 +1,5 @@
 
 
-
-/* ==== INITIALISE LEAFLET MAP & TILE LAYER ==== */
-
-var map = L.map('map', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
-//attr = L.control.attribution().addAttribution('<a href="https://urbanintelligence.co.nz/">Urban Intelligence</a>');
-//attr.addTo(map);
-
-var tile_layer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                             {"attributionControl": false, "detectRetina": false, "maxZoom": 16, "minZoom": 4,
-                              "noWrap": false, "subdomains": "abc"}).addTo(map);
-
-map.createPane('labels');
-map.getPane('labels').style.zIndex = 650;
-map.getPane('labels').style.pointerEvents = 'none';
-
-L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}{r}.png',
-            {pane: 'labels'}).addTo(map);
-
-
-
 /* ==== BLOCK MOUSE EVENTS ==== */
 /* - Don't remove these */
 /* Highlights a block on mouseover, and updates the distance pop-up.
