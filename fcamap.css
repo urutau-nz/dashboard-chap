@@ -75,7 +75,6 @@ div.shadow {
   border-radius: 1rem;
   color: #18426F;
   position: relative;
-  padding: 1rem;
 }
 #report-info-td .filters-div {
   box-shadow: 0 0.3rem 0.5rem #0002;
@@ -88,14 +87,15 @@ div.shadow {
   padding: 1rem;
 }
 .filters-div h2 {
-  margin: 0 0.4rem;
+  margin: 0.4rem 0.4rem 0 1rem;
+  font-size: 1.7rem;
 }
 .filters-div h3 {
   margin: 0 0.4rem;
 }
 
 .filters-div td {
-  padding: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 body .vl-select-head {
@@ -103,7 +103,10 @@ body .vl-select-head {
   border-radius: 0.2rem;
 }
 
-
+.slider {
+  height: 1.5rem;
+  width: 100%;
+}
 
 
 

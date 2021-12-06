@@ -45,7 +45,7 @@ function initFilterPanels() {
                 </td>
             </tr>
             <tr style="height: 100%;">
-                <td style="border-right: 2px dashed;width:50%;">
+                <td style="border-right: 2px dashed;width:50%; padding: 0 1rem;">
                     <table style="height:100%">
                         <tr>
                             <td>
@@ -61,8 +61,8 @@ function initFilterPanels() {
                         </tr>
                     </table>
                 </td>
-                <td>
-                    <table style="height:100%">
+                <td style="padding: 0 1rem;">
+                    <table style="height:100%;width:100%;">
                         <tr>
                             <td>
                                 <h3>SLR</h3>
@@ -72,8 +72,8 @@ function initFilterPanels() {
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <div class="slr-slider"></div>
+                            <td width="100%" colspan="2">
+                                <div class="slr-slider slider"></div>
                             </td>
                         </tr>
                         <tr>
@@ -85,8 +85,8 @@ function initFilterPanels() {
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <div class="frequency-slider"></div>
+                            <td width="100%" colspan="2">
+                                <div class="frequency-slider slider"></div>
                             </td>
                         </tr>
                         <tr>
@@ -98,8 +98,8 @@ function initFilterPanels() {
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <div class="year-slider"></div>
+                            <td width="100%" colspan="2">
+                                <div class="year-slider slider"></div>
                             </td>
                         </tr>
                     </table>
@@ -118,10 +118,17 @@ function initFilterPanels() {
     $("#page-map .hazard-dropdown").attr('id', 'map-hazard-dropdown');
     $("#page-report .hazard-dropdown").attr('id', 'report-hazard-dropdown');
 
+    $("#page-map .slr-slider").attr('id', 'map-slr-slider');
+    $("#page-report .slr-slider").attr('id', 'report-slr-slider');
+
     mapRegionMenu = new vlDropDown("map-region-dropdown");
     reportRegionMenu = new vlDropDown("report-region-dropdown");
     mapHazardMenu = new vlDropDown("map-hazard-dropdown");
     reportHazardMenu = new vlDropDown("report-hazard-dropdown");
+
+
+    mapSLRSlider = new vlSlider("map-slr-slider", 0, 20, 2);
+    reportSLRSlider = new vlSlider("report-slr-slider");
 }
 
 
