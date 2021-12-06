@@ -112,7 +112,11 @@ function initFilterPanels() {
 
     $(".filters-td").html(contents);
 
-    regionMenu = new vlDropDown("region-dropdown");
+    $("#page-map .region-dropdown").attr('id', 'map-region-dropdown');
+    $("#page-map .region-dropdown").attr('id', 'map-region-dropdown');
+    
+    regionMenu = new vlDropDown("map-region-dropdown");
+    regionMenu = new vlDropDown("map-region-dropdown");
 }
 
 
