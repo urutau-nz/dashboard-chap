@@ -2,16 +2,38 @@
 var current_page = "overview";
 function setPage(page) {
     if (current_page != page) {
-        $("#menu-table td").removeClass("active");
-        $(`#page-${current_page}`).removeClass("active");
 
-        current_page = page;
+        $("#menu-table td").removeClass("active");
         $(`#menu-table td[value="${page}"]`).addClass("active");
+
         $(`#page-${page}`).addClass("active");
 
+        filterPanelRender();
+        filtersApplyChanges();
+
         if (page == "map") {
-            initMap();
+            updateMap();
+
+            for (var form_item of filterItems) {
+                console.log(form_item);
+                console.log(form_item.map.value , form_item.report.value);
+                form_item.map.setValue(form_item.report.value);
+            }
+
+        } else if (page == "report") {
+
+            for (var form_item of filterItems) {
+                console.log(form_item);
+                console.log(form_item.map.value , form_item.report.value);
+                form_item.report.setValue(form_item.map.value);
+            }
+
         }
+
+        $(`#page-${current_page}`).removeClass("active");
+
+        
+        current_page = page;
     }
 }
 
@@ -34,40 +56,80 @@ function setReportTab(tab) {
 
 
 
-var regionMenu;
+var mapRegionMenu;
+var reportRegionMenu;
+var mapHazardMenu;
+var reportHazardMenu;
+
+
+var mapSLRSlider;
+var reportSLRSlider;
+var mapFrequencySlider;
+var reportFrequencySlider;
+var mapYearSlider;
+var reportYearSlider;
+
+var filterItems;
 function initFilterPanels() {
     var contents = `
     <div class="filters-div">
-        <table style="height:100%;width:100%;">
+        <table class="summary-table">
             <tr>
                 <td>
                     <h2>Filters</h2>
                 </td>
+                <td>
+                    <h3>Region:&nbsp;<span class="region"></span></h3>
+                </td>
+                <td>
+                    <h3>Hazard:&nbsp;<span class="hazard"></span></h3>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>SLR:&nbsp;<span class="slr"></span></h3>
+                </td>
+                <td>
+                    <h3>Frequency:&nbsp;<span class="frequency"></span></h3>
+                </td>
+                <td>
+                    <h3>Year:&nbsp;<span class="year"></span></h3>
+                </td>
+            </tr>
+        </table>
+        <table class="form-table" style="height:100%;width:100%;">
+            <tr>
+                <td>
+                    <h2>Filters</h2>
+                </td>
+                <td style="position:relative;">
+                    <div class="filters-apply-button" onclick="filtersApplyChanges()">Apply Changes</div>
+                </td>
             </tr>
             <tr style="height: 100%;">
-                <td style="border-right: 2px dashed;width:50%; padding: 0 1rem;">
+                <td style="border-right: 2px dashed;width:50%;padding: 2rem;padding-bottom:0;">
                     <table style="height:100%">
-                        <tr>
+                        <tr style="height: 40%">
                             <td>
                                 <div class="region-dropdown"></div>
-                                <div>This is a description for a region, if that is needed.</div>
+                                <div style="font-style:italic;">This is a description for a region, if that is needed.</div>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <div class="hazard-dropdown"></div>
-                                <div>This is a description for a hazard, if that is needed.</div>
+                                <div style="font-style:italic;">This is a description for a hazard, if that is needed.</div>
                             </td>
                         </tr>
                     </table>
                 </td>
-                <td style="padding: 0 1rem;">
-                    <table style="height:100%;width:100%;">
+                <td style="padding: 1.5rem;padding-bottom:0;">
+                    <table class="filters-slider-table" style="height:100%;width:100%;">
                         <tr>
                             <td>
                                 <h3>SLR</h3>
                             </td>
-                            <td>
+                            <td class="slr-label">
                                 
                             </td>
                         </tr>
@@ -80,7 +142,7 @@ function initFilterPanels() {
                             <td>
                                 <h3>Frequency</h3>
                             </td>
-                            <td>
+                            <td class="frequency-label">
                                 
                             </td>
                         </tr>
@@ -93,7 +155,7 @@ function initFilterPanels() {
                             <td>
                                 <h3>Year</h3>
                             </td>
-                            <td>
+                            <td class="year-label">
                                 
                             </td>
                         </tr>
@@ -106,7 +168,7 @@ function initFilterPanels() {
                 </td>
             </tr>
         </table>
-        <div class="filters-expanding-icon"><img src="./icons/expand_arrow.svg"></div>
+        <div class="filters-expanding-icon" onclick="filterPanelInvert()"><img src="./icons/expand_arrow.svg"></div>
     </div>
     `;
 
@@ -121,18 +183,118 @@ function initFilterPanels() {
     $("#page-map .slr-slider").attr('id', 'map-slr-slider');
     $("#page-report .slr-slider").attr('id', 'report-slr-slider');
 
+    $("#page-map .frequency-slider").attr('id', 'map-frequency-slider');
+    $("#page-report .frequency-slider").attr('id', 'report-frequency-slider');
+
+    $("#page-map .year-slider").attr('id', 'map-year-slider');
+    $("#page-report .year-slider").attr('id', 'report-year-slider');
+
     mapRegionMenu = new vlDropDown("map-region-dropdown");
     reportRegionMenu = new vlDropDown("report-region-dropdown");
+
+    for (var item of ["Place", "Great Place", "Best Place"]) {
+        mapRegionMenu.push(item);
+        reportRegionMenu.push(item);
+    }
+
+    var region_onchange = function (value) {
+        onFiltersChange();
+    }
+    mapRegionMenu.setOnChange(region_onchange);
+    reportRegionMenu.setOnChange(region_onchange);
+
+
     mapHazardMenu = new vlDropDown("map-hazard-dropdown");
     reportHazardMenu = new vlDropDown("report-hazard-dropdown");
 
+    for (var item of ["Earthquake", "Tsunami", "Volcano", "Meteorite", "Solar Flare", "Aliens"]) {
+        mapHazardMenu.push(item);
+        reportHazardMenu.push(item);
+    }
 
-    mapSLRSlider = new vlSlider("map-slr-slider", 0, 20, 2);
-    reportSLRSlider = new vlSlider("report-slr-slider");
+    var hazard_onchange = function (value) {
+        onFiltersChange();
+    }
+    mapHazardMenu.setOnChange(hazard_onchange);
+    reportHazardMenu.setOnChange(hazard_onchange);
+
+
+
+
+
+    mapSLRSlider = new vlSlider("map-slr-slider", 0, 14, 2);
+    reportSLRSlider = new vlSlider("report-slr-slider", 0, 14, 2);
+    var sli_onchange = function (value) {
+        $(".slr-label").html(`<h3>${value}ft</h3>`);
+        onFiltersChange();
+        console.log(value);
+    }
+    mapSLRSlider.setOnChange(sli_onchange);
+    reportSLRSlider.setOnChange(sli_onchange);
+
+    mapFrequencySlider = new vlSlider("map-frequency-slider", 0, 2, 1);
+    reportFrequencySlider = new vlSlider("report-frequency-slider", 0, 2, 1);
+    var frequency_onchange = function (value) {
+        $(".frequency-label").html(`<h3>${value}</h3>`); // Replace with true labels
+        onFiltersChange();
+    }
+    mapFrequencySlider.setOnChange(frequency_onchange);
+    reportFrequencySlider.setOnChange(frequency_onchange);
+
+    mapYearSlider = new vlSlider("map-year-slider", 2021, 2026, 1);
+    reportYearSlider = new vlSlider("report-year-slider", 2021, 2026, 1);
+    var year_onchange = function (value) {
+        $(".year-label").html(`<h3>${value}</h3>`); // Replace with true labels
+        onFiltersChange();
+    }
+    mapYearSlider.setOnChange(year_onchange);
+    reportYearSlider.setOnChange(year_onchange);
+
+
+
+    filterItems = [
+        {'map': mapRegionMenu, 'report': reportRegionMenu},
+        {'map': mapHazardMenu, 'report': reportHazardMenu},
+        {'map': mapSLRSlider, 'report': reportSLRSlider},
+        {'map': mapFrequencySlider, 'report': reportFrequencySlider},
+        {'map': mapYearSlider, 'report': reportYearSlider},
+    ];
+}
+
+var filters_expanded = true;
+function filterPanelInvert() {
+    filters_expanded = !filters_expanded;
+    filterPanelRender();
+}
+function filterPanelRender() {
+    if (filters_expanded) {
+        $(".filters-div").css('height', '');
+        $(".filters-div .form-table").css("display", "table");
+        $(".filters-div .summary-table").css("display", "none");
+    } else {
+        $(".filters-div").css('height', '5rem');
+        $(".filters-div .form-table").css("display", "none");
+        $(".filters-div .summary-table").css("display", "table");
+
+        $(".filters-div .summary-table .region").text((current_page == "map" ? mapRegionMenu.value : reportRegionMenu.value));
+        $(".filters-div .summary-table .hazard").text((current_page == "map" ? mapHazardMenu.value : mapHazardMenu.value));
+        $(".filters-div .summary-table .slr").text((current_page == "map" ? mapSLRSlider.value : reportSLRSlider.value) + "ft");
+        $(".filters-div .summary-table .frequency").text((current_page == "map" ? mapFrequencySlider.value : reportFrequencySlider.value));
+        $(".filters-div .summary-table .year").text((current_page == "map" ? mapYearSlider.value : reportYearSlider.value));
+    }
 }
 
 
 
+
+function onFiltersChange() {
+    $(".filters-apply-button").addClass("active");
+}
+
+function filtersApplyChanges() {
+    $(".filters-apply-button").removeClass("active");
+
+}
 
 
 
