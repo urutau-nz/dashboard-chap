@@ -64,7 +64,7 @@ import_manager.addImport('isolation_county', 'Isolated County Pops', 'csv',
     'https://raw.githubusercontent.com/urutau-nz/dashboard-slr-usa/master/data/results/isolation_county.csv',
     (d) => ({geoid: d.geoid_county, year: +d.year, rise: +d.rise, pop: +d.count}));
 */
-/*
+
 import_manager.addImport('ses_public', 'Sites of Eco Sig Public', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/ses_a.json');
 
@@ -129,14 +129,14 @@ import_manager.addImport('tanks', 'Tanks', 'csv',
 import_manager.addImport('banks_groundwater', 'Banks Peninsula Groundwater', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/banks_gw1.json');
 
-*/
+
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
 
 
 function importsComplete(imports) {
 
-/*
+
   new DataLayer('coastal_protection',
       'Coastal Protection',
       'Built',
@@ -287,7 +287,7 @@ function importsComplete(imports) {
     ).addToHazards("Expected groundwater levels with 1.9m SLR")
     .addLegend('Depth to Groundwater', 'm', ["GW is at or above ground", "GW is within 0.7m of ground"], ["#018", "#2AF"]);
 
-*/
+
   initMap();
 }
 
@@ -672,6 +672,7 @@ function initMap() {
       }, 100);
   } else {
     initFilterPanels();
+    $("#loading-popup").css("right", "-20rem");
     updateMap();
   }
 }

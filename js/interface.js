@@ -69,7 +69,7 @@ var reportFrequencySlider;
 var mapYearSlider;
 var reportYearSlider;
 
-var filterItems;
+var filterItems = [];
 function initFilterPanels() {
     var contents = `
     <div class="filters-div">
@@ -235,7 +235,8 @@ function initFilterPanels() {
     mapFrequencySlider = new vlSlider("map-frequency-slider", 0, 2, 1);
     reportFrequencySlider = new vlSlider("report-frequency-slider", 0, 2, 1);
     var frequency_onchange = function (value) {
-        $(".frequency-label").html(`<h3>${value}</h3>`); // Replace with true labels
+        var label = ['1/20', '1/50', '1/100'][value];
+        $(".frequency-label").html(`<h3>${label} years</h3>`); // Replace with true labels
         onFiltersChange();
     }
     mapFrequencySlider.setOnChange(frequency_onchange);
@@ -276,10 +277,12 @@ function filterPanelRender() {
         $(".filters-div .form-table").css("display", "none");
         $(".filters-div .summary-table").css("display", "table");
 
+        var frequencyLabel = ['1/20', '1/50', '1/100'][(current_page == "map" ? mapFrequencySlider.value : reportFrequencySlider.value)];
+
         $(".filters-div .summary-table .region").text((current_page == "map" ? mapRegionMenu.value : reportRegionMenu.value));
-        $(".filters-div .summary-table .hazard").text((current_page == "map" ? mapHazardMenu.value : mapHazardMenu.value));
+        $(".filters-div .summary-table .hazard").text((current_page == "map" ? mapHazardMenu.value : reportHazardMenu.value));
         $(".filters-div .summary-table .slr").text((current_page == "map" ? mapSLRSlider.value : reportSLRSlider.value) + "ft");
-        $(".filters-div .summary-table .frequency").text((current_page == "map" ? mapFrequencySlider.value : reportFrequencySlider.value));
+        $(".filters-div .summary-table .frequency").text(frequencyLabel + " years");
         $(".filters-div .summary-table .year").text((current_page == "map" ? mapYearSlider.value : reportYearSlider.value));
     }
 }
@@ -296,6 +299,22 @@ function filtersApplyChanges() {
 
 }
 
+
+
+
+function tncCheckboxChange() {
+    if ($("#tnc-checkbox").is(':checked')) {
+        $("#tnc-button").addClass("active");
+    } else {
+        $("#tnc-button").removeClass("active");
+    }
+}
+
+function tncButtonClick() {
+    if ($("#tnc-checkbox").is(':checked')) {
+        $("#tnc-popup-backdrop").css("display", "none");
+    }
+}
 
 
 /* ==== TOP RIGHT UI ELEMENT ==== 

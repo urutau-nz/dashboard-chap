@@ -209,6 +209,27 @@ body .vl-select-body td:hover {
 }
 
 
+.scroll-fade-bottom {
+  width: 100%;
+  position:absolute;
+  bottom: 0.5rem;
+  left: 0;
+  height: 20px;
+  background: rgb(255,255,255);
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+.scroll-fade-top {
+  width: 100%;
+  position:absolute;
+  top: 0.5rem;
+  left: 0;
+  height: 20px;
+  background: rgb(255,255,255);
+  background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+}
+
+
+
 
 
 
@@ -415,6 +436,7 @@ div.intro_tour .introjs-button {
   font-size: 15px;
   font-family: "Source Sans Pro",Verdana,Calibri,sans-serif;
   display: inline-flex;
+  font-weight: 600;
 }
 #menu-table td {
   padding: 0.5rem 1rem 1rem 1rem;
@@ -597,6 +619,7 @@ div.intro_tour .introjs-button {
 }
 #map-menu-td {
   padding: 0.5rem;
+  position: relative;
 }
 #map-menu-div {
   width: 100%;
@@ -667,4 +690,113 @@ div.intro_tour .introjs-button {
 #report-info-table {
   width: 100%;
   height: 100%;
+}
+
+#loading-popup {
+  position: absolute;
+  bottom: 3rem;
+  right: 3rem;
+  background-color: #333;
+  padding: 0.5rem;
+  border-radius: 6rem;
+  color: white;
+  z-index: 50000000;
+  width: 17rem;
+  height: 2.5rem;
+  box-shadow: 0.2rem 0 0.5rem #0005;
+  transition: right 0.8s cubic-bezier(.34,-1,.82,0);
+}
+#loading-popup object {
+  height: 2.5rem;
+  width: 2.5rem;
+  position: absolute;
+}
+#loading-popup .text {
+  font-style: italic;
+  font-size: 1.2rem;
+  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+  position: absolute;
+  right: 2.4rem;
+  bottom: 1rem;
+}
+#loading-popup .object-backdrop {
+  position: absolute;
+  left:0;
+  top:0;
+  height: 100%;
+  width: 3.5rem;
+  border-radius: 5rem;
+  background-color: #333;
+}
+
+#tnc-popup-backdrop {
+  position: absolute;
+  z-index: 4000000000;
+  background-color: #4448;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#tnc-popup {
+  width: calc(100% - 20rem);
+  height: calc(100% - 10rem);
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0.2rem 0 0.8rem #0005;
+  position: absolute;
+  top: 5rem;
+  left: 10rem;
+  z-index: 4000000002;
+  font-family: "Source Sans Pro",Verdana,Calibri,sans-serif;
+}
+#tnc-popup>table {
+  width: 100%;
+  height: 100%;
+}
+#tnc-popup td {
+  padding: 1rem;
+}
+#tnc-popup h2 {
+  margin: 0;
+  color: #666;
+  font-size: 1.4rem;
+}
+#tnc-button {
+  border-radius: 0.5rem;
+  background-color: #AAA;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  transition: background-color 0.1s ease-in-out;
+}
+#tnc-button.active {
+  background-color: #5FAFAF;
+  cursor: pointer;
+}
+#tnc-button.active:hover {
+  background-color: #30777D;
+}
+#tnc-popup .highlight {
+  color:#0f797c;
+  background-color: #d8f2f7;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.4;
+}
+#tnc-contents-div {
+  padding: 0 1rem;
+  box-sizing: border-box;
+  line-height: 1.4;
+  width: 100%;
+}
+#tnc-checkbox {
+  height: 1.1rem;
+  width: 1.1rem;
+  position: relative;
+  top: 0.2rem;
+  right: 0.3rem;
 }

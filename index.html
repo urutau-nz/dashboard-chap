@@ -27,7 +27,7 @@
     <!-- GOOGLE FONTS-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
 
 
     <link href="https://test.urbanintelligence.co.nz/uivl/form-items.css" rel="stylesheet">
@@ -70,6 +70,13 @@
     </tr>
     <tr>
       <td id="page-td" colspan="100%">
+        <div id="loading-popup">
+          <div class="object-backdrop"></div>
+          <object type="image/svg+xml" data="icons/UI Anim.svg"></object>
+          <div class="text">
+            Loading Resources...
+          </div>
+        </div>
         <div class="page active" id="page-overview">
           <img class="background" src="src/CHCH Map.jpg">
           <div style="width:100%;height:100%;overflow: auto;">
@@ -213,6 +220,8 @@
                           </tr>
                         </table>
                       </div>
+                      <div class="scroll-fade-bottom"></div>
+                      <div class="scroll-fade-top"></div>
                     </td>
                   </tr>
                   <tr>
@@ -246,6 +255,46 @@
       </td>
     </tr>
   </table>
+  <div id="tnc-popup-backdrop">
+    <div id="tnc-popup">
+      <table>
+        <tr style="height: 0;">
+          <td colspan="100%" style="border-bottom: 1px solid #CCC;">
+            <h2>Terms and Conditions and Disclaimer</h2>
+          </td>
+        </tr>
+        <tr style="height: 0;">
+          <td colspan="100%">
+            <div class="highlight">
+              This website contains information about coastal hazards in the Christchurch District and is provided as a public service. Please take the time to read the Terms and Conditions and Disclaimer for the use of this website and the information provided. If you agree to these terms, tick the box, and then click the 'Continue' button.
+            </div>
+          </td>
+        </tr>
+        <tr style="height: 100%;">
+          <td colspan="100%" style="border-bottom: 1px solid #CCC;vertical-align: top;padding-top: 0;">
+            <div id="tnc-contents-div">
+              The information this website provides is currently being developed. Urban Intelligence Ltd. and the University of Canterbury are not liable for any decisions made based on this information.
+            </div>
+          </td>
+        </tr>
+        <tr style="height: 0;">
+          <td style="position: relative;">
+            <a href="https://urbanintelligence.co.nz/" target="_blank">
+              <img src="https://urbanintelligence.co.nz/wp-content/uploads/2021/11/Urban-Intelligence-Horizontal-Light-Blue-149px50px.png" style = 'position: absolute; top: 0.6rem;'>
+            </a>
+          </td>
+          <td style="float: right;padding-top: 1.3rem;font-size: 1.1rem;">
+            <div>
+              <input id="tnc-checkbox" type="checkbox" onchange="tncCheckboxChange()"> I agree to the above Terms and Conditions
+            </div>
+          </td>
+          <td style="width:0;">
+            <div id="tnc-button" onclick="tncButtonClick()">Continue</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
     <!--
   <div class="folium-map" id="map" ></div>
   <div id="help-popup"></div>
