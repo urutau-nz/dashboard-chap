@@ -2,6 +2,8 @@
 var current_page = "overview";
 function setPage(page) {
     if (current_page != page) {
+        $('#try-map-popup').remove();
+        $('#try-map-popup-arrow').remove();
 
         $("#menu-table td").removeClass("active");
         $(`#menu-table td[value="${page}"]`).addClass("active");
@@ -28,6 +30,9 @@ function setPage(page) {
                 form_item.report.setValue(form_item.map.value);
             }
 
+            if (!current_report_tab) {
+                setReportTab('overview');
+            }
         }
 
         $(`#page-${current_page}`).removeClass("active");
@@ -38,7 +43,7 @@ function setPage(page) {
 }
 
 
-var current_report_tab = "overview";
+var current_report_tab = null;
 function setReportTab(tab) {
     if (tab != current_report_tab) {
         $(`#report-menu-${current_report_tab}-td`).removeClass("active");
@@ -48,6 +53,29 @@ function setReportTab(tab) {
         // Set Report Info BG to color of tab
         $("#report-info-td").css("background-color", $(`#report-menu-${tab}-td`).css("background-color"));
         $(`#report-menu-${current_report_tab}-td`).addClass("active");
+
+        switch(tab) {
+            case "overview": {
+                $("#report-summary-td .title").html(`<h1>Overview</h1>`);
+
+            } break;
+            case "built": {
+                $("#report-summary-td .title").html(`<h1>Built Domain</h1>`);
+
+            } break;
+            case "natural": {
+                $("#report-summary-td .title").html(`<h1>Natural Domain</h1>`);
+
+            } break;
+            case "cultural": {
+                $("#report-summary-td .title").html(`<h1>Cultural Domain</h1>`);
+
+            } break;
+            case "human": {
+                $("#report-summary-td .title").html(`<h1>Human Domain</h1>`);
+
+            } break;
+        }
     }
 }
 
@@ -79,21 +107,21 @@ function initFilterPanels() {
                     <h2>Filters</h2>
                 </td>
                 <td>
-                    <h3>Region:&nbsp;<span class="region"></span></h3>
+                    <h3>Region:&nbsp;&nbsp;<span class="region"></span></h3>
                 </td>
                 <td>
-                    <h3>Hazard:&nbsp;<span class="hazard"></span></h3>
+                    <h3>Hazard:&nbsp;&nbsp;<span class="hazard"></span></h3>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h3>SLR:&nbsp;<span class="slr"></span></h3>
+                    <h3>SLR:&nbsp;&nbsp;<span class="slr"></span></h3>
                 </td>
                 <td>
-                    <h3>Frequency:&nbsp;<span class="frequency"></span></h3>
+                    <h3>Frequency:&nbsp;&nbsp;<span class="frequency"></span></h3>
                 </td>
                 <td>
-                    <h3>Year:&nbsp;<span class="year"></span></h3>
+                    <h3>Year:&nbsp;&nbsp;<span class="year"></span></h3>
                 </td>
             </tr>
         </table>
@@ -315,6 +343,38 @@ function tncButtonClick() {
         $("#tnc-popup-backdrop").css("display", "none");
     }
 }
+
+
+
+
+
+var selected_asset = null;
+
+function mapAsset(asset, asset_label) {
+    filters_expanded = false;
+    filterPanelRender();
+
+    $("#map-menu-div").css("display", "none");
+    $("#map-report-div").css("display", "block");
+    
+    $("#map-report-header-td").html(`<h1>${asset_label}</h1>`);
+
+    // Render asset on map
+    available_layers[asset].display();
+    selected_asset = asset;
+}
+
+function mapAssetReturn() {
+    filters_expanded = true;
+    filterPanelRender();
+
+    $("#map-menu-div").css("display", "block");
+    $("#map-report-div").css("display", "none");
+
+    available_layers[selected_asset].remove();
+    selected_asset = null;
+}
+
 
 
 /* ==== TOP RIGHT UI ELEMENT ==== 

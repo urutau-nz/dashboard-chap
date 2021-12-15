@@ -2,14 +2,14 @@
 body {
   user-select: none;
   overflow: hidden;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Rubik', Arial, Helvetica, sans-serif;
   line-height: 1.2;
 }
 td {
   padding: 0;
 }
 h1 {
-  font-size: 4.5rem;
+  font-size: 4.3rem;
   margin: 0.3em;
 }
 p {
@@ -50,6 +50,7 @@ div.shadow {
 .nice-scroll {
   padding: 0.5rem;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 .nice-scroll::-webkit-scrollbar {
   width: 10px;
@@ -230,33 +231,6 @@ body .vl-select-body td:hover {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .filters-expanding-icon {
   position: absolute;
   top: 0.5rem;
@@ -269,6 +243,124 @@ body .vl-select-body td:hover {
   height: 100%;
   width: 100%;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#try-map-popup-arrow {
+  background-color: #50add4;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 0.8rem;
+  right: 3.5rem;
+  transform: rotate(45deg);
+}
+
+#try-map-popup {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  background-color: #50add4;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.4rem;
+  color: white;
+  border-radius: 5rem;
+  
+}
+
+#map-td {
+  width: 50%;
+  position: relative;
+}
+
+#mouse-info {
+  visibility: hidden;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.8rem;
+  z-index: 5000;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 0.5rem #0004;
+}
+
+#report-summary-td .title h1 {
+  font-size: 3rem;
+  color: white;
+  margin: 2rem;
+}
+
+#report-summary-td .content {
+  color: white;
+  font-size: 1.2rem;
+  padding: 0 2rem;
+}
+
+
+#map-report-table {
+  height: 100%;
+  width: 100%;
+}
+
+#map-report-div {
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  font-family: 'Rubik', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#map-report-div h1 {
+  font-size: 2.5rem;
+}
+
+#map-report-header-td {
+  height: 0;
+  padding: 1rem;
+  color: #444;
+}
+
+#map-report-return-div {
+  position: absolute;
+  top: 0.6rem;
+  left: 1rem;
+  font-size: 1.2rem;
+  color: #04497c;
+  cursor: pointer;
+  z-index: 5;
+}
+#map-report-return-div:hover {
+  font-weight: 500;
+}
+
+
 
 
 #footer {
@@ -322,7 +414,7 @@ body .vl-select-body td:hover {
 }
 
 .contact {
-  opacity: 0.8;
+  opacity: 0.4;
   font-size: 1.2em;
   font-style: italic;
   text-align: center;

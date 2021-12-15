@@ -405,7 +405,7 @@ class DataLayer extends Layer {
 
     this.style_func = style_func;
 
-    this.opacity = 0.2;
+    this.opacity = 0.3;
 
     this.tiled = tiling;
 
@@ -422,11 +422,11 @@ class DataLayer extends Layer {
               e.target.setStyle({
                 weight: 3,
                 opacity: 1,
-                fillOpacity: 0.5
+                fillOpacity: 0.7
               });
 
               // Update Mouse Info
-              var mouse_info = document.getElementById("mouseInfo");
+              var mouse_info = document.getElementById("mouse-info");
               mouse_info.style.visibility = "visible";
               mouse_info.style.background = "rgb(255,255,255)";
               
@@ -447,7 +447,7 @@ class DataLayer extends Layer {
             });
             
             // Update Mouse Info
-            var mouse_info = document.getElementById("mouseInfo");
+            var mouse_info = document.getElementById("mouse-info");
             mouse_info.style.visibility = "hidden";
             mouse_info.style.background = "rgba(255,255,255, 0.8)";
           }
@@ -546,7 +546,7 @@ class MarkerLayer extends Layer {
               });
 
               // Update Mouse Info
-              var mouse_info = document.getElementById("mouseInfo");
+              var mouse_info = document.getElementById("mouse-info");
               mouse_info.style.visibility = "visible";
               mouse_info.style.background = "rgb(255,255,255)";
               
@@ -566,7 +566,7 @@ class MarkerLayer extends Layer {
             });
             
             // Update Mouse Info
-            var mouse_info = document.getElementById("mouseInfo");
+            var mouse_info = document.getElementById("mouse-info");
             mouse_info.style.visibility = "hidden";
             mouse_info.style.background = "rgba(255,255,255, 0.8)";
           }
@@ -763,7 +763,7 @@ function updateMap() {
 
     } else if (left.length > 0) {
       var item = left.pop(); // Add clickability & use item[0]
-      content += `<td class="item ${left_cat}">${item[1]}</td>`;
+      content += `<td class="item ${left_cat}" onclick="mapAsset('${item[0]}', '${item[1]}')">${item[1]}</td>`;
 
     } else {
       content += '<td></td>';
@@ -778,7 +778,7 @@ function updateMap() {
 
     } else if (right.length > 0) {
       var item = right.pop(); // Add clickability & use item[0]
-      content += `<td class="item ${right_cat}">${item[1]}</td>`;
+      content += `<td class="item ${right_cat}" onclick="mapAsset('${item[0]}', '${item[1]}')">${item[1]}</td>`;
       
     } else {
       content += '<td></td>';

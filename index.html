@@ -29,6 +29,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,800;1,300;1,400;1,500;1,600;1,800&display=swap" rel="stylesheet">
+
+
 
     <link href="https://test.urbanintelligence.co.nz/uivl/form-items.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -78,12 +81,12 @@
           </div>
         </div>
         <div class="page active" id="page-overview">
-          <img class="background" src="src/CHCH Map.jpg">
+          <img class="background" src="src/CHCH Map BW.jpg">
           <div style="width:100%;height:100%;overflow: auto;">
-            <table style="width:100%;margin: 5rem 0;">
+            <table style="width:100%;margin: 4.5rem 0;">
               <tr>
                 <td style="text-align: center;">
-                  <div style="display:inline-block; max-width: 55rem; color: #444">
+                  <div style="display:inline-block; max-width: 55rem; color: #444;background-color: white; border-radius: 4rem; box-shadow: 0 0 2rem white;">
                     <h1>Christchurch Coastal Hazards Impact Viewer</h1>
                   </div>
                 </td>
@@ -131,6 +134,8 @@
               </tr>
             </table>
           </div>
+          <div id="try-map-popup-arrow"></div>
+          <div id="try-map-popup">Try the Map!</div>
         </div>
         <div class="page" id="page-report">
           <table style="width:100%;height:100%;">
@@ -140,7 +145,30 @@
                 <table id="report-info-table">
                   <tr>
                     <td id="report-summary-td">
-                      
+                      <table style="width: 100%;height: 100%;">
+                        <tr style="height: 0;">
+                          <td class="title">
+
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="content">
+                            <div style="height: 100%;width: 100%;" class="nice-scroll">
+                              <table style="width: 100%;">
+                                <tr>
+                                  <td>
+                                    Your student ID card, more commonly known at UC as your Canterbury Card, is your formal identification for around campus. It is available after you have fully enrolled and is valid for 5 years. Staff and visitors are issued with Cards that are valid for the term of their contract or visit.
+                                    <br><br>
+                                    You should always carry your Canterbury Card with you whenever you are on campus.
+                                    <br><br>
+                                    Your username is printed on your Canterbury Card (see circled in red above) and replaces the temporary one you were given during the enrolment process. Instructions on how to create your password are provided when you collect your Canterbury Card (distance and regional campus students are sent these instructions separately).
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
                     </td>
                   </tr>
                   <tr>
@@ -220,6 +248,25 @@
                           </tr>
                         </table>
                       </div>
+                      <div id="map-report-div" class="nice-scroll">
+                        <div id="map-report-return-div" onclick="mapAssetReturn()">
+                          Return
+                        </div>
+                        <table id="map-report-table">
+                          <tr>
+                            <td id="map-report-header-td" style="text-align: center;">
+                              <h1></h1>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="text-align: center;">
+                              <table id="map-report-subtable">
+
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
                       <div class="scroll-fade-bottom"></div>
                       <div class="scroll-fade-top"></div>
                     </td>
@@ -231,10 +278,11 @@
                   </tr>
                 </table>
               </td>
-              <td style="width:50%;" id="map-td">
+              <td id="map-td">
                 <div id="map-div">
 
                 </div>
+                <div id="mouse-info"></div>
               </td>
             </tr>
           </table>
@@ -285,7 +333,7 @@
           </td>
           <td style="float: right;padding-top: 1.3rem;font-size: 1.1rem;">
             <div>
-              <input id="tnc-checkbox" type="checkbox" onchange="tncCheckboxChange()"> I agree to the above Terms and Conditions
+              <input id="tnc-checkbox" type="checkbox" onchange="tncCheckboxChange()"><label for="tnc-checkbox"> I agree to the above Terms and Conditions</label>
             </div>
           </td>
           <td style="width:0;">
