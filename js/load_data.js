@@ -134,6 +134,9 @@ import_manager.onComplete(importsComplete);
 import_manager.runImports();
 
 
+var areas;
+
+
 function importsComplete(imports) {
 
 
@@ -265,12 +268,7 @@ function importsComplete(imports) {
 
     
 
-  new DataLayer('priority_areas',
-    'Adaptation Priority Areas',
-    'Misc',
-    '#B40',
-    imports['priority_areas']
-    ).addToLayers();
+  areas = imports['priority_areas'];
 
 
   // HAZARDS
@@ -302,6 +300,37 @@ var category_titles = {'Built': 'Built Domain',
 'Social': 'Social Domain',
 'Misc': 'Misc Layers',
 };
+
+var centroids = {
+  "All": {lat: -43.5025469, lng: 172.6798971},
+  "Akaroa Wairewa": {lat: -43.76843673, lng: 172.8636687},
+  "Open Coast": {lat: -43.50655657, lng: 172.7235934},
+  "Styx": {lat: -43.44038741, lng: 172.676245},
+  "Avon": {lat: -43.5025469, lng: 172.6798971},
+  "Estuary to Sumner": {lat: -43.56595513, lng: 172.7347677},
+  "Heathcote": {lat: -43.55728148, lng: 172.6798259},
+  "Lyttelton-Mt Herbert": {lat: -43.64895336, lng: 172.7456975}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* ==== DATALAYER DEFINITION ==== */
@@ -418,7 +447,6 @@ class DataLayer extends Layer {
       feature.datalayer = myself;
       layer.on({
           mouseover: function(e) {
-            console.log(e);
               e.target.setStyle({
                 weight: 3,
                 opacity: 1,
@@ -437,7 +465,6 @@ class DataLayer extends Layer {
                 hover_val = e.target.feature.properties.name;
               }
               mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
-              console.log(e);
           },
           mouseout: function(e) {
             e.target.setStyle({
@@ -655,137 +682,3 @@ new ImageLayer('ch_gw',
 
 
 
-
-
-
-
-
-
-/* First update to map */
-function initMap() {
-  if (!LOADED) {
-      var wait_to_load = setInterval(function() {
-          if (LOADED) {
-              clearInterval(wait_to_load); 
-              initMap();
-          }
-      }, 100);
-  } else {
-    initFilterPanels();
-    $("#loading-popup").css("right", "-20rem");
-    updateMap();
-  }
-}
-
-
-
-/* Updates entire map */
-var map = null;
-function updateMap() {
-  
-  if (map != null) {
-    map.remove();
-  }
-  /* ==== INITIALISE LEAFLET MAP & TILE LAYER ==== */
-
-  map = L.map('map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
-  //attr = L.control.attribution().addAttribution('<a href="https://urbanintelligence.co.nz/">Urban Intelligence</a>');
-  //attr.addTo(map);
-
-  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                              {"attributionControl": false, "detectRetina": false, "maxZoom": 16, "minZoom": 4,
-                                "noWrap": false, "subdomains": "abc"}).addTo(map);
-
-  map.createPane('labels');
-  map.getPane('labels').style.zIndex = 650;
-  map.getPane('labels').style.pointerEvents = 'none';
-
-  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}{r}.png',
-              {pane: 'labels'}).addTo(map);
-  
-  
-
-
-
-  var category_colors = {'Built': ['#FFC400', '#885400'],
-  'Cultural': ['#82003D', '#390009'],
-  'Natural': ['#8FD760', '#1F8324'],
-  'Social': ['#495CB1', '#2A284F'],
-  'Misc': ['#00A9A7', '#004B57'],
-  };
-  
-
-  // Generate Asset Menu
-  var asset_menu = [];
-  for (var category in category_titles) {
-    var items = [];
-    for (var layer_id in available_layers) {
-      var layer = available_layers[layer_id];
-      if (layer.category == category) {
-        items.push([layer.id, layer.name]);
-      }
-    }
-    asset_menu.push({'header': category_titles[category], 'category': category,  'items': items});
-  }
-  asset_menu.sort(function(a, b) { // Larger length to smaller. If equal, put in original order.
-    var len = a.items.length - b.items.length;
-    if (len == 0) {
-      var keys = Object.values(category_titles);
-      var out = keys.indexOf(b.header) - keys.indexOf(a.header);
-      return out;
-    } else {
-      return len;
-    }
-  });
-
-  $("#map-asset-table").html("");
-
-  var content = "";
-  var looping = true;
-  var left = [];
-  var right = [];
-  var left_cat = null;
-  var right_cat = null;
-
-  while(looping) {
-    if (left.length + right.length + asset_menu.length == 0) {
-      looping = false;
-      break;
-    }
-    
-    content += '<tr>';
-
-    if (left.length == 0 && asset_menu.length > 0) {
-      var asset = asset_menu.pop();
-      content += `<td class="header">${asset.header}</td>`;
-      left = asset.items;
-      left_cat = asset.category;
-
-    } else if (left.length > 0) {
-      var item = left.pop(); // Add clickability & use item[0]
-      content += `<td class="item ${left_cat}" onclick="mapAsset('${item[0]}', '${item[1]}')">${item[1]}</td>`;
-
-    } else {
-      content += '<td></td>';
-    }
-
-
-    if (right.length == 0 && asset_menu.length > 0) {
-      var asset = asset_menu.pop();
-      content += `<td class="header">${asset.header}</td>`;
-      right = asset.items;
-      right_cat = asset.category;
-
-    } else if (right.length > 0) {
-      var item = right.pop(); // Add clickability & use item[0]
-      content += `<td class="item ${right_cat}" onclick="mapAsset('${item[0]}', '${item[1]}')">${item[1]}</td>`;
-      
-    } else {
-      content += '<td></td>';
-    }
-    
-    content += '</tr>';
-  }
-
-  $("#map-asset-table").html(content);
-}

@@ -97,6 +97,14 @@ var reportFrequencySlider;
 var mapYearSlider;
 var reportYearSlider;
 
+var filter_values = {
+    region: null,
+    hazard: null,
+    slr: null,
+    frequency: null,
+    year: null
+};
+
 var filterItems = [];
 function initFilterPanels() {
     var contents = `
@@ -220,7 +228,7 @@ function initFilterPanels() {
     mapRegionMenu = new vlDropDown("map-region-dropdown");
     reportRegionMenu = new vlDropDown("report-region-dropdown");
 
-    for (var item of ["Place", "Great Place", "Best Place"]) {
+    for (var item of Object.keys(centroids)) {
         mapRegionMenu.push(item);
         reportRegionMenu.push(item);
     }
@@ -288,6 +296,8 @@ function initFilterPanels() {
         {'map': mapFrequencySlider, 'report': reportFrequencySlider},
         {'map': mapYearSlider, 'report': reportYearSlider},
     ];
+
+    filtersApplyChanges();
 }
 
 var filters_expanded = true;
@@ -325,6 +335,27 @@ function onFiltersChange() {
 function filtersApplyChanges() {
     $(".filters-apply-button").removeClass("active");
 
+    if (mapYearSlider) {
+        if (current_page == 'map') {
+            filter_values.region = mapRegionMenu.value;
+            filter_values.hazard = mapHazardMenu.value;
+            filter_values.slr = mapSLRSlider.value;
+            filter_values.frequency = mapFrequencySlider.value;
+            filter_values.year = mapYearSlider.value;
+    
+        } else {
+            filter_values.region = reportRegionMenu.value;
+            filter_values.hazard = reportHazardMenu.value;
+            filter_values.slr = reportSLRSlider.value;
+            filter_values.frequency = reportFrequencySlider.value;
+            filter_values.year = reportYearSlider.value;
+    
+        }
+        if (map) {
+            map.setView(centroids[filter_values.region], 12);
+            showAreaOutline();
+        }
+    }
 }
 
 
