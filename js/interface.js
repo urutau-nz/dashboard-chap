@@ -172,6 +172,8 @@ function initFilterPanels() {
                         <tr>
                             <td width="100%" colspan="2">
                                 <div class="slr-slider slider"></div>
+                                <div class="slr-pointers-div">
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -297,6 +299,28 @@ function initFilterPanels() {
         {'map': mapYearSlider, 'report': reportYearSlider},
     ];
 
+
+    var pointers = [
+        {short: 'L',
+        long: 'Low'
+        },
+        {short: 'M',
+        long: 'Medium'
+        },
+        {short: 'HM',
+        long: 'High<br><span>(Median Estimate)</span>'
+        },
+        {short: 'HU',
+        long: 'High<br><span>(Upper Estimate)</span>'
+        }
+    ];
+    var pointer_contents = "";
+    for (var pointer of pointers) {
+        pointer_contents += `<div class="${pointer.short}"><img src="./icons/PointerArrow.svg"/><div class="label">${pointer.short}</div><div class="hover">${pointer.long}</div></div>`;
+    }
+
+    $(".slr-pointers-div").html(pointer_contents);
+
     filtersApplyChanges();
 }
 
@@ -354,6 +378,23 @@ function filtersApplyChanges() {
         if (map) {
             map.setView(centroids[filter_values.region], 12);
             showAreaOutline();
+        }
+
+        // Update SLR Pointers according to Year
+        var year_val = (filter_values.year - 2021) * 2;
+        if (current_page == 'map') {
+            var conv = function (val) {return mapSLRSlider.valueToPerc(val);};
+            $(".slr-pointers-div .L").css("left", conv(year_val/3) + "%");
+            $(".slr-pointers-div .M").css("left",  conv(year_val/1.5) + "%");
+            $(".slr-pointers-div .HM").css("left",  conv(year_val) + "%");
+            $(".slr-pointers-div .HU").css("left",  conv(year_val*1.4) + "%");
+    
+        } else {
+            $(".slr-pointers-div .L").css("left", "%");
+            $(".slr-pointers-div .M").css("left", "%");
+            $(".slr-pointers-div .HM").css("left", "%");
+            $(".slr-pointers-div .HU").css("left", "%");
+
         }
     }
 }

@@ -297,8 +297,7 @@ function importsComplete(imports) {
 var category_titles = {'Built': 'Built Domain',
 'Cultural': 'Cultural Domain',
 'Natural': 'Natural Domain',
-'Social': 'Social Domain',
-'Misc': 'Misc Layers',
+'Social': 'Social Domain'
 };
 
 var centroids = {

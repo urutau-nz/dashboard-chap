@@ -892,3 +892,62 @@ div.intro_tour .introjs-button {
   top: 0.2rem;
   right: 0.3rem;
 }
+
+
+
+.slr-pointers-div {
+  height: 30px;
+  position: relative;
+  top: -8px;
+}
+.slr-pointers-div>div {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  top: 0;
+  left: 20px;
+  transition: left 0.2s ease-in-out;
+  cursor: pointer;
+}
+.slr-pointers-div img {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  top:0;
+  left: 0;
+  transform: translateX(-10px);
+}
+.slr-pointers-div .label {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateX(-10px);
+  background-color: #E3EDF9;
+}
+.slr-pointers-div .hover {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  width: 110px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  transform: translateX(-55px);
+  background-color: white;
+  border: 2px solid #18426F;
+  border-radius:4px;
+  display: none;
+  z-index:10;
+  pointer-events: none;
+}
+.slr-pointers-div>div:hover .hover {
+  display: block;
+}
+.slr-pointers-div .hover span {
+  font-size: 12px;
+  font-weight: 500;
+}
