@@ -63,7 +63,7 @@ var import_manager = new ImportManager();
 import_manager.addImport('isolation_county', 'Isolated County Pops', 'csv', 
     'https://raw.githubusercontent.com/urutau-nz/dashboard-slr-usa/master/data/results/isolation_county.csv',
     (d) => ({geoid: d.geoid_county, year: +d.year, rise: +d.rise, pop: +d.count}));
-*/
+
 
 import_manager.addImport('ses_public', 'Sites of Eco Sig Public', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/ses_a.json');
@@ -71,8 +71,6 @@ import_manager.addImport('ses_public', 'Sites of Eco Sig Public', 'json',
 import_manager.addImport('ses_private', 'Sites of Eco Sig Private', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/ses_b.json'); 
 
-import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/adaptation_priority_areas.json');
 
 import_manager.addImport('wildife_significance', 'Sites of Wildlife Sig.', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/sites_of_special_wildlife_significance.json');
@@ -128,7 +126,9 @@ import_manager.addImport('tanks', 'Tanks', 'csv',
 
 import_manager.addImport('banks_groundwater', 'Banks Peninsula Groundwater', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/banks_gw1.json');
-
+*/
+import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
+'https://projects.urbanintelligence.co.nz/chap/data/adaptation_priority_areas.json');
 
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
@@ -139,7 +139,7 @@ var areas;
 
 function importsComplete(imports) {
 
-
+/*
   new DataLayer('coastal_protection',
       'Coastal Protection',
       'Built',
@@ -196,7 +196,7 @@ function importsComplete(imports) {
       imports['port_access']
     ).addToLayers();
   new DataLayer('port_land_claim',
-      'Port land Claim',
+      'Port Land Claim',
       'Built',
       '#F44',
       imports['port_land_claim']
@@ -267,10 +267,10 @@ function importsComplete(imports) {
     ).addToLayers();
 
     
-
+*/
   areas = imports['priority_areas'];
 
-
+/*
   // HAZARDS
   new DataLayer('banks_groundwater',
       'Groundwater Rise (Banks Peninsula)',
@@ -284,7 +284,7 @@ function importsComplete(imports) {
       }
     ).addToHazards("Expected groundwater levels with 1.9m SLR")
     .addLegend('Depth to Groundwater', 'm', ["GW is at or above ground", "GW is within 0.7m of ground"], ["#018", "#2AF"]);
-
+  */
 
   initMap();
 }
@@ -309,6 +309,12 @@ var centroids = {
   "Estuary to Sumner": {lat: -43.56595513, lng: 172.7347677},
   "Heathcote": {lat: -43.55728148, lng: 172.6798259},
   "Lyttelton-Mt Herbert": {lat: -43.64895336, lng: 172.7456975}
+};
+
+var category_colors = {'Built': '#ff961d',
+'Cultural': '#BB0088',
+'Natural': '#00BB88',
+'Social': '#6666BB'
 };
 
 
@@ -428,7 +434,6 @@ class DataLayer extends Layer {
   constructor(id, name, category, color, topojson, tiling=false, style_func=null) {
     super(id, name, category);
 
-    this.color = color;
     this.topojson = topojson;
 
     this.style_func = style_func;
@@ -483,7 +488,7 @@ class DataLayer extends Layer {
   default_style_generator () {
     var myself = this;
     return function (feature) { 
-      return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
+      return { fillColor: category_colors[myself.category], weight: 2, color: category_colors[myself.category], opacity: myself.opacity, fillOpacity: myself.opacity}; 
     }
   }
   display () {
@@ -503,8 +508,8 @@ class DataLayer extends Layer {
           tolerance: 3,
           debug: 0,
           style: {
-            fillColor: this.color,
-            color: this.color,
+            fillColor: category_colors[this.category],
+            color: category_colors[this.category],
             weight: 2,
             opacity: this.opacity,
             fillOpacity: this.opacity
@@ -555,7 +560,6 @@ class MarkerLayer extends Layer {
   constructor (id, name, category, color, csv, style_func=null) {
     super(id, name, category);
 
-    this.color = color;
     this.csv = csv;
 
     this.style_func = style_func;
@@ -601,7 +605,7 @@ class MarkerLayer extends Layer {
   default_style_generator () {
     var myself = this;
     return function (feature) { 
-      return { fillColor: myself.color, weight: 2, color: myself.color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
+      return { fillColor: category_colors[myself.category], weight: 2, color: category_colors[myself.category], opacity: myself.opacity, fillOpacity: myself.opacity}; 
     }
   }
   display () {
@@ -612,7 +616,7 @@ class MarkerLayer extends Layer {
       for (var d of this.csv) {
           var marker = L.circleMarker([d.Y, d.X]).setStyle({
               radius: 3,
-              fillColor: this.color,
+              fillColor: category_colors[this.category],
               color: "#000",
               weight: 0,
               opacity: 1,
@@ -679,5 +683,20 @@ new ImageLayer('ch_gw',
   
   
 
+/* First update to map */
+function initMap() {
+  if (!LOADED) {
+      var wait_to_load = setInterval(function() {
+          if (LOADED) {
+              clearInterval(wait_to_load); 
+              initMap();
+          }
+      }, 100);
+  } else {
+    initFilterPanels();
+    $("#loading-popup").css("right", "-20rem");
+    updateMap();
+  }
+}
 
 

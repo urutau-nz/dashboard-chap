@@ -48,7 +48,6 @@ div.shadow {
   pointer-events: none;
 }
 .nice-scroll {
-  padding: 0.5rem;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -72,7 +71,7 @@ div.shadow {
 
 .filters-div {
   height: 20rem;
-  background-color: #E3EDF9;
+  background-color: #d9eaff;
   border-radius: 1rem;
   color: #18426F;
   position: relative;
@@ -81,7 +80,7 @@ div.shadow {
   box-shadow: 0 0.3rem 0.5rem #0004;
 }
 #map-info-td .filters-div {
-  border: 3px solid;
+  border: 2px solid;
 }
 .filters-td {
   height: 0;
@@ -106,7 +105,7 @@ div.shadow {
   background-color: #18426F30;
   transition: background-color 0.1s ease-in-out,
               color 0.1s ease-in-out;
-  color: #E3EDF9;
+  color: #d9eaff;
   padding: 0.3rem 1rem;
   top: 0.35rem;
   font-size: 0.9rem;
@@ -256,8 +255,12 @@ body .vl-select-body td:hover {
 
 
 
-
-
+#report-year-slider .vl-slider-handle, #map-year-slider .vl-slider-handle {
+  top: 9px;
+  width: 16px;
+  height: 16px;
+  transform: translateX(-8px);
+}
 
 
 
@@ -289,7 +292,7 @@ body .vl-select-body td:hover {
   right: 2rem;
   background-color: #50add4;
   padding: 0.8rem 1.2rem;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: white;
   border-radius: 5rem;
   
@@ -329,8 +332,13 @@ body .vl-select-body td:hover {
   width: 100%;
 }
 
-#map-report-div {
+#map-report-td {
   display: none;
+  height: 100%;
+  position: relative;
+}
+
+#map-report-div {
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -339,12 +347,13 @@ body .vl-select-body td:hover {
 
 #map-report-div h1 {
   font-size: 2.5rem;
+  letter-spacing: 0.5px;
 }
 
 #map-report-header-td {
   height: 0;
   padding: 1rem;
-  color: #444;
+  color: white;
 }
 
 #map-report-return-div {
@@ -352,7 +361,7 @@ body .vl-select-body td:hover {
   top: 0.6rem;
   left: 1rem;
   font-size: 1.2rem;
-  color: #04497c;
+  color: white;
   cursor: pointer;
   z-index: 5;
 }
@@ -712,6 +721,7 @@ div.intro_tour .introjs-button {
 #map-menu-td {
   padding: 0.5rem;
   position: relative;
+  height: 100%;
 }
 #map-menu-div {
   width: 100%;
@@ -926,7 +936,7 @@ div.intro_tour .introjs-button {
   font-size: 13px;
   font-weight: 600;
   transform: translateX(-10px);
-  background-color: #E3EDF9;
+  background-color: #d9eaff;
 }
 .slr-pointers-div .hover {
   position: absolute;
@@ -936,7 +946,7 @@ div.intro_tour .introjs-button {
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  transform: translateX(-55px);
+  transform: translate(-55px, 17px);
   background-color: white;
   border: 2px solid #18426F;
   border-radius:4px;

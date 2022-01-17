@@ -99,10 +99,23 @@ var reportYearSlider;
 
 var filter_values = {
     region: null,
-    hazard: null,
+    hazard: 'Erosion',
     slr: null,
     frequency: null,
     year: null
+};
+
+var yearLabels = ['2020', '2050', '2080', '2130', '2150+'];
+var hazards = ['Erosion', 'Inundation', 'Groundwater'];
+var hazard_slrs = {
+    'Erosion': [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0],
+    'Inundation': [0, 0.2, 0.4, 0.6, 0.8, 1.2, 1.4, 1.5, 2.0],
+    'Groundwater': [0, 0.2, 0.4, 1.0, 1.9],
+};
+var hazard_frequencies = {
+    'Erosion': null,
+    'Inundation': [1, 10, 100],
+    'Groundwater': null,
 };
 
 var filterItems = [];
@@ -170,13 +183,13 @@ function initFilterPanels() {
                             </td>
                         </tr>
                         <tr>
-                            <td width="100%" colspan="2">
+                            <td width="100%" colspan="2" style="height: 4.5rem;">
                                 <div class="slr-slider slider"></div>
                                 <div class="slr-pointers-div">
                                 </div>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="frequency-tr">
                             <td>
                                 <h3>Frequency</h3>
                             </td>
@@ -184,7 +197,7 @@ function initFilterPanels() {
                                 
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="frequency-tr">
                             <td width="100%" colspan="2">
                                 <div class="frequency-slider slider"></div>
                             </td>
@@ -236,7 +249,11 @@ function initFilterPanels() {
     }
 
     var region_onchange = function (value) {
-        onFiltersChange();
+        if (map) {
+            map.setView(centroids[filter_values.region], 12);
+            showAreaOutline();
+        }
+        filter_values.region = value;
     }
     mapRegionMenu.setOnChange(region_onchange);
     reportRegionMenu.setOnChange(region_onchange);
@@ -245,13 +262,26 @@ function initFilterPanels() {
     mapHazardMenu = new vlDropDown("map-hazard-dropdown");
     reportHazardMenu = new vlDropDown("report-hazard-dropdown");
 
-    for (var item of ["Earthquake", "Tsunami", "Volcano", "Meteorite", "Solar Flare", "Aliens"]) {
-        mapHazardMenu.push(item);
-        reportHazardMenu.push(item);
-    }
+    mapHazardMenu.populate(hazards);
+    reportHazardMenu.populate(hazards);
 
     var hazard_onchange = function (value) {
-        onFiltersChange();
+        if (value == 'Inundation') {
+            mapFrequencySlider.recreate(0, 2, 1, true);
+            reportFrequencySlider.recreate(0, 2, 1, true);
+
+            $(".frequency-tr").css('display', 'table-row');
+
+        } else {
+            mapFrequencySlider.recreate(0, 0, 1, true);
+            reportFrequencySlider.recreate(0, 0, 1, true);
+
+            $(".frequency-tr").css('display', 'none');
+        }
+        filter_values.hazard = value;
+
+        mapSLRSlider.recreate(0, 2, hazard_slrs[filter_values.hazard], true);
+        reportSLRSlider.recreate(0, 2, hazard_slrs[filter_values.hazard], true);
     }
     mapHazardMenu.setOnChange(hazard_onchange);
     reportHazardMenu.setOnChange(hazard_onchange);
@@ -259,38 +289,50 @@ function initFilterPanels() {
 
 
 
-
-    mapSLRSlider = new vlSlider("map-slr-slider", 0, 14, 2);
-    reportSLRSlider = new vlSlider("report-slr-slider", 0, 14, 2);
+    // SLRs
+    mapSLRSlider = new vlSlider("map-slr-slider", 0, 2, hazard_slrs[filter_values.hazard], true);
+    reportSLRSlider = new vlSlider("report-slr-slider", 0, 2, hazard_slrs[filter_values.hazard], true);
     var sli_onchange = function (value) {
-        $(".slr-label").html(`<h3>${value}ft</h3>`);
+        $(".slr-label").html(`<h3>${value}m</h3>`);
         onFiltersChange();
-        console.log(value);
     }
     mapSLRSlider.setOnChange(sli_onchange);
     reportSLRSlider.setOnChange(sli_onchange);
 
-    mapFrequencySlider = new vlSlider("map-frequency-slider", 0, 2, 1);
-    reportFrequencySlider = new vlSlider("report-frequency-slider", 0, 2, 1);
+
+
+    // Frequencies
+    mapFrequencySlider = new vlSlider("map-frequency-slider", 0, 0, 1, true);
+    reportFrequencySlider = new vlSlider("report-frequency-slider", 0, 0, 1, true);
     var frequency_onchange = function (value) {
-        var label = ['1/20', '1/50', '1/100'][value];
-        $(".frequency-label").html(`<h3>${label} years</h3>`); // Replace with true labels
-        onFiltersChange();
+        if (hazard_frequencies[filter_values.hazard]) {
+            var label = hazard_frequencies[filter_values.hazard][value];
+            $(".frequency-label").html(`<h3>ARI ${label}</h3>`);
+            onFiltersChange();
+        } else {
+            $(".frequency-label").html(`<h3>ARI 1</h3>`); 
+        }
     }
     mapFrequencySlider.setOnChange(frequency_onchange);
     reportFrequencySlider.setOnChange(frequency_onchange);
 
-    mapYearSlider = new vlSlider("map-year-slider", 2021, 2026, 1);
-    reportYearSlider = new vlSlider("report-year-slider", 2021, 2026, 1);
+    $(".frequency-tr").css('display', 'none');
+
+    // Years
+    mapYearSlider = new vlSlider("map-year-slider", 0, 4, 1);
+    reportYearSlider = new vlSlider("report-year-slider", 0, 4, 1);
     var year_onchange = function (value) {
-        $(".year-label").html(`<h3>${value}</h3>`); // Replace with true labels
-        onFiltersChange();
+        var label = yearLabels[value];
+        $(".year-label").html(`<h3>${label}</h3>`); 
+        updateSLRPointers(value);
     }
     mapYearSlider.setOnChange(year_onchange);
     reportYearSlider.setOnChange(year_onchange);
 
 
 
+
+    // Filters
     filterItems = [
         {'map': mapRegionMenu, 'report': reportRegionMenu},
         {'map': mapHazardMenu, 'report': reportHazardMenu},
@@ -339,13 +381,15 @@ function filterPanelRender() {
         $(".filters-div .form-table").css("display", "none");
         $(".filters-div .summary-table").css("display", "table");
 
-        var frequencyLabel = ['1/20', '1/50', '1/100'][(current_page == "map" ? mapFrequencySlider.value : reportFrequencySlider.value)];
+        var frequencyLabel = hazard_frequencies[filter_values.hazard][filter_values.frequency];
 
-        $(".filters-div .summary-table .region").text((current_page == "map" ? mapRegionMenu.value : reportRegionMenu.value));
-        $(".filters-div .summary-table .hazard").text((current_page == "map" ? mapHazardMenu.value : reportHazardMenu.value));
-        $(".filters-div .summary-table .slr").text((current_page == "map" ? mapSLRSlider.value : reportSLRSlider.value) + "ft");
+        var yearLabel = yearLabels[filter_values.year];
+
+        $(".filters-div .summary-table .region").text(filter_values.region);
+        $(".filters-div .summary-table .hazard").text(filter_values.hazard);
+        $(".filters-div .summary-table .slr").text(filter_values.slr);
         $(".filters-div .summary-table .frequency").text(frequencyLabel + " years");
-        $(".filters-div .summary-table .year").text((current_page == "map" ? mapYearSlider.value : reportYearSlider.value));
+        $(".filters-div .summary-table .year").text(yearLabel);
     }
 }
 
@@ -365,36 +409,19 @@ function filtersApplyChanges() {
             filter_values.hazard = mapHazardMenu.value;
             filter_values.slr = mapSLRSlider.value;
             filter_values.frequency = mapFrequencySlider.value;
-            filter_values.year = mapYearSlider.value;
+            
+            mapSLRSlider.updateMarker();
+            mapFrequencySlider.updateMarker();
     
         } else {
             filter_values.region = reportRegionMenu.value;
             filter_values.hazard = reportHazardMenu.value;
             filter_values.slr = reportSLRSlider.value;
             filter_values.frequency = reportFrequencySlider.value;
-            filter_values.year = reportYearSlider.value;
+            
+            reportSLRSlider.updateMarker();
+            reportFrequencySlider.updateMarker();
     
-        }
-        if (map) {
-            map.setView(centroids[filter_values.region], 12);
-            showAreaOutline();
-        }
-
-        // Update SLR Pointers according to Year
-        var year_val = (filter_values.year - 2021) * 2;
-        if (current_page == 'map') {
-            var conv = function (val) {return mapSLRSlider.valueToPerc(val);};
-            $(".slr-pointers-div .L").css("left", conv(year_val/3) + "%");
-            $(".slr-pointers-div .M").css("left",  conv(year_val/1.5) + "%");
-            $(".slr-pointers-div .HM").css("left",  conv(year_val) + "%");
-            $(".slr-pointers-div .HU").css("left",  conv(year_val*1.4) + "%");
-    
-        } else {
-            $(".slr-pointers-div .L").css("left", "%");
-            $(".slr-pointers-div .M").css("left", "%");
-            $(".slr-pointers-div .HM").css("left", "%");
-            $(".slr-pointers-div .HU").css("left", "%");
-
         }
     }
 }
@@ -419,6 +446,22 @@ function tncButtonClick() {
 
 
 
+function updateSLRPointers(value) {
+        // Update SLR Pointers according to Year
+        var low = [0, 0.17, 0.25, 0.5, 0.6][value];
+        var med = [0, 0.18, 0.35, 0.65, 0.8][value];
+        var high_med = [0, 0.2, 0.45, 1.1, 1.35][value];
+        var high_upper = [0, 0.25, 0.65, 1.45, 1.8][value];
+
+        var conv = function (val) {return mapSLRSlider.valueToPerc(val);};
+
+        $(".slr-pointers-div .L").css("left", conv(low) + "%");
+        $(".slr-pointers-div .M").css("left",  conv(med) + "%");
+        $(".slr-pointers-div .HM").css("left",  conv(high_med) + "%");
+        $(".slr-pointers-div .HU").css("left",  conv(high_upper) + "%");
+}
+
+
 
 var selected_asset = null;
 
@@ -426,10 +469,11 @@ function mapAsset(asset, asset_label) {
     filters_expanded = false;
     filterPanelRender();
 
-    $("#map-menu-div").css("display", "none");
-    $("#map-report-div").css("display", "block");
+    $("#map-menu-td").css("display", "none");
+    $("#map-report-td").css("display", "table-cell");
     
     $("#map-report-header-td").html(`<h1>${asset_label}</h1>`);
+    $("#map-report-header-td").css("background-color", category_colors[available_layers[asset].category]);
 
     // Render asset on map
     available_layers[asset].display();
@@ -437,12 +481,10 @@ function mapAsset(asset, asset_label) {
 }
 
 function mapAssetReturn() {
-    filters_expanded = true;
-    filterPanelRender();
 
-    $("#map-menu-div").css("display", "block");
-    $("#map-report-div").css("display", "none");
-
+    $("#map-menu-td").css("display", "table-cell");
+    $("#map-report-td").css("display", "none");
+    
     available_layers[selected_asset].remove();
     selected_asset = null;
 }

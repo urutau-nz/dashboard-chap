@@ -47,21 +47,6 @@ function resetHighlight(e) {
 
 
 
-/* First update to map */
-function initMap() {
-    if (!LOADED) {
-        var wait_to_load = setInterval(function() {
-            if (LOADED) {
-                clearInterval(wait_to_load); 
-                initMap();
-            }
-        }, 100);
-    } else {
-      initFilterPanels();
-      $("#loading-popup").css("right", "-20rem");
-      updateMap();
-    }
-  }
   
   
   
