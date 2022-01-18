@@ -63,75 +63,23 @@ var import_manager = new ImportManager();
 import_manager.addImport('isolation_county', 'Isolated County Pops', 'csv', 
     'https://raw.githubusercontent.com/urutau-nz/dashboard-slr-usa/master/data/results/isolation_county.csv',
     (d) => ({geoid: d.geoid_county, year: +d.year, rise: +d.rise, pop: +d.count}));
-
-
-import_manager.addImport('ses_public', 'Sites of Eco Sig Public', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/ses_a.json');
-
-import_manager.addImport('ses_private', 'Sites of Eco Sig Private', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/ses_b.json'); 
-
-
-import_manager.addImport('wildife_significance', 'Sites of Wildlife Sig.', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/sites_of_special_wildlife_significance.json');
-
-import_manager.addImport('coastal_protection', 'Coastal Protection', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/coastal_protection.json');
-
-import_manager.addImport('DOC_conservation', 'DOC Conservation Areas', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/DOC_public_conservation_land.json');
-
-import_manager.addImport('cemetery', 'Cemeteries', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/cemetery.json');
-
-import_manager.addImport('water_pipes', 'Water Pipes', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/potable_water_pipes_in_service.json');
-
-import_manager.addImport('landfill', 'Landfills', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/landfill.json');
-
-import_manager.addImport('port_access', 'Port Access', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/port_access.json');
-
-import_manager.addImport('port_land_claim', 'Port Land Claim', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/port_land_claim.json');
-
-import_manager.addImport('port_operations', 'Port Operations', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/port_operations.json');
-
-import_manager.addImport('port_storage', 'Port Storage', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/port_storage.json');
-
-import_manager.addImport('potable_water_strcutures_in_service', 'Potable Water Structures', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/potable_water_strcutures_in_service.json');
-
-
-
-
-import_manager.addImport('community_facilities', 'Community Facilities', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/clipped_community_facilities.csv');
-
-import_manager.addImport('transfer_stations', 'Transfer Stations', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/transfer_stations.csv');
-
-import_manager.addImport('potable_water_pumps', 'Potable Water Pumps', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/potable_water_pumps.csv');
-
-import_manager.addImport('tanks', 'Tanks', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/tanks.csv');
-
-
-
-
-
-import_manager.addImport('banks_groundwater', 'Banks Peninsula Groundwater', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/banks_gw1.json');
 */
+
 import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/adaptation_priority_areas.json');
 
 import_manager.addImport('hazard_info', 'Hazard CSV', 'csv', 
 'https://projects.urbanintelligence.co.nz/chap/data/hazard_info.csv');
+
+import_manager.addImport('asset_info', 'Asset CSV', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/website_assets.csv');
+
+import_manager.addImport('exposure_built', 'Exposure Built CSV', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/exposure_built.csv',
+(d) => ({asset_id: d.asset_id, hazard_scenario: d.hazard_scenario, exposure: d.exposure})); // For hover-over data
+
+import_manager.addImport('asset_descriptions', 'Asset Descriptions CSV', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/import.csv');
 
 
 import_manager.onComplete(importsComplete);
@@ -139,158 +87,35 @@ import_manager.runImports();
 
 
 var areas;
+var asset_info;
+var assets = {};
+var exposure_built;
+var asset_descriptions;
 
 
 function importsComplete(imports) {
 
-/*
-  new DataLayer('coastal_protection',
-      'Coastal Protection',
-      'Built',
-      '#D0D',
-      imports['coastal_protection']
-    ).addToLayers();
-  new DataLayer('cemetery',
-      'Cemetery',
-      'Built',
-      '#B88',
-      imports['cemetery']
-    ).addToLayers();
-  new DataLayer('water_pipes',
-      'Potable Water Pipes',
-      'Built',
-      '#88B',
-      imports['water_pipes'],
-      true // LARGE - needs to be tiled
-    ).addToLayers();
-  new MarkerLayer('community_facilities',
-      'Community Facilities',
-      'Built',
-      '#4B4',
-      imports['community_facilities']
-    ).addToLayers();
-  new MarkerLayer('transfer_stations',
-      'Transfer Stations',
-      'Built',
-      '#B44',
-      imports['transfer_stations']
-    ).addToLayers();
-  new MarkerLayer('tanks',
-      'Tanks',
-      'Built',
-      '#8B0',
-      imports['tanks']
-    ).addToLayers();
-  new DataLayer('potable_water_strcutures_in_service',
-      'Potable Water Structures',
-      'Built',
-      '#B80',
-      imports['potable_water_strcutures_in_service']
-    ).addToLayers();
-  new DataLayer('landfill',
-      'Landfills',
-      'Built',
-      '#44B',
-      imports['landfill']
-    ).addToLayers();
-  new DataLayer('port_access',
-      'Port Access',
-      'Built',
-      '#44F',
-      imports['port_access']
-    ).addToLayers();
-  new DataLayer('port_land_claim',
-      'Port Land Claim',
-      'Built',
-      '#F44',
-      imports['port_land_claim']
-    ).addToLayers();
-  new DataLayer('port_operations',
-    'Port Operations',
-    'Built',
-    '#4F4',
-    imports['port_operations']
-  ).addToLayers();
-  new DataLayer('port_storage',
-    'Port Storage',
-    'Built',
-    '#0B8',
-    imports['port_storage']
-  ).addToLayers();
-  new MarkerLayer('potable_water_pumps',
-    'Potable Water Pumps',
-    'Built',
-    '#08B',
-    imports['potable_water_pumps']
-  ).addToLayers();
-
-
-
-  new DataLayer('temp3',
-        'Placeholder',
-        'Cultural',
-        '#B40',
-        null
-      ).addToLayers();
-
-    
-
-  new DataLayer('ses_public',
-        'Public Sites of E.S.',
-        'Natural',
-        '#0B8',
-        imports['ses_public']
-      ).addToLayers();
-  new DataLayer('ses_private',
-        'Private Sites of E.S.',
-        'Natural',
-        '#8B0',
-        imports['ses_private']
-      ).addToLayers();
-  new DataLayer('wildife_significance',
-        'Sites of Wildlife Sig.',
-        'Natural',
-        '#DD0',
-        imports['wildife_significance']
-      ).addToLayers();
-  new DataLayer('DOC_conservation',
-        'DOC Conservation Areas',
-        'Natural',
-        '#0DD',
-        imports['DOC_conservation']
-      ).addToLayers();
-
-
-
-
-  new DataLayer('temp2',
-      'Placeholder',
-      'Social',
-      '#B40',
-      null
-    ).addToLayers();
-
-    
-*/
   areas = imports['priority_areas'];
   hazard_info = imports['hazard_info'];
+  asset_info = imports['asset_info'];
+  exposure_built = imports['exposure_built'];
+  asset_descriptions = imports['asset_descriptions'];
 
+  // Build Assets Dict
+  var index = 0;
+  asset_info.forEach(
+    function (d) {
+      assets["asset_"+index] = {
+        display_name: d.display_name,
+        name: d.display_name,
+        file_name: 'https://projects.urbanintelligence.co.nz/chap/data/' + d.domain + '_assets/' + d.file_name,
+        category: d.domain,
+        id: "asset_"+index
+      };
 
-/*
-  // HAZARDS
-  new DataLayer('banks_groundwater',
-      'Groundwater Rise (Banks Peninsula)',
-      null,
-      '#018',
-      imports['banks_groundwater'],
-      false,
-      function (feature) {
-        var col = (feature.properties.DN == 1 ? "#018" : "#2AF")
-        return { fillColor: col, weight: 1, color: col, opacity: 0.2, fillOpacity: 0.2}
-      }
-    ).addToHazards("Expected groundwater levels with 1.9m SLR")
-    .addLegend('Depth to Groundwater', 'm', ["GW is at or above ground", "GW is within 0.7m of ground"], ["#018", "#2AF"]);
-  */
+      index ++;
+    }
+  );
 
   initMap();
 }
@@ -300,10 +125,10 @@ function importsComplete(imports) {
 
 
   
-var category_titles = {'Built': 'Built Domain',
-'Cultural': 'Cultural Domain',
-'Natural': 'Natural Domain',
-'Social': 'Social Domain'
+var category_titles = {'built': 'Built Domain',
+'cultural': 'Cultural Domain',
+'natural': 'Natural Domain',
+'social': 'Social Domain'
 };
 
 var centroids = {
@@ -317,11 +142,14 @@ var centroids = {
   "Lyttelton-Mt Herbert": {lat: -43.64895336, lng: 172.7456975}
 };
 
-var category_colors = {'Built': '#ff961d',
-'Cultural': '#BB0088',
-'Natural': '#00BB88',
-'Social': '#6666BB'
+var category_colors = {'built': '#eb812e',
+'cultural': '#BB0088',
+'natural': '#00BB88',
+'social': '#6666BB'
 };
+
+
+
 
 
 
@@ -347,7 +175,6 @@ var category_colors = {'Built': '#ff961d',
 /* ==== DATALAYER DEFINITION ==== */
 /* - Used to control adding & removing layers of topojson data 
 */
-var available_layers = {};
 var all_hazards = {};
 
 class Layer {
@@ -365,10 +192,6 @@ class Layer {
   addToHazards(hazard_description) {
     all_hazards[this.id] = this;
     this.hazard_description = hazard_description;
-    return this;
-  }
-  addToLayers() {
-    available_layers[this.id] = this;
     return this;
   }
 
@@ -441,10 +264,11 @@ class DataLayer extends Layer {
     super(id, name, category);
 
     this.topojson = topojson;
+    console.log(this.topojson);
 
     this.style_func = style_func;
 
-    this.opacity = 0.3;
+    this.opacity = 0.6;
 
     this.tiled = tiling;
 
@@ -460,19 +284,23 @@ class DataLayer extends Layer {
               e.target.setStyle({
                 weight: 3,
                 opacity: 1,
-                fillOpacity: 0.7
+                fillOpacity: 1
               });
 
               // Update Mouse Info
               var mouse_info = document.getElementById("mouse-info");
               mouse_info.style.visibility = "visible";
               mouse_info.style.background = "rgb(255,255,255)";
+
+              console.log(filter_values.hazard, hover_data, e.target.feature.properties.asset_id, hover_data[e.target.feature.properties.asset_id]);
               
               var hover_val = "";
-              if (e.target.feature.properties.title) {
-                hover_val = e.target.feature.properties.title;
-              } else if (e.target.feature.properties.name) {
-                hover_val = e.target.feature.properties.name;
+              if (hover_data[e.target.feature.properties.asset_id]) {
+                if (filter_values.hazard.toLowerCase() == 'erosion') {
+                  hover_val = `${hover_data[e.target.feature.properties.asset_id]}% Likelihood of Erosion`;
+                } else if (filter_values.hazard.toLowerCase() == 'inundation') {
+                  hover_val = `${hover_data[e.target.feature.properties.asset_id]}cm of Inundation`;
+                }
               }
               mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
           },
@@ -494,7 +322,9 @@ class DataLayer extends Layer {
   default_style_generator () {
     var myself = this;
     return function (feature) { 
-      return { fillColor: category_colors[myself.category], weight: 2, color: category_colors[myself.category], opacity: myself.opacity, fillOpacity: myself.opacity}; 
+      //var color = ( hover_data[feature.properties.asset_id] ? category_colors[myself.category] : "#000");
+      var color = category_colors[myself.category];
+      return { fillColor: color, weight: 4, color: color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
     }
   }
   display () {
@@ -503,7 +333,6 @@ class DataLayer extends Layer {
     if (!this.layer && this.topojson) {
       // Find GeometryCollection in topojson
       var geomCollection = this.topojson.objects[Object.keys(this.topojson.objects)[0]];
-      console.log(geomCollection);
 
       //Create layer, converting topojson to geojson
       
@@ -646,86 +475,7 @@ class MarkerLayer extends Layer {
 
 
 
-// Hazards
 
-/*
-new ImageLayer('coastal_erosion',
-  'Coastal Erosion (Detailed)',
-  null,
-  'https://projects.urbanintelligence.co.nz/chap/data/tif5_2.png',
-  -43.8175583203575, 172.68006589048363,
-  -43.38980174324621, 172.97179259824534,
-  ).addToHazards("Probabilistic Erosion by 2150 with 2.0m of SLR")
-  .addLegend("Probability of Erosion", '%', [0, 25, 50, 75, 100]);
-
-new ImageLayer('slr_2m',
-  'Coastal Inundation',
-  null,
-  'https://projects.urbanintelligence.co.nz/chap/data/slr_2m.png',
-  -43.910311494073454, 172.370005888,
-  -43.387693258, 173.1430543875895,
-  ).addToHazards("Expected inundation depth during a 1 in 100year event with 2.0m SLR")
-  .addLegend("Inundation Depth", 'm', [0, 1, 2, 3, 4, 5, 6]);
-
-new ImageLayer('ch_gw',
-  'Groundwater Rise (Christchurch)',
-  null,
-  'https://projects.urbanintelligence.co.nz/chap/data/ch_gw_2.png',
-  -43.598523872449995, 172.53134737505002,
-  -43.39146096005, 172.77043032545,
-  ).addToHazards("Expected groundwater levels 85% of the time with 2.4m SLR")
-  .addLegend("Depth to Groundwater", 'm', [2, 1, 0, -1, -2, -3, -4, -5, -6]); */
-
-/* Original Lat & Long
-
-    -43.90065458258164,173.13050554343255,
-    -43.391691592429794, 172.37573303477018
-*/
-
-new ImageLayer('t_r1',
-  'Test Raster (1)',
-  'Built',
-  'https://test.urbanintelligence.co.nz/chap/data/temp_raster.png',
-  -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
-  -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-); 
-new ImageLayer('t_r2',
-    'Test Raster (2)',
-    'Built',
-    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_9_scale_0.1.png',
-    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
-    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    ); 
-new ImageLayer('t_r3',
-    'Test Raster (3)',
-    'Social',
-    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_JPEG_scale_0.1.png',
-    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
-    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    );
-new ImageLayer('t_r4',
-    'Test Raster (4)',
-    'Cultural',
-    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_lz77_scale_0.1.png',
-    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
-    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    );
-new ImageLayer('t_r5',
-    'Test Raster (5)',
-    'Natural',
-    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_lzw_scale_0.1.png',
-    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
-    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    );
-
-  
-
-
-
-  
-
-  
-  
   
   
 

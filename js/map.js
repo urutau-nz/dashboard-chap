@@ -78,20 +78,14 @@ function updateMap() {
   
   
   
-    var category_colors = {'Built': ['#FFC400', '#885400'],
-    'Cultural': ['#82003D', '#390009'],
-    'Natural': ['#8FD760', '#1F8324'],
-    'Social': ['#495CB1', '#2A284F'],
-    'Misc': ['#00A9A7', '#004B57'],
-    };
     
   
     // Generate Asset Menu
     var asset_menu = [];
     for (var category in category_titles) {
       var items = [];
-      for (var layer_id in available_layers) {
-        var layer = available_layers[layer_id];
+      for (var layer_id in assets) {
+        var layer = assets[layer_id];
         if (layer.category == category) {
           items.push([layer.id, layer.name]);
         }
@@ -125,7 +119,38 @@ function updateMap() {
       }
       
       content += '<tr>';
+
+      if (left.length == 0 && asset_menu.length > 0) {
+        var asset = asset_menu.pop();
+        content += `<td class="header">${asset.header}</td>`;
+        left = asset.items;
+        left_cat = asset.category;
   
+      } else if (left.length > 0) {
+        var item = left.pop(); // Add clickability & use item[0]
+        content += `<td class="item ${left_cat}" onclick="mapAsset('${item[0]}', '${item[1]}')">${item[1]}</td>`;
+
+        
+      
+        if (left.length == 0 && asset_menu.length > 0) {
+          var asset = asset_menu.pop();
+          content += `<td class="header">${asset.header}</td>`;
+          left = asset.items;
+          left_cat = asset.category;
+    
+        } else if (left.length > 0) {
+          var item = left.pop(); // Add clickability & use item[0]
+          content += `<td class="item ${left_cat}" onclick="mapAsset('${item[0]}', '${item[1]}')">${item[1]}</td>`;
+    
+        } else {
+          content += '<td></td>';
+        }
+  
+      } else {
+        content += '<td></td>';
+      }
+  
+      /*
       if (left.length == 0 && asset_menu.length > 0) {
         var asset = asset_menu.pop();
         content += `<td class="header">${asset.header}</td>`;
@@ -140,7 +165,6 @@ function updateMap() {
         content += '<td></td>';
       }
   
-  
       if (right.length == 0 && asset_menu.length > 0) {
         var asset = asset_menu.pop();
         content += `<td class="header">${asset.header}</td>`;
@@ -154,11 +178,13 @@ function updateMap() {
       } else {
         content += '<td></td>';
       }
-      
+      */
       content += '</tr>';
     }
   
     $("#map-asset-table").html(content);
+    
+    filtersApplyChanges();
 }
 
 
