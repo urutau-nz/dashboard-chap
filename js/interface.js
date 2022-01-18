@@ -158,10 +158,10 @@ function initFilterPanels() {
             <tr style="height: 100%;">
                 <td style="border-right: 2px dashed;width:50%;padding: 2rem;padding-bottom:0;">
                     <table style="height:100%">
-                        <tr style="height: 40%">
+                        <tr>
                             <td>
                                 <div class="region-dropdown"></div>
-                                <div style="font-style:italic;">This is a description for a region, if that is needed.</div>
+                                <div style="font-style:italic;"></div>
                             </td>
                         </tr>
                         <tr>
@@ -405,6 +405,9 @@ function onFiltersChange() {
     $(".filters-apply-button").addClass("active");
 }
 
+
+var hazard_layer = null;
+
 function filtersApplyChanges() {
     $(".filters-apply-button").removeClass("active");
 
@@ -429,6 +432,20 @@ function filtersApplyChanges() {
     
         }
     }
+
+    // Change Hazard Overlay
+    
+    hazard_layer.remove();
+    
+    hazard_layer = new ImageLayer('t_r1',
+    'Test Raster (1)',
+    'Built',
+    'https://test.urbanintelligence.co.nz/chap/data/temp_raster.png',
+    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
+    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
+    ); 
+
+    hazard_layer.display();
 }
 
 

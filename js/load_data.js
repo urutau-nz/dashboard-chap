@@ -130,6 +130,10 @@ import_manager.addImport('banks_groundwater', 'Banks Peninsula Groundwater', 'js
 import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
 'https://projects.urbanintelligence.co.nz/chap/data/adaptation_priority_areas.json');
 
+import_manager.addImport('hazard_info', 'Hazard CSV', 'csv', 
+'https://projects.urbanintelligence.co.nz/chap/data/hazard_info.csv');
+
+
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
 
@@ -269,6 +273,8 @@ function importsComplete(imports) {
     
 */
   areas = imports['priority_areas'];
+  hazard_info = imports['hazard_info'];
+
 
 /*
   // HAZARDS
@@ -682,35 +688,35 @@ new ImageLayer('t_r1',
   'https://test.urbanintelligence.co.nz/chap/data/temp_raster.png',
   -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
   -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-  ).addToLayers(); 
+); 
 new ImageLayer('t_r2',
     'Test Raster (2)',
     'Built',
     'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_9_scale_0.1.png',
     -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
     -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    ).addToLayers(); 
+    ); 
 new ImageLayer('t_r3',
     'Test Raster (3)',
     'Social',
     'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_JPEG_scale_0.1.png',
     -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
     -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    ).addToLayers();
+    );
 new ImageLayer('t_r4',
     'Test Raster (4)',
     'Cultural',
     'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_lz77_scale_0.1.png',
     -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
     -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    ).addToLayers();
+    );
 new ImageLayer('t_r5',
     'Test Raster (5)',
     'Natural',
     'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_lzw_scale_0.1.png',
     -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
     -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
-    ).addToLayers();
+    );
 
   
 
