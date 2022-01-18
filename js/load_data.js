@@ -642,6 +642,7 @@ class MarkerLayer extends Layer {
 
 // Hazards
 
+/*
 new ImageLayer('coastal_erosion',
   'Coastal Erosion (Detailed)',
   null,
@@ -667,11 +668,50 @@ new ImageLayer('ch_gw',
   -43.598523872449995, 172.53134737505002,
   -43.39146096005, 172.77043032545,
   ).addToHazards("Expected groundwater levels 85% of the time with 2.4m SLR")
-  .addLegend("Depth to Groundwater", 'm', [2, 1, 0, -1, -2, -3, -4, -5, -6]);
+  .addLegend("Depth to Groundwater", 'm', [2, 1, 0, -1, -2, -3, -4, -5, -6]); */
 
+/* Original Lat & Long
 
-  
-  
+    -43.90065458258164,173.13050554343255,
+    -43.391691592429794, 172.37573303477018
+*/
+
+new ImageLayer('t_r1',
+  'Test Raster (1)',
+  'Built',
+  'https://test.urbanintelligence.co.nz/chap/data/temp_raster.png',
+  -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
+  -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
+  ).addToLayers(); 
+new ImageLayer('t_r2',
+    'Test Raster (2)',
+    'Built',
+    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_9_scale_0.1.png',
+    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
+    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
+    ).addToLayers(); 
+new ImageLayer('t_r3',
+    'Test Raster (3)',
+    'Social',
+    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_JPEG_scale_0.1.png',
+    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
+    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
+    ).addToLayers();
+new ImageLayer('t_r4',
+    'Test Raster (4)',
+    'Cultural',
+    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_lz77_scale_0.1.png',
+    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
+    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
+    ).addToLayers();
+new ImageLayer('t_r5',
+    'Test Raster (5)',
+    'Natural',
+    'https://test.urbanintelligence.co.nz/chap/data/test_raster_comp_lzw_scale_0.1.png',
+    -43.90065458258164 * (1.00004),173.13050554343255 * 1.00001,
+    -43.391691592429794 * (1 - 0.00001), 172.37573303477018 * 1.00001
+    ).addToLayers();
+
   
 
 

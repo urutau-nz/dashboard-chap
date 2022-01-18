@@ -940,7 +940,7 @@ div.intro_tour .introjs-button {
 }
 .slr-pointers-div .hover {
   position: absolute;
-  top: 15px;
+  top: 20px;
   left: 0;
   width: 110px;
   text-align: center;
@@ -957,7 +957,7 @@ div.intro_tour .introjs-button {
 .slr-pointers-div>div:hover .hover {
   display: block;
 }
-.slr-pointers-div .hover span {
+.slr-pointers-div .hover .subtitle {
   font-size: 12px;
   font-weight: 500;
 }
