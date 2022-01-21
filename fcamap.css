@@ -804,12 +804,12 @@ div.intro_tour .introjs-button {
   border-radius: 6rem;
   color: white;
   z-index: 50000000;
-  width: 17rem;
+  width: 16rem;
   height: 2.5rem;
   box-shadow: 0.2rem 0 0.5rem #0005;
   transition: right 0.8s cubic-bezier(.34,-1,.82,0);
 }
-#loading-popup object {
+#loading-popup img {
   height: 2.5rem;
   width: 2.5rem;
   position: absolute;
@@ -819,7 +819,7 @@ div.intro_tour .introjs-button {
   font-size: 1.2rem;
   font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
   position: absolute;
-  right: 2.4rem;
+  right: 2rem;
   bottom: 1rem;
 }
 #loading-popup .object-backdrop {
@@ -873,10 +873,12 @@ div.intro_tour .introjs-button {
   padding: 0.6rem 1.2rem;
   font-weight: bold;
   transition: background-color 0.1s ease-in-out;
+  pointer-events: none;
 }
 #tnc-button.active {
   background-color: #5FAFAF;
   cursor: pointer;
+  pointer-events: all;
 }
 #tnc-button.active:hover {
   background-color: #30777D;

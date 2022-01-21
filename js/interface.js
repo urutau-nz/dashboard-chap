@@ -542,8 +542,9 @@ function filtersApplyChanges() {
 
 
 function tncCheckboxChange() {
-    if ($("#tnc-checkbox").is(':checked')) {
+    if ($("#tnc-checkbox").is(':checked') && assets) {
         $("#tnc-button").addClass("active");
+        $("#tnc-button").text("Continue");
     } else {
         $("#tnc-button").removeClass("active");
     }

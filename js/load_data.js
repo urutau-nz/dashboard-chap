@@ -88,7 +88,7 @@ import_manager.runImports();
 
 var areas;
 var asset_info;
-var assets = {};
+var assets;
 var exposure_built;
 var asset_descriptions;
 
@@ -103,6 +103,7 @@ function importsComplete(imports) {
 
   // Build Assets Dict
   var index = 0;
+  assets = {};
   asset_info.forEach(
     function (d) {
       assets["asset_"+index] = {
@@ -116,6 +117,10 @@ function importsComplete(imports) {
       index ++;
     }
   );
+
+  
+  // Let user in
+  tncCheckboxChange();
 
   initMap();
 }
