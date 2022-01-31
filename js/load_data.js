@@ -1,58 +1,3 @@
-/* ==== MODULAR IMPORTS (EXPERIMENTAL!) ==== */
-
-class ImportManager {
-  constructor () {
-    this.checks = {};
-    this.outputs = {};
-    this.imports = {};
-    this.has_imports = false;
-    this.oncomplete = (d) => (null);
-  }
-  isFinished() {
-    for (var id in this.checks) {
-      if (!this.checks[id]) return false;
-    }
-    return true;
-  }
-  addImport(id, title, type, url, csv_typing = d3.autoType) {
-    this.imports[id] = {'id': id, 'title': title, 'type': type, 'url': url, 'csv_typing': csv_typing};
-    this.checks[id] = false;
-    this.outputs[id] = null;
-    this.has_imports = true;
-  }
-  onComplete(func) {
-    this.oncomplete = func;
-  }
-  runImports() {
-    var onImports = {};
-    var impmod = this;
-    if (this.has_imports) {
-      for (var imp_id in this.imports) {
-        var imp = this.imports[imp_id];
-        var gen = function(imp) {
-          return function(error, json) {
-            if (error) return console.error(error);
-            impmod.outputs[imp.id] = json;
-            impmod.checks[imp.id] = true;
-            if (DEBUGGING) {
-              console.log(imp.title + " Imported");
-              console.log(json);
-            }
-            if (impmod.isFinished()) impmod.oncomplete(impmod.outputs);
-          }
-        };
-        onImports[imp_id] = gen(imp);
-        if (imp.type == 'csv') {
-          d3.csv(imp.url, imp.csv_typing, onImports[imp_id]);
-        } else if (imp.type == 'json') {
-          d3.json(imp.url, onImports[imp_id]);
-        }
-      }
-    } else {
-      this.oncomplete({});
-    }
-  }
-}
 
 
 
@@ -65,21 +10,28 @@ import_manager.addImport('isolation_county', 'Isolated County Pops', 'csv',
     (d) => ({geoid: d.geoid_county, year: +d.year, rise: +d.rise, pop: +d.count}));
 */
 
+var import_url = '';
+if (domain == 'test') {
+  import_url = `https://test.urbanintelligence.co.nz/chap`;
+} else {
+  import_url = `https://projects.urbanintelligence.co.nz/dashboard-chap`;
+}
+
 import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
-'https://projects.urbanintelligence.co.nz/chap/data/adaptation_priority_areas.json');
+import_url + `/data/adaptation_priority_areas.json`);
 
 import_manager.addImport('hazard_info', 'Hazard CSV', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/hazard_info.csv');
+import_url + `/data/hazard_info.csv`);
 
 import_manager.addImport('asset_info', 'Asset CSV', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/website_assets.csv');
+import_url + `/data/website_assets.csv`);
 
 import_manager.addImport('exposure_built', 'Exposure Built CSV', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/exposure_built.csv',
+import_url + `/data/exposure_built.csv`,
 (d) => ({asset_id: d.asset_id, hazard_scenario: d.hazard_scenario, exposure: d.exposure})); // For hover-over data
 
 import_manager.addImport('asset_descriptions', 'Asset Descriptions CSV', 'csv', 
-'https://projects.urbanintelligence.co.nz/chap/data/import.csv');
+import_url + `/data/import.csv`);
 
 
 import_manager.onComplete(importsComplete);
@@ -98,6 +50,13 @@ function importsComplete(imports) {
   areas = imports['priority_areas'];
   hazard_info = imports['hazard_info'];
   asset_info = imports['asset_info'];
+
+  asset_info.sort((x, y) => {
+    if (x.display_name < y.display_name) {return -1;}
+    if (x.display_name > y.display_name) {return 1;}
+    return 0;
+  });
+
   exposure_built = imports['exposure_built'];
   asset_descriptions = imports['asset_descriptions'];
 
@@ -109,7 +68,7 @@ function importsComplete(imports) {
       assets["asset_"+index] = {
         display_name: d.display_name,
         name: d.display_name,
-        file_name: 'https://projects.urbanintelligence.co.nz/chap/data/' + d.domain + '_assets/' + d.file_name,
+        file_name: import_url + '/data/' + d.domain + '_assets/' + d.file_name,
         category: d.domain,
         id: "asset_"+index
       };
@@ -133,7 +92,7 @@ function importsComplete(imports) {
 var category_titles = {'built': 'Built Domain',
 'cultural': 'Cultural Domain',
 'natural': 'Natural Domain',
-'social': 'Social Domain'
+'human': 'Human Domain'
 };
 
 var centroids = {
@@ -147,10 +106,32 @@ var centroids = {
   "Lyttelton-Mt Herbert": {lat: -43.64895336, lng: 172.7456975}
 };
 
-var category_colors = {'built': '#eb812e',
-'cultural': '#BB0088',
-'natural': '#00BB88',
-'social': '#6666BB'
+var category_colors = {'built': '#ffcb6d',
+'cultural': '#ff8686',
+'natural': '#a6ff8b',
+'human': '#A4A4FF',
+"overview": "#54ebbc"
+};
+
+var category_map_colors = {'built': '#DA7B1C',
+'cultural': '#D74343',
+'natural': '#5FB944',
+'human': '#5959C1',
+"overview": "#1C8E6A"
+};
+
+var category_text_colors = {'built': '#763100',
+'cultural': '#780021',
+'natural': '#037c09',
+'human': '#34229d',
+"overview": "#005652"
+};
+
+var category_highlight_colors = {'built': '#ffe2af',
+'cultural': '#ffbdbd',
+'natural': '#ceffbf',
+'human': '#cdcdff',
+"overview": "#a1f4da"
 };
 
 
@@ -273,7 +254,7 @@ class DataLayer extends Layer {
 
     this.style_func = style_func;
 
-    this.opacity = 0.6;
+    this.opacity = 0.8;
 
     this.tiled = tiling;
 
@@ -287,7 +268,7 @@ class DataLayer extends Layer {
       layer.on({
           mouseover: function(e) {
               e.target.setStyle({
-                weight: 3,
+                weight: 6,
                 opacity: 1,
                 fillOpacity: 1
               });
@@ -311,7 +292,7 @@ class DataLayer extends Layer {
           },
           mouseout: function(e) {
             e.target.setStyle({
-              weight: 2,
+              weight: 4,
               opacity: myself.opacity,
               fillOpacity: myself.opacity
             });
@@ -328,7 +309,7 @@ class DataLayer extends Layer {
     var myself = this;
     return function (feature) { 
       //var color = ( hover_data[feature.properties.asset_id] ? category_colors[myself.category] : "#000");
-      var color = category_colors[myself.category];
+      var color = category_map_colors[myself.category];
       return { fillColor: color, weight: 4, color: color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
     }
   }
@@ -348,8 +329,8 @@ class DataLayer extends Layer {
           tolerance: 3,
           debug: 0,
           style: {
-            fillColor: category_colors[this.category],
-            color: category_colors[this.category],
+            fillColor: category_map_colors[this.category],
+            color: category_map_colors[this.category],
             weight: 2,
             opacity: this.opacity,
             fillOpacity: this.opacity
@@ -445,7 +426,7 @@ class MarkerLayer extends Layer {
   default_style_generator () {
     var myself = this;
     return function (feature) { 
-      return { fillColor: category_colors[myself.category], weight: 2, color: category_colors[myself.category], opacity: myself.opacity, fillOpacity: myself.opacity}; 
+      return { fillColor: category_map_colors[myself.category], weight: 2, color: category_map_colors[myself.category], opacity: myself.opacity, fillOpacity: myself.opacity}; 
     }
   }
   display () {
@@ -456,7 +437,7 @@ class MarkerLayer extends Layer {
       for (var d of this.csv) {
           var marker = L.circleMarker([d.Y, d.X]).setStyle({
               radius: 3,
-              fillColor: category_colors[this.category],
+              fillColor: category_map_colors[this.category],
               color: "#000",
               weight: 0,
               opacity: 1,

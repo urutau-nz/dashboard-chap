@@ -15,7 +15,7 @@ function setPage(page) {
         if (page == "map") {
             updateMap();
 
-            filters_expanded = true;
+            filters_expanded = false;
             filterPanelRender();
 
             for (var form_item of filterItems) {
@@ -50,63 +50,7 @@ function setPage(page) {
 }
 
 
-var current_report_tab = null;
-function setReportTab(tab) {
-    if (tab != current_report_tab) {
-        $(`#report-menu-${current_report_tab}-td`).removeClass("active");
 
-        current_report_tab = tab;
-
-        // Set Report Info BG to color of tab
-        $("#report-info-td").css("background-color", $(`#report-menu-${tab}-td`).css("background-color"));
-        $(`#report-menu-${current_report_tab}-td`).addClass("active");
-
-        switch(tab) {
-            case "overview": {
-                $("#report-summary-td .title").html(`<h1>Overview</h1>`);
-
-            } break;
-            case "built": {
-                $("#report-summary-td .title").html(`<h1>Built Domain</h1>`);
-
-            } break;
-            case "natural": {
-                $("#report-summary-td .title").html(`<h1>Natural Domain</h1>`);
-
-            } break;
-            case "cultural": {
-                $("#report-summary-td .title").html(`<h1>Cultural Domain</h1>`);
-
-            } break;
-            case "human": {
-                $("#report-summary-td .title").html(`<h1>Human Domain</h1>`);
-
-            } break;
-        }
-        
-        // Switch shown contents
-        $(".report-report-table").removeClass('active');
-        $(`#report-${tab}-table`).addClass('active');
-
-        // Append Asset Reports
-        var contents = `<table style="width: 100%;padding-top: 3rem;"><tr><td><h1>${tab.substring(0,1).toUpperCase() + tab.substring(1)} Assets</h1></td></tr>`;
-        for (var asset_id in assets) {
-            asset = assets[asset_id];
-            if (asset.category == 'built') {
-                contents += `<tr><td id="${asset.id}-report-td"></td></tr>`;
-            }
-        }
-        contents += '</table>';
-        $(`#report-${tab}-table .asset-reports-tr`).html(contents);
-        
-        for (var asset_id in assets) {
-            asset = assets[asset_id];
-            if (asset.category == 'built') {
-                createAssetReport(`${asset.id}-report-td`, asset.display_name);
-            }
-        }
-    }
-}
 
 
 
@@ -134,7 +78,7 @@ var filter_values = {
     year: null
 };
 
-var yearLabels = ['2020', '2050', '2080', '2130', '2150+'];
+var yearLabels = {2020: '2020', 2050: '2050', 2080: '2080', 2130: '2130', 2150: '2150+'};
 var hazards = ['Erosion', 'Inundation']; //, 'Groundwater'
 var hazard_slrs = {
     'erosion': [],
@@ -248,7 +192,7 @@ function initFilterPanels() {
                 </td>
             </tr>
         </table>
-        <div class="filters-expanding-icon" onclick="filterPanelInvert()"><img src="./icons/expand_arrow.svg"></div>
+        <div class="filters-expanding-icon" onclick="filterPanelInvert()"><img src="./icons/overview-Expand.png"></div>
     </div>
     `;
 
@@ -357,8 +301,8 @@ function initFilterPanels() {
     $(".frequency-tr").css('display', 'none');
 
     // Years
-    mapYearSlider = new vlSlider("map-year-slider", 0, 4, 1);
-    reportYearSlider = new vlSlider("report-year-slider", 0, 4, 1);
+    mapYearSlider = new vlSlider("map-year-slider", 2020, 2150, Object.keys(yearLabels));
+    reportYearSlider = new vlSlider("report-year-slider", 2020, 2150, Object.keys(yearLabels));
     var year_onchange = function (value) {
         var label = yearLabels[value];
         $(".year-label").html(`<h3>${label}</h3>`); 
@@ -366,6 +310,8 @@ function initFilterPanels() {
     }
     mapYearSlider.setOnChange(year_onchange);
     reportYearSlider.setOnChange(year_onchange);
+    mapYearSlider.setValue(2150);
+    reportYearSlider.setValue(2150);
 
 
 
@@ -396,7 +342,7 @@ function initFilterPanels() {
     ];
     var pointer_contents = "";
     for (var pointer of pointers) {
-        pointer_contents += `<div class="${pointer.short}"><img src="./icons/PointerArrow.svg"/><div class="label">${pointer.short}</div><div class="hover">${pointer.long}</div></div>`;
+        pointer_contents += `<div class="${pointer.short}"><img src="./icons/overview-Pointer.png"/><div class="label">${pointer.short}</div><div class="hover">${pointer.long}</div></div>`;
     }
 
     $(".slr-pointers-div").html(pointer_contents);
@@ -431,12 +377,18 @@ function filterPanelRender() {
         }
 
         var yearLabel = yearLabels[filter_values.year];
+        if (filter_values.year) {
+            updateSLRPointers(filter_values.year);
+        } else {
+            updateSLRPointers(2150);
+        }
 
         $(".filters-div .summary-table .region").text(filter_values.region);
         $(".filters-div .summary-table .hazard").text(filter_values.hazard);
         $(".filters-div .summary-table .slr").text(filter_values.slr + "m");
         $(".filters-div .summary-table .year").text(yearLabel);
     }
+    
 }
 
 
@@ -509,7 +461,7 @@ function filtersApplyChanges() {
 
         hazard_scenario = target_hazard.file_name;
         
-        var url = `https://projects.urbanintelligence.co.nz/chap/data/hazards/${target_hazard.file_name}`;
+        var url = import_url + `/data/hazards/${target_hazard.file_name}`;
         
         hazard_layer = new ImageLayer('hazard_overlay',
         'Hazard Overlay',
@@ -542,9 +494,11 @@ function filtersApplyChanges() {
 
 
 function tncCheckboxChange() {
+    if (assets) {
+        $("#tnc-button").text("Continue");
+    }
     if ($("#tnc-checkbox").is(':checked') && assets) {
         $("#tnc-button").addClass("active");
-        $("#tnc-button").text("Continue");
     } else {
         $("#tnc-button").removeClass("active");
     }
@@ -561,10 +515,13 @@ function tncButtonClick() {
 
 function updateSLRPointers(value) {
         // Update SLR Pointers according to Year
-        var low = [0, 0.17, 0.25, 0.5, 0.6][value];
-        var med = [0, 0.18, 0.35, 0.65, 0.8][value];
-        var high_med = [0, 0.2, 0.45, 1.1, 1.35][value];
-        var high_upper = [0, 0.25, 0.65, 1.45, 1.8][value];
+        var index = Object.keys(yearLabels).indexOf(value.toString());
+        console.log(value, yearLabels,  Object.keys(yearLabels), index);
+
+        var low = [0, 0.17, 0.25, 0.5, 0.6][index];
+        var med = [0, 0.18, 0.35, 0.65, 0.8][index];
+        var high_med = [0, 0.2, 0.45, 1.1, 1.35][index];
+        var high_upper = [0, 0.25, 0.65, 1.45, 1.8][index];
 
         var conv = function (val) {return mapSLRSlider.valueToPerc(val);};
 
@@ -579,136 +536,3 @@ function updateSLRPointers(value) {
         $(".high-upper-estimate-span").text(high_upper + 'm');
 }
 
-
-
-var selected_asset = null;
-
-var asset_layer = null;
-
-var hover_data = {};
-
-function mapAssetOnLoad(data) {
-    var myasset = assets[selected_asset];
-
-    asset_layer = new DataLayer(selected_asset,
-        myasset.display_name,
-        myasset.category,
-        null,
-        data[selected_asset]
-    );
-
-    asset_layer.display();
-    $("#loading-popup").css("right", "-20rem");
-}
-
-function mapAsset(asset, asset_label) {
-    filters_expanded = false;
-    filterPanelRender();
-
-    $("#map-menu-td").css("display", "none");
-    $("#map-report-td").css("display", "table-cell");
-    
-    $("#map-report-header-td").html(`<h1>${asset_label}</h1>`);
-    $("#map-report-header-td").css("background-color", category_colors[assets[asset].category]);
-
-    createAssetReport("map-report-sub-div", asset_label);
-
-
-    if (asset_layer) {
-        asset_layer.remove();
-    }
-
-    // Render asset on map
-    $("#loading-popup").css("right", "3rem");
-
-    var myasset = assets[asset];
-    
-    var asset_importer = new ImportManager();
-    
-    asset_importer.addImport(myasset.id, myasset.display_name, 'json', 
-    myasset.file_name);
-
-    asset_importer.onComplete(mapAssetOnLoad);
-
-    selected_asset = asset;
-
-    asset_importer.runImports();
-
-
-
-}
-
-function mapAssetReturn() {
-
-    $("#map-menu-td").css("display", "table-cell");
-    $("#map-report-td").css("display", "none");
-    
-    asset_layer.remove();
-    selected_asset = null;
-}
-
-
-
-
-
-
-function assetReportImageOnError(e) {
-    console.log("Image Error:",e);
-    $(`#${e.id}-td`).html('Sorry - we don\'t have a figure for this scenario yet.');
-}
-function createAssetReport(html_id, asset_name) {
-
-    var asset_item = asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset_name.toLowerCase())[0];
-    if (!asset_item) {
-        $(`#${html_id}`).html(`<table style="width:100%;">
-        <tr>
-            <td colspan="2" class="asset-report-title-td">
-                <h2>${asset_name}</h2>
-            </td>
-        </tr>
-        <tr>
-            <td class="asset-report-description-td">
-                Sorry - we don't have a report for this asset yet.
-            </td>
-        </tr>
-        <tr>
-            <td class="asset-report-domain-td">
-            </td>
-        </tr>
-        </table>
-        `);
-        return false;
-    }
-
-    var description = asset_item["Asset Description"];
-    var domain = asset_item["Domain"];
-
-    var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
-
-    $(`#${html_id}`).html(`
-    <table style="width:100%;">
-    <tr>
-        <td colspan="2" class="asset-report-title-td">
-            <h2>${asset_name}</h2>
-        </td>
-    </tr>
-    <tr>
-        <td class="asset-report-description-td">
-            ${description}
-        </td>
-        <td rowspan="3" id="${html_id}-figure-td" class="asset-report-figure-td">
-            <img id="${html_id}-figure" onerror="assetReportImageOnError(this)" src="https://projects.urbanintelligence.co.nz/chap/data/report_figures/${asset_name}-${image_file}.jpg"/>
-        </td>
-    </tr>
-    <tr>
-        <td class="asset-report-domain-td" style="color: #934300bb">
-            ${domain} Domain
-        </td>
-    </tr>
-    <tr>
-        <td>
-        </td>
-    </tr>
-    </table>
-    `);
-}

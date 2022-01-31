@@ -1,13 +1,23 @@
 <?php 
+    switch (dirname(__FILE__, 2)) {
+        case "/home/web-dev": {
+            $GLOBALS["domain"] = "test";
+        }; break;
+        case "/home/website": {
+            $GLOBALS["domain"] = "projects";
+        }; break;
+    }
 
 ?>
+<script>
+  var domain = "<?=$GLOBALS["domain"]?>";
+</script>
 <!DOCTYPE html>
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <script>L_PREFER_CANVAS = false; L_NO_TOUCH = false; L_DISABLE_3D = false;</script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.0/dist/leaflet.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
@@ -27,16 +37,11 @@
 
     <script src="https://d3js.org/d3.v4.js"></script>
 
-    <!-- GOOGLE FONTS-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    
 
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,800;1,300;1,400;1,500;1,600;1,800&display=swap" rel="stylesheet">
-
-
-
-    <link href="https://test.urbanintelligence.co.nz/uivl/form-items.css" rel="stylesheet">
+    <?php
+        require_once("../ui-visual-library/css-links-" . $GLOBALS["domain"] . ".php");
+    ?>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123686738-4"></script>
     <script>
@@ -187,7 +192,7 @@
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td class="asset-reports-tr">
+                                  <td class="asset-reports-td">
 
                                   </td>
                                 </tr>
@@ -252,37 +257,37 @@
               <td>
                 <table id="report-menu-table">
                   <tr>
-                    <td id="report-menu-overview-td" onclick="setReportTab('overview')" class="active" style="background-color: #00A9A7; color: #004B57dd">
+                    <td id="report-menu-overview-td" onclick="setReportTab('overview')" class="active" style="background-color: #54ebbc; color: #005652dd">
                       Overview
-                      <img src="icons/overview.png">
+                      <img src="icons/Overview-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
-                    <td id="report-menu-built-td" onclick="setReportTab('built')" style="background-color: #eb7644; color: #885400dd;">
+                    <td id="report-menu-built-td" onclick="setReportTab('built')" style="background-color: #ffcb6d; color: #763100dd;">
                       Built<br>Domain
-                      <img src="icons/built.png">
+                      <img src="icons/Built-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
-                    <td id="report-menu-natural-td" onclick="setReportTab('natural')" style="background-color: #8FD760; color: #1F8324dd;">
+                    <td id="report-menu-natural-td" onclick="setReportTab('natural')" style="background-color: #a6ff8b; color: #037c09dd;">
                       Natural Domain
-                      <img src="icons/natural.png">
+                      <img src="icons/Natural-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
-                    <td id="report-menu-cultural-td" onclick="setReportTab('cultural')" style="background-color: #82003D; color: #390009dd;">
+                    <td id="report-menu-cultural-td" onclick="setReportTab('cultural')" style="background-color: #ff8686; color: #780021dd;">
                       Cultural Domain
-                      <img src="icons/cultural.png">
+                      <img src="icons/Cultural-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
-                    <td id="report-menu-human-td" onclick="setReportTab('human')" style="background-color: #495CB1; color: #2A284Fdd;">
+                    <td id="report-menu-human-td" onclick="setReportTab('human')" style="background-color: #A4A4FF; color: #34229ddd;">
                       Human Domain
-                      <img src="icons/human.png">
+                      <img src="icons/Human-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
@@ -299,27 +304,67 @@
             <tr>
               <td style="width:50%;" id="map-info-td">
                 <div class="shadow"></div>
-                <table id="map-info-table">
+                <table id="map-info-table" class="none">
                   <tr>
-                    <td id="map-menu-td">
-                      <div id="map-menu-div" class="nice-scroll">
-                        <table id="map-menu-table">
+                    <td id="map-domains-td">
+                      <div id="map-domains-div" class="nice-scroll map-menu-div">
+                        <table id="map-domains-table" class="map-menu-table">
                           <tr>
-                            <td style="text-align: center;">
-                              <h2>Pick An Asset</h2>
+                            <td style="text-align: center; border-bottom: 1px solid #CCC;">
+                              <h2>Choose a Domain</h2>
                             </td>
                           </tr>
+                          <tr style="height: 100%">
+                            <td style="text-align: center; height:100px;">
+                              <table id="map-domains-menu-table" class="map-menu-menu-table">
+                                <tr>
+                                  <td class="built-button" onclick="mapDomain('built')">
+                                    <img src="./icons/Built-Tab@120px.png"/>
+                                    <h3>Built Domain</h3>
+                                  </td>
+                                  <td class="natural-button" onclick="mapDomain('natural')">
+                                    <img src="./icons/Natural-Tab@120px.png"/>
+                                    <h3>Natural Domain</h3>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="cultural-button" onclick="mapDomain('cultural')">
+                                    <img src="./icons/Cultural-Tab@120px.png"/>
+                                    <h3>Cultural Domain</h3>
+                                  </td>
+                                  <td class="human-button" onclick="mapDomain('human')">
+                                    <img src="./icons/Human-Tab@120px.png"/>
+                                    <h3>Human Domain</h3>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td id="map-assets-td">
+                      <div id="map-assets-div" class="nice-scroll map-menu-div">
+                        <div id="map-assets-return-div" onclick="mapDomainReturn()">
+                          Return
+                        </div>
+                        <table id="map-assets-table" class="map-menu-table">
                           <tr>
-                            <td style="text-align: center;">
-                              <table id="map-asset-table">
+                            <td style="text-align: center; padding: 0;">
+                              <h1><span class="domain"></span> Assets</h1>
+                            </td>
+                          </tr>
+                          <tr style="height: 100%;">
+                            <td style="text-align: center; padding: 0 2rem 2rem 2rem;">
+                              <table id="map-assets-menu-table" class="map-menu-menu-table">
 
                               </table>
                             </td>
                           </tr>
                         </table>
                       </div>
-                      <div class="scroll-fade-bottom"></div>
-                      <div class="scroll-fade-top"></div>
                     </td>
                   </tr>
                   <tr>
@@ -335,7 +380,7 @@
                             </td>
                           </tr>
                           <tr>
-                            <td style="text-align: center;vertical-align: top; padding-top: 1rem;">
+                            <td id="map-report-sub-td">
                               <div id="map-report-sub-div" class='nice-scroll'>
                                 <table id="map-report-sub-table">
   
@@ -404,7 +449,7 @@
         <tr style="height: 0;">
           <td style="position: relative;">
             <a href="https://urbanintelligence.co.nz/" target="_blank">
-              <img src="https://projects.urbanintelligence.co.nz/chap/src/uc_ui_horizontal_logo.png" style = 'position: absolute; top: 1.1rem; height: 35px; left: 1.4rem'>
+              <img src="https://<?=$GLOBALS["domain"]?>.urbanintelligence.co.nz/chap/src/uc_ui_horizontal_logo.png" style = 'position: absolute; top: 1.1rem; height: 35px; left: 1.4rem'>
             </a>
           </td>
           <td style="float: right;padding-top: 1.3rem;font-size: 1.1rem;">
@@ -433,7 +478,9 @@
 </script> 
 
 
-<script src="https://test.urbanintelligence.co.nz/uivl/form-items.js"></script>
+<?php
+    require_once("../ui-visual-library/js-scripts-" . $GLOBALS["domain"] . ".php");
+?>
 
 <!-- LEAFLET GEOJSON VT -->
 <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
@@ -445,6 +492,7 @@
 <script type="text/javascript" src="js/load_data.js"></script>
 
 <script type="text/javascript" src="js/map.js"></script>
+<script type="text/javascript" src="js/reports.js"></script>
 <script type="text/javascript" src="js/interface.js"></script>
 
 

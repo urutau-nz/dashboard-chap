@@ -79,7 +79,7 @@ function updateMap() {
   
   
     
-  
+    /*
     // Generate Asset Menu
     var asset_menu = [];
     for (var category in category_titles) {
@@ -90,6 +90,7 @@ function updateMap() {
           items.push([layer.id, layer.name]);
         }
       }
+      items.reverse();
       asset_menu.push({'header': category_titles[category], 'category': category,  'items': items});
     }
     asset_menu.sort(function(a, b) { // Larger length to smaller. If equal, put in original order.
@@ -178,14 +179,24 @@ function updateMap() {
       } else {
         content += '<td></td>';
       }
-      */
       content += '</tr>';
     }
   
     $("#map-asset-table").html(content);
+      */
     
+    // Switch filter expand icon to right tab
+    $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
+
+        // Switch Pointer icons to right tab
+    $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
+
     filtersApplyChanges();
 }
+
+
+
+
 
 
 
@@ -213,125 +224,160 @@ function showAreaOutline() {
 
 
 
-/* Styles individual blocks. Called by Leaflet API.
-Params:
-    feature - Leaflet feature object for an individual block.
-*//*
-function style(feature) {
-    let col;
-    if (filtered_distances.length == 0) { 
-        col="#000000";
-    } else if (distances_by_geoid[feature.id][1] && simulateHazard) {
-        col="#000000";
-    } else { 
-        col = getColor(distances_by_geoid[feature.id][0]);
-    }
-    return { fillColor: col, weight: 1, color: col, opacity: 0.2, fillOpacity: 0.5};
+
+
+
+
+
+var selected_asset = null;
+
+var asset_layer = null;
+
+var hover_data = {};
+
+function mapAssetOnLoad(data) {
+    var myasset = assets[selected_asset];
+
+    asset_layer = new DataLayer(selected_asset,
+        myasset.display_name,
+        myasset.category,
+        null,
+        data[selected_asset]
+    );
+
+    asset_layer.display();
+    $("#loading-popup").css("right", "-20rem");
 }
 
+function mapAsset(asset, asset_label) {
+    filters_expanded = false;
+    filterPanelRender();
 
+    $("#map-info-table").removeClass();
+    $("#map-info-table").addClass(assets[asset].category);
 
-/* ====== ROADS ===== */
-/*
-
-function roadStyle(feature) {
-    let weight;
-    if (!simulateHazard) {
-        weight = 0
-    } else {
-        weight = 1
-    }
-    return { fillColor: '#f54242', color: '#f54242', weight: weight};
-}
-
-var roadsLayer = null;
-function updateRoads() {
-
-    if (roadsLayer) {
-        // Already exists, must be removed
-        map.removeLayer(roadsLayer);
-    }
-
-    roadsLayer = L.geoJSON(topojson.feature(roads, roads.objects.road), 
-            { style: roadStyle }
-            ).addTo(map);
-
-    updateMarkers();
-}
-
-
-
-
-
-/* ====== DESTINATION MARKERS ===== */
-/*
-function highlightMarker(e) {
-    var marker = e.target;
-    var d = marker.destination;
-    marker.setStyle({
-        radius: 8,
-    });
-
-    // Update Mouse Info
-    var mouse_info = document.getElementById("mouseInfo");
-    mouse_info.style.visibility = "visible";
-    mouse_info.style.background = "rgb(255,255,255)";
-
-    var out = "";
-    if (d.name && d.name.length > 0) {
-        out += '<h3 style="margin:5px 0;">' + d.name + '&nbsp;<span style="font-size:1.2em;color:' + marker.options.fillColor + '">&#9679;</span></h3>';
-    } else {
-        out += '<h3 style="margin:5px 0;"><span style="font-style:italic">';
-        switch (d.dest_type) {
-            case "supermarket":
-                out += "Supermarket";
-                break;
-            case "medical_clinic":
-                out += "Medical Clinic";
-                break;
-            case "primary_school":
-                out += "Primary School"
-                break;
-        }
-        out += '</span>&nbsp;<span style="font-size:1.2em;color:' + marker.options.fillColor + '">&#9679;</span></h3>';
-    }
-    mouse_info.innerHTML = out;
-}
-function resetHighlightMarker(e) {
-    var marker = e.target;
-    marker.setStyle({
-        radius: 3,
-    });
+    $("#map-assets-td").css("display", "none");
+    $("#map-report-td").css("display", "table-cell");
     
-    // Update Mouse Info
-    var mouse_info = document.getElementById("mouseInfo");
-    mouse_info.style.visibility = "hidden";
-    mouse_info.style.background = "rgba(255,255,255, 0.8)";
-}
-/* Updates all markers on the map
-*//*
-var markerLayer = null;
-var timeValue = 0;
-function updateMarkers(m) {
-    var markers = [];
-    for (d of filtered_destinations) {
-        const col = (d.operational.toLowerCase() != "false" && simulateHazard ? "#000" : "#55F");
-        marker = L.circleMarker([d.lat, d.lon]).setStyle({
-            radius: 3,
-            fillColor: col,
-            color: "#000",
-            weight: 0,
-            opacity: 1,
-            fillOpacity: 1
-        }).addTo(geojsonLayer).on({
-            mouseover: highlightMarker,
-            mouseout: resetHighlightMarker
-        });
-        marker.destination = d;
-        markers.push(marker);
+    $("#map-report-header-td").html(`<h1>${asset_label}</h1>`);
+    $("#map-info-table").css("background-color", category_colors[assets[asset].category]);
+    $("#map-info-table").css("color", category_text_colors[assets[asset].category]);
+    
+    // Switch filter expand icon to right tab
+    $('#page-map .filters-expanding-icon img').attr('src', `./icons/${assets[asset].category}-Expand.png`);
+
+        // Switch Pointer icons to right tab
+    $("#page-map .slr-pointers-div img").attr('src', `./icons/${assets[asset].category}-Pointer.png`);
+
+    createAssetReport("map-report-sub-div", asset_label);
+
+
+    if (asset_layer) {
+        asset_layer.remove();
     }
-    markerLayer = L.layerGroup(markers);
-} */
+
+    // Render asset on map
+    $("#loading-popup").css("right", "3rem");
+
+    var myasset = assets[asset];
+    
+    var asset_importer = new ImportManager();
+    
+    asset_importer.addImport(myasset.id, myasset.display_name, 'json', 
+    myasset.file_name);
+
+    asset_importer.onComplete(mapAssetOnLoad);
+
+    selected_asset = asset;
+
+    asset_importer.runImports();
+}
 
 
 
+function mapAssetReturn() {
+
+    $("#map-assets-td").css("display", "table-cell");
+    $("#map-report-td").css("display", "none");
+    $("#map-info-table").css("background-color", "white");
+
+    $("#map-info-table").removeClass();
+    $("#map-info-table").addClass("none");
+    
+    // Switch filter expand icon to right tab
+    $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
+
+        // Switch Pointer icons to right tab
+    $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
+    
+    asset_layer.remove();
+    selected_asset = null;
+}
+
+
+function mapDomain(domain) {
+  filters_expanded = false;
+  filterPanelRender();
+  
+  $("#map-assets-td").css("display", "table-cell");
+  $("#map-domains-td").css("display", "none");
+
+  $("#map-info-table").removeClass();
+  $("#map-info-table").addClass("none");
+  $("#map-info-table").css("background-color", "white");
+
+  $("#map-info-table span.domain").text(domain.substring(0, 1).toUpperCase() + domain.substring(1));
+
+  // Switch filter expand icon to right tab
+  $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
+
+  // Switch Pointer icons to right tab
+  $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
+
+
+  // Generate Asset Menu
+  var content = "";
+  var odd = true;
+  for (var asset_id in assets) {
+    var asset = assets[asset_id];
+
+    if (asset.category == domain) {
+
+      var info_icon = "";
+      if (asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset.display_name.toLowerCase()).length == 0) {
+        // No asset description matching this asset
+        info_icon = `<div class="asset-caution-div"><table>
+        <tr><td class="info">
+        Missing Report
+        </td><td class="icon">
+        <img src="./icons/Cauton-Dot.svg"/>
+        </td></tr>
+        </table></div>`;
+      }
+
+      content += `<tr><td style="background-color: ${(odd ? category_colors[domain] : category_highlight_colors[domain])}"
+                  onclick="mapAsset('${asset.id}', '${asset.display_name}')">${asset.display_name}${info_icon}</td></tr>`;
+      odd = !odd;
+    }
+  }
+
+  $("#map-assets-menu-table").html(content);
+}
+
+
+function mapDomainReturn() {
+
+  $("#map-domains-td").css("display", "table-cell");
+  $("#map-assets-td").css("display", "none");
+  $("#map-info-table").css("background-color", "white");
+
+  $("#map-info-table").removeClass();
+  $("#map-info-table").addClass("none");
+  
+  // Switch filter expand icon to right tab
+  $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
+
+      // Switch Pointer icons to right tab
+  $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
+
+}
