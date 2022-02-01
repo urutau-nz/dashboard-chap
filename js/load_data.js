@@ -14,7 +14,7 @@ var import_url = '';
 if (domain == 'test') {
   import_url = `https://test.urbanintelligence.co.nz/chap`;
 } else {
-  import_url = `https://projects.urbanintelligence.co.nz/dashboard-chap`;
+  import_url = `https://projects.urbanintelligence.co.nz/chap`;
 }
 
 import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
