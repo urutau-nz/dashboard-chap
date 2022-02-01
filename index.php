@@ -449,7 +449,7 @@
         <tr style="height: 0;">
           <td style="position: relative;">
             <a href="https://urbanintelligence.co.nz/" target="_blank">
-              <img src="https://<?=$GLOBALS["domain"]?>.urbanintelligence.co.nz/chap/src/uc_ui_horizontal_logo.png" style = 'position: absolute; top: 1.1rem; height: 35px; left: 1.4rem'>
+              <img src="src/uc_ui_horizontal_logo.png" style = 'position: absolute; top: 1.1rem; height: 35px; left: 1.4rem'>
             </a>
           </td>
           <td style="float: right;padding-top: 1.3rem;font-size: 1.1rem;">

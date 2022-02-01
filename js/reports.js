@@ -119,7 +119,7 @@ function createAssetReport(html_id, asset_name) {
             ${description}
         </td>
         <td rowspan="3" id="${html_id}-figure-td" class="asset-report-figure-td">
-            <img id="${html_id}-figure" onerror="assetReportImageOnError(this)" src="https://${domain}.urbanintelligence.co.nz/chap/data/report_figures/${asset_name}-${image_file}.jpg"/>
+            <img id="${html_id}-figure" onerror="assetReportImageOnError(this)" src="data/report_figures/${asset_name}-${image_file}.jpg"/>
         </td>
     </tr>
     <tr>
