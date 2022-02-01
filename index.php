@@ -85,7 +85,7 @@
       <td id="page-td" colspan="100%">
         <div id="loading-popup">
           <div class="object-backdrop"></div>
-          <img src="src/Logo-Animation.gif"/>
+          <img src="https://projects.urbanintelligence.co.nz/uivl/lib/Logo-Animation.gif"/>
           <div class="text">
             Loading Resources...
           </div>
