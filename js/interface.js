@@ -436,6 +436,7 @@ function filtersApplyChanges() {
 
     $(".slr-slider-marker-info").css('opacity', 0);
     $(".slr-slider-marker-info").text(filter_values.slr + "m");
+    $(".slr-slider-marker-info").css('left', ((mapSLRSlider.valueToPerc(filter_values.slr) + 2.5) * 0.95) + '%');
 
     
 

@@ -941,7 +941,10 @@ div.intro_tour .introjs-button {
   top: -2px;
   font-size: 0.7rem;
   font-weight: bold;
-  right: 7px;
+  width: 40px;
+  transform: translateX(-20px);
+  text-align:center;
+  left: 0px;
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
 }
