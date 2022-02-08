@@ -424,8 +424,8 @@
       </td>
     </tr>
   </table>
-  <div id="tnc-popup-backdrop">
-    <div id="tnc-popup">
+  <div id="tnc-popup-backdrop" class="popup-backdrop">
+    <div id="tnc-popup"  class="popup">
       <table>
         <tr style="height: 0;">
           <td colspan="100%" style="border-bottom: 1px solid #CCC;">
@@ -449,7 +449,7 @@
         <tr style="height: 0;">
           <td style="position: relative;">
             <a href="https://urbanintelligence.co.nz/" target="_blank">
-              <img src="src/uc_ui_horizontal_logo.png" style = 'position: absolute; top: 1.1rem; height: 35px; left: 1.4rem'>
+              <img src="src/UC_UI_Horizontal.svg" style = 'position: absolute; top: 1.1rem; height: 35px; left: 1.4rem'>
             </a>
           </td>
           <td style="float: right;padding-top: 1.3rem;font-size: 1.1rem;">
@@ -458,16 +458,63 @@
             </div>
           </td>
           <td style="width:0;">
-            <div id="tnc-button" onclick="tncButtonClick()">Loading...</div>
+            <div id="tnc-button" class="button" onclick="tncButtonClick()">Loading...</div>
           </td>
         </tr>
       </table>
     </div>
   </div>
-    <!--
-  <div class="folium-map" id="map" ></div>
-  <div id="help-popup"></div>
-  <div id="dist-graph"></div>-->
+  <div id="filters-help-popup-backdrop" class="popup-backdrop">
+    <div id="filters-help-popup"  class="popup">
+      <table>
+        <tr>
+          <td colspan="2">
+            <h1>The Filters Panel</h1>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <p>Some Text Here ...</P>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h2>Region Dropdown</h2>
+            <p>Some Text Here ...</P>
+          </td>
+          <td>
+            <h2>SLR Slider</h2>
+            <p>Some Text Here ...</P>
+            <h3>SLR Pointers</h3>
+            <p>Some Text Here ...</P>
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="2">
+            <h2>Hazard Dropdown</h2>
+            <p>Some Text Here ...</P>
+          </td>
+          <td>
+            <h2>Frequency Slider (Inundation)</h2>
+            <p>Some Text Here ...</P>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h2>Year Slider</h2>
+            <p>Some Text Here ...</P>
+          </td>
+        </tr>
+        <tr style="height: 0;">
+          <td>
+          </td>
+          <td style="text-align: right;width:50%;">
+            <div class="button active" onclick="filtersHelpButtonClick()">Return</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </body>
 <script>
     

@@ -33,6 +33,9 @@ import_url + `/data/exposure_built.csv`,
 import_manager.addImport('asset_descriptions', 'Asset Descriptions CSV', 'csv', 
 import_url + `/data/import.csv`);
 
+import_manager.addImport('built_points', 'Built Points CSV', 'csv', 
+import_url + `/data/built_points.csv`);
+
 
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
@@ -43,6 +46,7 @@ var asset_info;
 var assets;
 var exposure_built;
 var asset_descriptions;
+var built_points;
 
 
 function importsComplete(imports) {
@@ -50,6 +54,7 @@ function importsComplete(imports) {
   areas = imports['priority_areas'];
   hazard_info = imports['hazard_info'];
   asset_info = imports['asset_info'];
+  built_points = imports['built_points'];
 
   asset_info.sort((x, y) => {
     if (x.display_name < y.display_name) {return -1;}
@@ -70,12 +75,35 @@ function importsComplete(imports) {
         name: d.display_name,
         file_name: import_url + '/data/' + d.domain + '_assets/' + d.file_name,
         category: d.domain,
-        id: "asset_"+index
+        id: "asset_"+index,
+        type: "shapes" // Either SHAPES or POINTS
       };
 
       index ++;
     }
   );
+
+  // Add Point Data to Assets Dict
+  var met_names = [];
+  built_points.forEach(
+    function (d) {
+      if (!met_names.includes(d.name)) {
+        assets["asset_"+index] = {
+          display_name: d.name,
+          name: d.name,
+          file_name: null, // Already in built_points
+          category: "built",
+          id: "asset_"+index,
+          type: "points" // Either SHAPES or POINTS
+        };
+  
+        index ++;
+
+        met_names.push(d.name);
+      }
+    }
+  );
+
 
   
   // Let user in
@@ -134,6 +162,13 @@ var category_highlight_colors = {'built': '#ffe2af',
 "overview": "#a1f4da"
 };
 
+var assets_to_tile = [
+  "Residential Buildings",
+  "Water Supply Network Pipes",
+  "Stormwater Network pipes",
+  "Wastewater Network pipes",
+  "Industrial Properties & Facilities"
+]
 
 
 
@@ -393,27 +428,32 @@ class MarkerLayer extends Layer {
     return {
           mouseover: function(e) {
               e.target.setStyle({
-                radius: 6
+                radius: 8,
+                weight: 4,
               });
+              console.log(e);
 
               // Update Mouse Info
               var mouse_info = document.getElementById("mouse-info");
               mouse_info.style.visibility = "visible";
               mouse_info.style.background = "rgb(255,255,255)";
+
+              console.log(filter_values.hazard, hover_data, e.target.feature.properties.asset_id, hover_data[e.target.feature.properties.asset_id]);
               
               var hover_val = "";
-              console.log(e.target);
-              if (e.target.destination.title) {
-                hover_val = e.target.destination.title;
-              } else if (e.target.destination.name) {
-                hover_val = e.target.destination.name;
+              if (hover_data[e.target.feature.properties.asset_id]) {
+                if (filter_values.hazard.toLowerCase() == 'erosion') {
+                  hover_val = `${hover_data[e.target.feature.properties.asset_id]}% Likelihood of Erosion`;
+                } else if (filter_values.hazard.toLowerCase() == 'inundation') {
+                  hover_val = `${hover_data[e.target.feature.properties.asset_id]}cm of Inundation`;
+                }
               }
-              mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.destination.markerlayer.name + '</td></tr></table>';
-              console.log(e);
+              mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
           },
           mouseout: function(e) {
             e.target.setStyle({
-              radius: 3
+              radius: 4,
+              weight: 2,
             });
             
             // Update Mouse Info
@@ -435,17 +475,19 @@ class MarkerLayer extends Layer {
     if (!this.layer && this.csv) {
       var markers = [];
       for (var d of this.csv) {
-          var marker = L.circleMarker([d.Y, d.X]).setStyle({
-              radius: 3,
-              fillColor: category_map_colors[this.category],
-              color: "#000",
-              weight: 0,
+          var marker = L.circleMarker([(d.Y ? d.Y : d.lat), (d.X ? d.X : d.lon)]).setStyle({
+              radius: 4,
+              fillColor: "#FFF",
+              color: category_map_colors[this.category],
+              weight: 2,
               opacity: 1,
               fillOpacity: 1
           }).on({
               mouseover: this.onEachFeature.mouseover,
               mouseout: this.onEachFeature.mouseout
           });
+          marker.feature = {properties: d,
+                            datalayer: this};
           d.markerlayer = this;
           marker.destination = d;
           markers.push(marker);

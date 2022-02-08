@@ -121,7 +121,7 @@ function initFilterPanels() {
         <table class="form-table" style="height:100%;width:100%;">
             <tr>
                 <td>
-                    <h2>Filters</h2>
+                    <h2>Filters <div class="filters-help" onclick="showFiltersHelp()"><img src="icons/QMark-Dot-Black.svg"/></h2>
                 </td>
                 <td style="position:relative;">
                     <div class="filters-apply-button" onclick="filtersApplyChanges()">Apply Changes</div>
@@ -131,9 +131,19 @@ function initFilterPanels() {
                 <td style="border-right: 2px dashed;width:50%;padding: 2rem;padding-bottom:0;">
                     <table style="height:100%">
                         <tr>
+                            <td style="vertical-align: bottom;">
+                                <h3 style="margin:0;">Region:</h3>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <div class="region-dropdown"></div>
                                 <div style="font-style:italic;"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align: bottom;">
+                                <h3 style="margin:0;">Hazard:</h3>
                             </td>
                         </tr>
                         <tr>
@@ -412,6 +422,11 @@ var hazard_scenario = null;
 function filtersApplyChanges() {
     $(".filters-apply-button").removeClass("active");
 
+    // Refresh Asset Menu
+    if (current_page == 'map' && selected_domain != null) {
+        mapDomain(selected_domain);
+    }
+
     if (mapYearSlider) {
         if (current_page == 'map') {
             filter_values.region = mapRegionMenu.value;
@@ -537,3 +552,12 @@ function updateSLRPointers(value) {
         $(".high-upper-estimate-span").text(high_upper + 'm');
 }
 
+
+
+
+function showFiltersHelp() {
+    $("#filters-help-popup-backdrop").css("display", "block");
+}
+function filtersHelpButtonClick() {
+    $("#filters-help-popup-backdrop").css("display", "none");
+}

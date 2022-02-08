@@ -359,16 +359,19 @@ body .vl-select-body td:hover {
 }
 #map-report-return-div, #map-assets-return-div {
   position: absolute;
-  top: 0;
-  left: 0;
-  padding: 0.6rem 1rem;
-  font-size: 1.2rem;
+  top: 0.3rem;
+  left: 0.5rem;
+  padding: 0.2rem 0.8rem;
+  font-size: 1rem;
   cursor: pointer;
   z-index: 5;
+  border-radius: 2rem;
   font-family: 'Rubik', sans-serif;
+  opacity: 0.4;
+  transition: opacity 0.1s ease-in-out;
 }
 #map-report-return-div:hover, #map-assets-return-div:hover {
-  font-weight: 500;
+  opacity: 1;
 }
 
 
@@ -838,7 +841,7 @@ div.intro_tour .introjs-button {
   background-color: #333;
 }
 
-#tnc-popup-backdrop {
+.popup-backdrop {
   position: absolute;
   z-index: 4000000000;
   background-color: #4448;
@@ -846,9 +849,14 @@ div.intro_tour .introjs-button {
   left: 0;
   height: 100%;
   width: 100%;
+  display: none;
 }
 
-#tnc-popup {
+#tnc-popup-backdrop {
+  display: block;
+}
+
+.popup {
   width: calc(100% - 20rem);
   height: calc(100% - 10rem);
   background-color: white;
@@ -858,35 +866,63 @@ div.intro_tour .introjs-button {
   top: 5rem;
   left: 10rem;
   z-index: 4000000002;
+}
+#tnc-popup {
   font-family: "Source Sans Pro",Verdana,Calibri,sans-serif;
 }
-#tnc-popup>table {
+#filters-help-popup {
+}
+
+.popup>table {
   width: 100%;
   height: 100%;
 }
-#tnc-popup td {
+.popup td {
   padding: 1rem;
+  vertical-align: top;
 }
-#tnc-popup h2 {
+.popup h2 {
   margin: 0;
   color: #666;
   font-size: 1.4rem;
 }
-#tnc-button {
+.popup h3 {
+  margin: 0;
+  color: #666;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
+.popup h1 {
+  color: #666;
+  font-size: 2.5rem;
+  font-family: 'Rubik', Arial, Helvetica, sans-serif;
+  text-align: center;
+  margin-bottom: -2rem;
+}
+.popup p {
+  font-size: 1.1rem;
+  line-height: 1.1;
+  margin-left: 1.4rem;
+  margin-top: 0.6rem;
+}
+.popup .button {
   border-radius: 0.5rem;
   background-color: #AAA;
   color: white;
+  display: inline-block;
+  width: fit-content;
   padding: 0.6rem 1.2rem;
   font-weight: bold;
   transition: background-color 0.1s ease-in-out;
   pointer-events: none;
+  font-family: "Source Sans Pro",Verdana,Calibri,sans-serif;
 }
-#tnc-button.active {
+.popup .button.active {
   background-color: #5FAFAF;
   cursor: pointer;
   pointer-events: all;
 }
-#tnc-button.active:hover {
+.popup .button.active:hover {
   background-color: #30777D;
 }
 #tnc-popup .highlight {
@@ -985,6 +1021,13 @@ div.intro_tour .introjs-button {
 
 .asset-reports-td h2 {
   text-align: center;
+}
+
+.asset-type-img {
+  height: 0.8em;
+  width: 0.8em;
+  margin-bottom: -0.08em;
+  margin-right: 0.4em;
 }
 
 
@@ -1131,7 +1174,11 @@ body .human .filters-div { box-shadow: 0 0.3rem 0.5rem #0004; }
 
 
 
-
+/* RETURN COLORS */
+.built #map-report-return-div, .built #map-assets-return-div { background-color: #763100; color: #ffe2af;}
+.natural #map-report-return-div, .natural #map-assets-return-div { background-color: #037c09; color: #ceffbf;}
+.cultural #map-report-return-div, .cultural #map-assets-return-div { background-color: #780021; color: #ffbdbd;}
+.human #map-report-return-div, .human #map-assets-return-div { background-color: #34229d; color: #cdcdff;}
 
 
 #map-report-sub-td {
@@ -1167,4 +1214,32 @@ body .human .filters-div { box-shadow: 0 0.3rem 0.5rem #0004; }
 .asset-caution-div .icon {
   height: 20px;
   width: 20px;
+}
+
+.filters-help {
+  display: inline-block;
+  height: 1rem;
+  width: 1rem;
+  opacity: 0.3;
+  margin-left: 0.2rem;
+  cursor: pointer;
+  transition: opacity 0.1s ease-in-out;
+}
+.filters-help:hover {
+  opacity: 0.6;
+}
+
+
+
+.show-on-map-img {
+  position: absolute;
+  top: 0.2rem;
+  right: 0;
+  cursor: pointer;
+  height: 28px;
+  width: 28px;
+}
+
+.asset-report-td {
+  position: relative;
 }

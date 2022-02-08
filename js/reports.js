@@ -46,20 +46,32 @@ function setReportTab(tab) {
         $(`#report-${tab}-table`).addClass('active');
 
         // Append Asset Reports
+        // Alphabetical assets
+        var alphabetical_asset_ids = Object.keys(assets);
+        alphabetical_asset_ids.sort((a, b) => {
+            var x = assets[a], y = assets[b];
+            if (x.display_name < y.display_name) {return -1;}
+            if (x.display_name > y.display_name) {return 1;}
+            return 0;
+        });
+
         var contents = `<table style="width: 100%;padding-top: 3rem;"><tr><td><h1>${tab.substring(0,1).toUpperCase() + tab.substring(1)} Assets</h1></td></tr>`;
-        for (var asset_id in assets) {
+        for (var asset_id of alphabetical_asset_ids) {
             asset = assets[asset_id];
             if (asset.category == 'built') {
-                contents += `<tr><td id="${asset.id}-report-td"></td></tr>`;
+                contents += `<tr><td id="${asset.id}-report-td" class="asset-report-td"></td></tr>`;
             }
         }
         contents += '</table>';
         $(`#report-${tab}-table .asset-reports-td`).html(contents);
         
-        for (var asset_id in assets) {
+        for (var asset_id of alphabetical_asset_ids) {
             asset = assets[asset_id];
             if (asset.category == 'built') {
                 createAssetReport(`${asset.id}-report-td`, asset.display_name);
+
+                // Add To Map button
+                $(`#${asset.id}-report-td`).append(`<img class="show-on-map-img" src="icons/${tab}-map.svg" onclick="showAssetOnMap('${asset.id}', '${asset.display_name}')"/>`);
             }
         }
     }
@@ -103,7 +115,7 @@ function createAssetReport(html_id, asset_name) {
     }
 
     var description = asset_item["Asset Description"];
-    var domain = asset_item["Domain"];
+    var category = asset_item["Domain"];
 
     var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
 
@@ -119,12 +131,12 @@ function createAssetReport(html_id, asset_name) {
             ${description}
         </td>
         <td rowspan="3" id="${html_id}-figure-td" class="asset-report-figure-td">
-            <img id="${html_id}-figure" onerror="assetReportImageOnError(this)" src="https://${domain}.urbanintelligence.co.nz/chap/data/report_figures/${asset_name}-${image_file}.jpg"/>
+            <img id="${html_id}-figure" onerror="assetReportImageOnError(this)" src="${import_url}/data/report_figures/${asset_name}-${image_file}.jpg"/>
         </td>
     </tr>
     <tr>
         <td class="asset-report-domain-td" style="color: #934300bb">
-            ${domain} Domain
+            ${category} Domain
         </td>
     </tr>
     <tr>
@@ -133,4 +145,10 @@ function createAssetReport(html_id, asset_name) {
     </tr>
     </table>
     `);
+}
+
+
+function showAssetOnMap(asset_id, asset_name) {
+    setPage('map');
+    mapAsset(asset_id, asset_name);
 }
