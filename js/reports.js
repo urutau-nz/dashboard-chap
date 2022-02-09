@@ -152,3 +152,14 @@ function showAssetOnMap(asset_id, asset_name) {
     setPage('map');
     mapAsset(asset_id, asset_name);
 }
+
+
+function reportSwitch(type) {
+    $(`#report-summary-td .switch>table td`).toggleClass('active');
+    
+    if (type == 'summary') {
+
+    } else if (type == 'assets') {
+
+    }
+}

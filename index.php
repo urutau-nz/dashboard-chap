@@ -91,12 +91,12 @@
           </div>
         </div>
         <div class="page active" id="page-overview">
-          <img class="background" src="src/CHCH Map BW.jpg">
+          <img class="background" src="src/CHCH Map BW.png">
           <div style="width:100%;height:100%;overflow: auto;">
             <table style="width:100%;margin: 4.5rem 0;">
               <tr>
                 <td style="text-align: center;">
-                  <div style="display:inline-block; max-width: 55rem; color: #444;background-color: white; border-radius: 4rem; box-shadow: 0 0 2rem white;">
+                  <div style="display:inline-block; max-width: 55rem; color: #444; border-radius: 4rem; text-shadow: 0 0 1rem  #FFF;">
                     <h1>Christchurch Coastal Risk Explorer</h1>
                   </div>
                 </td>
@@ -161,6 +161,20 @@
                         <tr style="height: 0;">
                           <td class="title">
 
+                          </td>
+                        </tr>
+                        <tr style="height: 0;">
+                          <td class="switch">
+                            <table>
+                              <tr>
+                                <td class="active" onclick="reportSwitch('summary')">
+                                  Summary
+                                </td>
+                                <td onclick="reportSwitch('assets')">
+                                  Assets
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                         <tr>
