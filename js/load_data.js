@@ -289,7 +289,7 @@ class DataLayer extends Layer {
 
     this.style_func = style_func;
 
-    this.opacity = 0.8;
+    this.opacity = 0.4;
 
     this.tiled = tiling;
 
@@ -302,10 +302,13 @@ class DataLayer extends Layer {
       feature.datalayer = myself;
       layer.on({
           mouseover: function(e) {
+            var color = category_text_colors[myself.category];
               e.target.setStyle({
-                weight: 6,
+                weight: 8,
                 opacity: 1,
-                fillOpacity: 1
+                fillOpacity: myself.opacity,
+                color: color,
+                fillColor: color
               });
 
               // Update Mouse Info
@@ -326,10 +329,13 @@ class DataLayer extends Layer {
               mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
           },
           mouseout: function(e) {
+            var color = category_map_colors[myself.category];
             e.target.setStyle({
               weight: 4,
-              opacity: myself.opacity,
-              fillOpacity: myself.opacity
+              opacity: 1,
+              fillOpacity: myself.opacity,
+              color: color,
+              fillColor: color
             });
             
             // Update Mouse Info
@@ -345,7 +351,7 @@ class DataLayer extends Layer {
     return function (feature) { 
       //var color = ( hover_data[feature.properties.asset_id] ? category_colors[myself.category] : "#000");
       var color = category_map_colors[myself.category];
-      return { fillColor: color, weight: 4, color: color, opacity: myself.opacity, fillOpacity: myself.opacity}; 
+      return { fillColor: color, weight: 4, color: color, opacity: 1, fillOpacity: myself.opacity}; 
     }
   }
   display () {
@@ -360,15 +366,15 @@ class DataLayer extends Layer {
       if (this.tiled) {
         // Tile the layer using geojson-vt (i.e. it's large)
         var options = {
-          maxZoom: 16,
-          tolerance: 3,
+          maxZoom: 18,
+          tolerance: 0,
           debug: 0,
           style: {
             fillColor: category_map_colors[this.category],
             color: category_map_colors[this.category],
             weight: 2,
-            opacity: this.opacity,
-            fillOpacity: this.opacity
+            opacity: 1,
+            fillOpacity: 0.5
           },
         };
         this.layer = L.geoJson.vt(topojson.feature(this.topojson, geomCollection), options).addTo(map);
@@ -428,8 +434,8 @@ class MarkerLayer extends Layer {
     return {
           mouseover: function(e) {
               e.target.setStyle({
-                radius: 8,
-                weight: 4,
+                radius: 12,
+                weight: 6,
               });
               console.log(e);
 
@@ -452,8 +458,8 @@ class MarkerLayer extends Layer {
           },
           mouseout: function(e) {
             e.target.setStyle({
-              radius: 4,
-              weight: 2,
+              radius: 8,
+              weight: 4,
             });
             
             // Update Mouse Info
@@ -476,10 +482,10 @@ class MarkerLayer extends Layer {
       var markers = [];
       for (var d of this.csv) {
           var marker = L.circleMarker([(d.Y ? d.Y : d.lat), (d.X ? d.X : d.lon)]).setStyle({
-              radius: 4,
+              radius: 8,
               fillColor: "#FFF",
               color: category_map_colors[this.category],
-              weight: 2,
+              weight: 4,
               opacity: 1,
               fillOpacity: 1
           }).on({

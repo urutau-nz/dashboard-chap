@@ -76,12 +76,12 @@ function updateMap() {
     }
     /* ==== INITIALISE LEAFLET MAP & TILE LAYER ==== */
   
-    map = L.map('map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
+    map = L.map('map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, maxZoom: 18, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
     //attr = L.control.attribution().addAttribution('<a href="https://urbanintelligence.co.nz/">Urban Intelligence</a>');
     //attr.addTo(map);
   
     L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                                {"attributionControl": false, "detectRetina": false, "maxZoom": 16, "minZoom": 4,
+                                {"attributionControl": false, "detectRetina": false, "maxZoom": 18, "minZoom": 4,
                                   "noWrap": false, "subdomains": "abc"}).addTo(map);
   
     map.createPane('labels');
@@ -357,7 +357,7 @@ function mapAssetReturn() {
         // Switch Pointer icons to right tab
     $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
 
-    mapDomain(selected_asset.category);
+    mapDomain(assets[selected_asset].category);
     
     asset_layer.remove();
     selected_asset = null;
@@ -426,42 +426,4 @@ function mapDomain(domain) {
         }});
 
         info_icon = `<div class="asset-caution-div" id="asset-caution-div-${asset.id}" style="visibility: hidden;"><table>
-        <tr><td class="info">
-        
-        </td><td class="icon">
-        <img style="height: 20px;margin-right:2px" src="./icons/Missing-Image.svg"/>
-        </td></tr>
-        </table></div>`;
-      }
-
-
-      var type_icon = `<img class="asset-type-img" src="icons/${(asset.type == "shapes" ? "Map-Shape-Black" : "Map-Pointer-Black")}.svg"/>`;
-
-      content += `<tr><td style="background-color: ${(odd ? category_colors[domain] : category_highlight_colors[domain])}"
-                  onclick="mapAsset('${asset.id}', '${asset.display_name}')">${type_icon}${asset.display_name}${info_icon}</td></tr>`;
-      odd = !odd;
-    }
-  }
-
-  $("#map-assets-menu-table").html(content);
-}
-
-
-function mapDomainReturn() {
-  selected_domain = null;
-
-  $("#map-domains-td").css("display", "table-cell");
-  $("#map-assets-td").css("display", "none");
-  $("#map-report-td").css("display", "none");
-  $("#map-info-table").css("background-color", "white");
-
-  $("#map-info-table").removeClass();
-  $("#map-info-table").addClass("none");
-  
-  // Switch filter expand icon to right tab
-  $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
-
-      // Switch Pointer icons to right tab
-  $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
-
-}
+        <tr><td
