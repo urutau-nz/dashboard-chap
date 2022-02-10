@@ -202,7 +202,6 @@ function updateMap() {
   $("#map-asset-table").html(content);
     */
   
-  console.log(selected_asset);
   if (!selected_asset) {
     // Switch filter expand icon to right tab
     $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
@@ -357,7 +356,7 @@ function mapAssetReturn() {
       // Switch Pointer icons to right tab
   $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
 
-  mapDomain(selected_asset.category);
+  mapDomain(assets[selected_asset].category);
   
   asset_layer.remove();
   selected_asset = null;
@@ -458,7 +457,7 @@ $("#map-info-table").css("background-color", "white");
 $("#map-info-table").removeClass();
 $("#map-info-table").addClass("none");
 
-// Switch filter expand icon to right tab
+// Switch filter expand icon to right tab.asset-reports-td
 $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
 
     // Switch Pointer icons to right tab

@@ -55,10 +55,10 @@ function setReportTab(tab) {
             return 0;
         });
 
-        var contents = `<table style="width: 100%;padding-top: 3rem;"><tr><td><h1>${tab.substring(0,1).toUpperCase() + tab.substring(1)} Assets</h1></td></tr>`;
+        var contents = `<table style="width: 100%;">`;
         for (var asset_id of alphabetical_asset_ids) {
             asset = assets[asset_id];
-            if (asset.category == 'built') {
+            if (asset.category == tab) {
                 contents += `<tr><td id="${asset.id}-report-td" class="asset-report-td"></td></tr>`;
             }
         }
@@ -67,12 +67,22 @@ function setReportTab(tab) {
         
         for (var asset_id of alphabetical_asset_ids) {
             asset = assets[asset_id];
-            if (asset.category == 'built') {
+            if (asset.category == tab) {
                 createAssetReport(`${asset.id}-report-td`, asset.display_name);
 
                 // Add To Map button
                 $(`#${asset.id}-report-td`).append(`<img class="show-on-map-img" src="icons/${tab}-map.svg" onclick="showAssetOnMap('${asset.id}', '${asset.display_name}')"/>`);
             }
+        }
+
+        // Hide Switch if Overview
+        if (tab == 'overview') {
+            reportSwitch("summary");
+            $(`#report-summary-td .switch`).css('display', 'none');
+            
+        } else {
+            $(`#report-summary-td .switch`).css('display', 'table-cell');
+        
         }
     }
 }
@@ -155,11 +165,20 @@ function showAssetOnMap(asset_id, asset_name) {
 
 
 function reportSwitch(type) {
-    $(`#report-summary-td .switch>table td`).toggleClass('active');
     
     if (type == 'summary') {
+        $(`.domain-summary-td`).css('display', 'table-cell');
+        $(`.asset-reports-td`).css('display', 'none');
+        
+        $(`#report-summary-td .switch .summary`).addClass('active');
+        $(`#report-summary-td .switch .assets`).removeClass('active');
 
     } else if (type == 'assets') {
+        $(`.asset-reports-td`).css('display', 'table-cell');
+        $(`.domain-summary-td`).css('display', 'none');
+        
+        $(`#report-summary-td .switch .assets`).addClass('active');
+        $(`#report-summary-td .switch .summary`).removeClass('active');
 
     }
 }

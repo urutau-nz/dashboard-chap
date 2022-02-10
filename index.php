@@ -167,10 +167,10 @@
                           <td class="switch">
                             <table>
                               <tr>
-                                <td class="active" onclick="reportSwitch('summary')">
+                                <td class="summary active" onclick="reportSwitch('summary')">
                                   Summary
                                 </td>
-                                <td onclick="reportSwitch('assets')">
+                                <td class="assets" onclick="reportSwitch('assets')">
                                   Assets
                                 </td>
                               </tr>
@@ -196,7 +196,7 @@
                               </table>
                               <table class="report-report-table" id="report-built-table">
                                 <tr>
-                                  <td>
+                                  <td class="domain-summary-td">
                                     The built domain contains all aspects of our constructed environment, these assets provide critical supporting services to the livelihoods of our residents. Assessing and protecting our built domain ensures that communities have a roof over their heads, water to drink, electricity to heat and cook with, ways to get around and more. Including this domain allows for the exploration of the impact on the built infrastructure and it’s cascading impacts to other domains.
                                     <br><br>
                                     <h2>Status</h2>
@@ -213,7 +213,7 @@
                               </table>
                               <table class="report-report-table" id="report-cultural-table">
                                 <tr>
-                                  <td>
+                                  <td class="domain-summary-td">
                                     Māori social, cultural, spiritual and economic wellbeing are at risk from loss and degradation of lands and waters, as well as cultural assets such as marae, due to ongoing sea-level rise and other coastal processes. Climate change and associated coastal hazards disproportionately threatens both the tangible components that contribute to Māori well-being as well as the intangible spiritual components 
                                     <a href="http://www.maramatanga.ac.nz/sites/default/files/teArotahi_7_21-1910%20Climate%20Change_Awatere.pdf" target="_blank">(Awatere et al. 2021)</a>. Furthermore, it is possible that these tangible and intangible components may not only be threatened by the changing climate but also possible interventions to protect current infrastructure. 
                                     <br><br>
@@ -227,10 +227,15 @@
                                     Meeting with TRONT GIS representative this month.
                                   </td>
                                 </tr>
+                                <tr>
+                                  <td class="asset-reports-td">
+
+                                  </td>
+                                </tr>
                               </table>
                               <table class="report-report-table" id="report-natural-table">
                                 <tr>
-                                  <td>
+                                  <td class="domain-summary-td">
                                     The natural domain pertains to all aspects of the natural environment that support the full range of our indigenous species, he kura taiao (living treasures), and the ecosystems in terrestrial, freshwater and marine environments. As Kaitaki it is our responsibility to assess and manage risks to the natural environment. But we do not do this merely out of responsibility, but also to protect our social, cultural, spiritual and economic wellbeing of communities. Through the NCCRA we know that these attributes can become impacted due to degradation of land, waterways, mahinga kai, and more.
                                     <br><br>
                                     This inclusion of this domain aims to understand natural species, ecosystems, and sites of natural amenity may be impacted over the next 100+ years and identify if there are options to protect these assets.
@@ -241,16 +246,26 @@
                                     Currently developing a methodology and data with CCC subject matter experts. Next step is to add flora layer and test internally before developing vulnerability thresholds.
                                   </td>
                                 </tr>
+                                <tr>
+                                  <td class="asset-reports-td">
+
+                                  </td>
+                                </tr>
                               </table>
                               <table class="report-report-table" id="report-human-table">
                                 <tr>
-                                  <td>
+                                  <td class="domain-summary-td">
                                     The human domain includes the health and wellbeing of people as individuals and as a community. It takes a Hauora approach (Holistic health philosophy) and includes our physical, social, mental and spiritual health. This domain has been included with the aim of understanding how the capacity and health of our communities will be impacted whilst highlighting potential areas for adaptation.
                                     <br><br>
                                     <h2>Status</h2>
                                     <span style="font-style: italic; font-size: 0.8em;">Last updated: 17/01/2022</span>
                                     <br><br>
                                     Awaiting finalised approach. Will begin to add social deprivation, exposure, and isolation information this month. This will be iterated with a bottom up approach that utilises information gathered from community engagement.
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="asset-reports-td">
+
                                   </td>
                                 </tr>
                               </table>
