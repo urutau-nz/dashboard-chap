@@ -260,6 +260,34 @@ var asset_layer = null;
 
 var hover_data = {};
 
+function updateHoverData() {
+  
+  hover_data = {};
+
+  if (selected_asset && hazard_scenario) {
+    var hazard_scenario_tif = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
+
+    var file_name = asset_info.filter(d => d.display_name == assets[selected_asset].display_name)[0].exposure_file_name;
+  
+    var asset_importer = new ImportManager();
+      
+    asset_importer.addImport('hover', "Hover Data", 'csv', 
+    import_url + `/data/exposure_values/${file_name}`);
+  
+    asset_importer.onComplete(function (imports) {
+      imports['hover'].filter(d => d.hazard_scenario == hazard_scenario_tif).forEach(function (d) {
+        hover_data[d.asset_id] = d.exposure;
+      });
+      console.log(hover_data, hazard_scenario_tif);
+    });
+  
+    asset_importer.runImports();
+  }
+
+    
+  
+}
+
 function mapAssetOnLoad(data) {
   var myasset = assets[selected_asset];
 
@@ -270,6 +298,12 @@ function mapAssetOnLoad(data) {
       data[selected_asset],
       (assets_to_tile.includes(myasset.display_name)) // Tile if BIG (names kept in assets_to_tile)
   );
+
+  if (assets_to_tile.includes(myasset.display_name)) {
+    $(`#vt-info`).css('display', 'block');
+  } else {
+    $(`#vt-info`).css('display', 'none');
+  }
 
   asset_layer.display();
   $("#loading-popup").css("right", "-20rem");
@@ -308,6 +342,8 @@ function mapAsset(asset, asset_label) {
   // Render asset on map
 
   selected_asset = asset;
+
+  updateHoverData();
   
   if (myasset.type == 'shapes') {
     $("#loading-popup").css("right", "3rem");

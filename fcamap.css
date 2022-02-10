@@ -633,6 +633,7 @@ div.intro_tour .introjs-button {
   height: 10rem;
   width: 10rem;
   border-radius: 20rem;
+  object-fit: cover;
 }
 
 #overview-info-table tr:first-child td {
@@ -1271,4 +1272,18 @@ body .human .filters-div { box-shadow: 0 0.3rem 0.5rem #0004; }
   background-color: #00000012;
   color: black;
   font-weight: 600;
+}
+
+#vt-info {
+  position: absolute;
+  background-color: #ffffff80;
+  color: red;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 0.4rem;
+  text-align: right;
+  z-index: 4999;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.7rem;
+  display: none;
 }

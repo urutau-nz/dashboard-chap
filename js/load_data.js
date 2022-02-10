@@ -26,9 +26,11 @@ import_url + `/data/hazard_info.csv`);
 import_manager.addImport('asset_info', 'Asset CSV', 'csv', 
 import_url + `/data/website_assets.csv`);
 
+/*
 import_manager.addImport('exposure_built', 'Exposure Built CSV', 'csv', 
 import_url + `/data/exposure_built.csv`,
 (d) => ({asset_id: d.asset_id, hazard_scenario: d.hazard_scenario, exposure: d.exposure})); // For hover-over data
+*/
 
 import_manager.addImport('asset_descriptions', 'Asset Descriptions CSV', 'csv', 
 import_url + `/data/import.csv`);
@@ -44,7 +46,6 @@ import_manager.runImports();
 var areas;
 var asset_info;
 var assets;
-var exposure_built;
 var asset_descriptions;
 var built_points;
 
@@ -62,7 +63,6 @@ function importsComplete(imports) {
     return 0;
   });
 
-  exposure_built = imports['exposure_built'];
   asset_descriptions = imports['asset_descriptions'];
 
   // Build Assets Dict
@@ -74,6 +74,7 @@ function importsComplete(imports) {
         display_name: d.display_name,
         name: d.display_name,
         file_name: import_url + '/data/' + d.domain + '_assets/' + d.file_name,
+        exposure_file_name: import_url + '/data/exposure_values/' + d.exposure_file_name,
         category: d.domain,
         id: "asset_"+index,
         type: "shapes" // Either SHAPES or POINTS
@@ -324,6 +325,12 @@ class DataLayer extends Layer {
                   hover_val = `${hover_data[e.target.feature.properties.asset_id]}% Likelihood of Erosion`;
                 } else if (filter_values.hazard.toLowerCase() == 'inundation') {
                   hover_val = `${hover_data[e.target.feature.properties.asset_id]}cm of Inundation`;
+                }
+              } else {
+                if (filter_values.hazard.toLowerCase() == 'erosion') {
+                  hover_val = `No Likelihood of Erosion`;
+                } else if (filter_values.hazard.toLowerCase() == 'inundation') {
+                  hover_val = `No Inundation`;
                 }
               }
               mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';

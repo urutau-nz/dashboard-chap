@@ -79,7 +79,7 @@ var filter_values = {
 };
 
 var yearLabels = {2020: '2020', 2050: '2050', 2080: '2080', 2130: '2130', 2150: '2150+'};
-var hazards = ['Erosion', 'Inundation']; //, 'Groundwater'
+var hazards = ['Erosion', 'Inundation', 'Groundwater']; //
 var hazard_slrs = {
     'erosion': [],
     'inundation': [],
@@ -423,7 +423,7 @@ function filtersApplyChanges() {
     $(".filters-apply-button").removeClass("active");
 
     // Refresh Asset Menu
-    if (current_page == 'map' && selected_domain != null) {
+    if (current_page == 'map' && selected_domain != null && selected_asset == null) {
         mapDomain(selected_domain);
     }
 
@@ -492,12 +492,7 @@ function filtersApplyChanges() {
 
     
         // Collect Hover Data
-    
-        hover_data = {};
-    
-        exposure_built.filter(d => d.hazard_scenario == target_hazard.file_name).forEach(function (d) {
-            hover_data[d.asset_id] = d.exposure;
-        });
+        updateHoverData();
     }
 
     

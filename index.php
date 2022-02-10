@@ -432,6 +432,7 @@
                 <div id="map-div">
 
                 </div>
+                <div id="vt-info">This is a large file, and may take some time to load.<br>Information on mouse hover will not be available.</div>
                 <div id="mouse-info"></div>
               </td>
             </tr>
