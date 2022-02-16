@@ -46,17 +46,9 @@ function setReportTab(tab) {
         $(`#report-${tab}-table`).addClass('active');
 
         // Append Asset Reports
-        // Alphabetical assets
-        var alphabetical_asset_ids = Object.keys(assets);
-        alphabetical_asset_ids.sort((a, b) => {
-            var x = assets[a], y = assets[b];
-            if (x.display_name < y.display_name) {return -1;}
-            if (x.display_name > y.display_name) {return 1;}
-            return 0;
-        });
 
         var contents = `<table style="width: 100%;">`;
-        for (var asset_id of alphabetical_asset_ids) {
+        for (var asset_id of Object.keys(assets)) {
             asset = assets[asset_id];
             if (asset.category == tab) {
                 contents += `<tr><td id="${asset.id}-report-td" class="asset-report-td"></td></tr>`;
@@ -65,14 +57,22 @@ function setReportTab(tab) {
         contents += '</table>';
         $(`#report-${tab}-table .asset-reports-td`).html(contents);
         
-        for (var asset_id of alphabetical_asset_ids) {
+        for (var asset_id of Object.keys(assets)) {
             asset = assets[asset_id];
             if (asset.category == tab) {
-                createAssetReport(`${asset.id}-report-td`, asset.display_name);
+                createAssetReport(`${asset.id}-report-td`, asset);
 
                 // Add To Map button
                 $(`#${asset.id}-report-td`).append(`<img class="show-on-map-img" src="icons/${tab}-map.svg" onclick="showAssetOnMap('${asset.id}', '${asset.display_name}')"/>`);
             }
+        }
+
+
+        // Update Domain Status
+        var status = domain_status.filter(d => d.domain == tab)[0];
+        if (status) {
+            $(`#report-${tab}-table .last-updated`).html(status.updated_date);
+            $(`#report-${tab}-table .status`).html(status.status);
         }
 
         // Hide Switch if Overview
@@ -97,17 +97,17 @@ var report_colors = {"overview": "#005652",
 
 
 function assetReportImageOnError(e) {
-    //console.log("Image Error:",e);
-    $(`#${e.id}-td`).html('Sorry - we don\'t have a figure for this asset in this scenario yet.');
+    //console.log("Image Error:",e,`${e.className}-td`);
+    $(`.${e.className}-td`).html('Sorry - we don\'t have a figure for this asset in this scenario yet.');
 }
-function createAssetReport(html_id, asset_name) {
+function createAssetReport(html_id, asset) {
 
-    var asset_item = asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset_name.toLowerCase())[0];
+    var asset_item = asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset.name.toLowerCase())[0];
     if (!asset_item) {
         $(`#${html_id}`).html(`<table style="width:100%;">
         <tr>
             <td colspan="2" class="asset-report-title-td">
-                <h2>${asset_name}</h2>
+                <h2>${asset.name}</h2>
             </td>
         </tr>
         <tr>
@@ -133,15 +133,15 @@ function createAssetReport(html_id, asset_name) {
     <table style="width:100%;">
     <tr>
         <td colspan="2" class="asset-report-title-td">
-            <h2>${asset_name}</h2>
+            <h2>${asset.name}</h2>
         </td>
     </tr>
     <tr>
         <td class="asset-report-description-td">
             ${description}
         </td>
-        <td rowspan="3" id="${html_id}-figure-td" class="asset-report-figure-td">
-            <img id="${html_id}-figure" onerror="assetReportImageOnError(this)" src="${import_url}/data/report_figures/${asset_name}-${image_file}.jpg"/>
+        <td rowspan="3" id="${html_id}-figure-td" class="asset-report-figure-td ${asset.id}-figure-td">
+            
         </td>
     </tr>
     <tr>
@@ -155,6 +155,16 @@ function createAssetReport(html_id, asset_name) {
     </tr>
     </table>
     `);
+    updateReportFigures();
+}
+function updateReportFigures() {
+    if (hazard_scenario) {
+        var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
+        for (var asset_id in assets) {
+            var asset = assets[asset_id];
+            $(`.${asset.id}-figure-td`).html(`<img class="${asset.id}-figure" onerror="assetReportImageOnError(this)" src="${import_url}/data/report_figures/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.jpg"/>`);
+        }
+    }
 }
 
 

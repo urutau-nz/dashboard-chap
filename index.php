@@ -200,9 +200,9 @@
                                     The built domain contains all aspects of our constructed environment, these assets provide critical supporting services to the livelihoods of our residents. Assessing and protecting our built domain ensures that communities have a roof over their heads, water to drink, electricity to heat and cook with, ways to get around and more. Including this domain allows for the exploration of the impact on the built infrastructure and it’s cascading impacts to other domains.
                                     <br><br>
                                     <h2>Status</h2>
-                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: 17/01/2022</span>
+                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
                                     <br><br>
-                                    First iteration for exposure complete. Next steps include testing with CHAP team, enhancing data resolutions, converting exposure to risk through vulnerability functions, and refining the asset reports.
+                                    <span class="status"></span>
                                   </td>
                                 </tr>
                                 <tr>
@@ -220,11 +220,9 @@
                                     To ensure that current taonga (both physical and non-physical) are appropriately considered as communities begin adaptation interventions, we must understand where these taonga are and how they will be impacted under various hazard scenarios that are likely to be seen within the following 100 years.
                                     <br><br>
                                     <h2>Status</h2>
-                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: 17/01/2022</span>
+                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
                                     <br><br>
-                                    Currently developing a methodology with TRONT GIS team to capture things and places (data) of value at an appropriate resolution such to remove any sensitivity whilst retaining enough context/nuance that effective decisions can be made. This method will be further tested with the Rāpaki runanga before implementation.
-                                    <br><br>
-                                    Meeting with TRONT GIS representative this month.
+                                    <span class="status"></span>
                                   </td>
                                 </tr>
                                 <tr>
@@ -241,9 +239,9 @@
                                     This inclusion of this domain aims to understand natural species, ecosystems, and sites of natural amenity may be impacted over the next 100+ years and identify if there are options to protect these assets.
                                     <br><br>
                                     <h2>Status</h2>
-                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: 17/01/2022</span>
+                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
                                     <br><br>
-                                    Currently developing a methodology and data with CCC subject matter experts. Next step is to add flora layer and test internally before developing vulnerability thresholds.
+                                    <span class="status"></span>
                                   </td>
                                 </tr>
                                 <tr>
@@ -258,9 +256,9 @@
                                     The human domain includes the health and wellbeing of people as individuals and as a community. It takes a Hauora approach (Holistic health philosophy) and includes our physical, social, mental and spiritual health. This domain has been included with the aim of understanding how the capacity and health of our communities will be impacted whilst highlighting potential areas for adaptation.
                                     <br><br>
                                     <h2>Status</h2>
-                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: 17/01/2022</span>
+                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
                                     <br><br>
-                                    Awaiting finalised approach. Will begin to add social deprivation, exposure, and isolation information this month. This will be iterated with a bottom up approach that utilises information gathered from community engagement.
+                                    <span class="status"></span>
                                   </td>
                                 </tr>
                                 <tr>
@@ -386,7 +384,7 @@
                             </td>
                           </tr>
                           <tr style="height: 100%;">
-                            <td style="text-align: center; padding: 0 2rem 2rem 2rem;">
+                            <td style="text-align: center; padding: 0 2rem 2rem 2rem;vertical-align:top;">
                               <table id="map-assets-menu-table" class="map-menu-menu-table">
 
                               </table>
@@ -432,7 +430,28 @@
                 <div id="map-div">
 
                 </div>
-                <div id="vt-info">This is a large file, and may take some time to load.<br>Information on mouse hover will not be available.</div>
+                <div id="hazard-legend">
+                  <h3>Hazard Legend</h3>
+                  <table id="inundation-legend">
+                    <tr>
+                      <td><div style="background-color: #8FD3D8;"></div></td>
+                      <td>0 to 25cm</td>
+                    </tr>
+                    <tr>
+                      <td><div style="background-color: #79b2c0;"></div></td>
+                      <td>25 to 50cm</td>
+                    </tr>
+                    <tr>
+                      <td><div style="background-color: #6290a8;"></div></td>
+                      <td>50 to 75cm</td>
+                    </tr>
+                    <tr>
+                      <td><div style="background-color: #4c6e90;"></div></td>
+                      <td>More than 75cm</td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="vt-info">This is a large file, and may take some time to load.<br>Information on mouse-over will be available soon.</div>
                 <div id="mouse-info"></div>
               </td>
             </tr>

@@ -33,10 +33,13 @@ import_url + `/data/exposure_built.csv`,
 */
 
 import_manager.addImport('asset_descriptions', 'Asset Descriptions CSV', 'csv', 
-import_url + `/data/import.csv`);
+import_url + `/data/reports.csv`);
 
 import_manager.addImport('built_points', 'Built Points CSV', 'csv', 
 import_url + `/data/built_points.csv`);
+
+import_manager.addImport('domain_status', 'Domain Statuses CSV', 'csv', 
+import_url + `/data/domain_status.csv`);
 
 
 import_manager.onComplete(importsComplete);
@@ -48,6 +51,7 @@ var asset_info;
 var assets;
 var asset_descriptions;
 var built_points;
+var domain_status;
 
 
 function importsComplete(imports) {
@@ -56,6 +60,8 @@ function importsComplete(imports) {
   hazard_info = imports['hazard_info'];
   asset_info = imports['asset_info'];
   built_points = imports['built_points'];
+  asset_descriptions = imports['asset_descriptions'];
+  domain_status = imports['domain_status'];
 
   asset_info.sort((x, y) => {
     if (x.display_name < y.display_name) {return -1;}
@@ -63,52 +69,27 @@ function importsComplete(imports) {
     return 0;
   });
 
-  asset_descriptions = imports['asset_descriptions'];
 
   // Build Assets Dict
   var index = 0;
   assets = {};
   asset_info.forEach(
     function (d) {
-      assets["asset_"+index] = {
+      assets[d.asset_tag] = {
         display_name: d.display_name,
         name: d.display_name,
-        file_name: import_url + '/data/' + d.domain + '_assets/' + d.file_name,
-        exposure_file_name: import_url + '/data/exposure_values/' + d.exposure_file_name,
+        file_name: import_url + '/data/' + d.domain + '_assets/' + d.asset_tag + '.topojson',
+        exposure_file_name: import_url + '/data/exposure_values/exposure_' + d.asset_tag + '.csv',
         category: d.domain,
-        id: "asset_"+index,
-        type: "shapes" // Either SHAPES or POINTS
+        id: d.asset_tag,
+        type: d.file_type // Either TOPOJSON or POINTS
       };
 
       index ++;
     }
   );
 
-  // Add Point Data to Assets Dict
-  var met_names = [];
-  built_points.forEach(
-    function (d) {
-      if (!met_names.includes(d.name)) {
-        assets["asset_"+index] = {
-          display_name: d.name,
-          name: d.name,
-          file_name: null, // Already in built_points
-          category: "built",
-          id: "asset_"+index,
-          type: "points" // Either SHAPES or POINTS
-        };
-  
-        index ++;
 
-        met_names.push(d.name);
-      }
-    }
-  );
-
-
-  
-  // Let user in
-  tncCheckboxChange();
 
   initMap();
 }
@@ -133,6 +114,16 @@ var centroids = {
   "Estuary to Sumner": {lat: -43.56595513, lng: 172.7347677},
   "Heathcote": {lat: -43.55728148, lng: 172.6798259},
   "Lyttelton-Mt Herbert": {lat: -43.64895336, lng: 172.7456975}
+};
+
+var region_ids = {'All': 'all',
+  'Styx' : 'styx' ,
+  'Avon': 'avon',
+  'Open Coast': 'open_coast',
+  'Heathcote': 'heathcote',
+  'Estuary to Sumner' : 'estuary_to_sumner',
+  'Lyttelton-Mt Herbert': 'lyttelton_mt_herbert',
+  'Akaroa Wairewa' : 'akaroa_wairewa'
 };
 
 var category_colors = {'built': '#ffcb6d',
@@ -164,11 +155,19 @@ var category_highlight_colors = {'built': '#ffe2af',
 };
 
 var assets_to_tile = [
-  "Residential Buildings",
-  "Water Supply Network Pipes",
-  "Stormwater Network pipes",
-  "Wastewater Network pipes",
-  "Industrial Properties & Facilities"
+  "water_supply_network_pipes",
+  "roads",
+  "wastewater_network_pipes",
+  "stormwater_network_pipes",
+  "public_road_transport_systems",
+  "walkways",
+  //"cycleways",
+  "state_highways",
+  "residential_buildings",
+  "coastal_barriers_and_sea_walls",
+  "gas_infrastructure",
+  "rail",
+  "stopbanks_and_engineered_flood_management_schemes",
 ]
 
 
@@ -307,9 +306,7 @@ class DataLayer extends Layer {
               e.target.setStyle({
                 weight: 8,
                 opacity: 1,
-                fillOpacity: myself.opacity,
-                color: color,
-                fillColor: color
+                fillOpacity: 1,
               });
 
               // Update Mouse Info
@@ -341,8 +338,6 @@ class DataLayer extends Layer {
               weight: 4,
               opacity: 1,
               fillOpacity: myself.opacity,
-              color: color,
-              fillColor: color
             });
             
             // Update Mouse Info
@@ -441,8 +436,8 @@ class MarkerLayer extends Layer {
     return {
           mouseover: function(e) {
               e.target.setStyle({
-                radius: 12,
-                weight: 6,
+                radius: 10,
+                weight: 4,
               });
               console.log(e);
 
@@ -460,13 +455,19 @@ class MarkerLayer extends Layer {
                 } else if (filter_values.hazard.toLowerCase() == 'inundation') {
                   hover_val = `${hover_data[e.target.feature.properties.asset_id]}cm of Inundation`;
                 }
+              } else {
+                if (filter_values.hazard.toLowerCase() == 'erosion') {
+                  hover_val = `No Likelihood of Erosion`;
+                } else if (filter_values.hazard.toLowerCase() == 'inundation') {
+                  hover_val = `No Inundation`;
+                }
               }
               mouse_info.innerHTML = '<table><tr><td style="font-weight:bold;">' + hover_val + '</td></tr><tr><td style="font-style:italic;padding-top:3px;">' + e.target.feature.datalayer.name + '</td></tr></table>';
           },
           mouseout: function(e) {
             e.target.setStyle({
-              radius: 8,
-              weight: 4,
+              radius: 6,
+              weight: 3,
             });
             
             // Update Mouse Info
@@ -489,10 +490,10 @@ class MarkerLayer extends Layer {
       var markers = [];
       for (var d of this.csv) {
           var marker = L.circleMarker([(d.Y ? d.Y : d.lat), (d.X ? d.X : d.lon)]).setStyle({
-              radius: 8,
+              radius: 6,
               fillColor: "#FFF",
               color: category_map_colors[this.category],
-              weight: 4,
+              weight:3,
               opacity: 1,
               fillOpacity: 1
           }).on({
@@ -529,7 +530,10 @@ function initMap() {
               initMap();
           }
       }, 100);
-  } else {
+  } else {  
+    // Let user in
+    tncCheckboxChange();
+
     initFilterPanels();
     $("#loading-popup").css("right", "-20rem");
     updateMap();

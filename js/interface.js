@@ -237,6 +237,7 @@ function initFilterPanels() {
             map.setView(centroids[value], 12);
             showAreaOutline();
         }
+        filtersApplyChanges();
     }
     mapRegionMenu.setOnChange(region_onchange);
     reportRegionMenu.setOnChange(region_onchange);
@@ -490,15 +491,18 @@ function filtersApplyChanges() {
         hazard_layer.display();
 
 
+        // Update Hazard Legends
+        $('#hazard-legend table').css('display', 'none');
+        $(`#${filter_values.hazard.toLowerCase()}-legend`).css('display', 'table');
     
         // Collect Hover Data
         updateHoverData();
     }
 
-    
-    if (selected_asset) {
-        createAssetReport("map-report-sub-div", assets[selected_asset].display_name);
-    }
+    updateReportFigures();
+    /*if (selected_asset) {
+        createAssetReport("map-report-sub-div", assets[selected_asset]);
+    }*/
 }
 
 

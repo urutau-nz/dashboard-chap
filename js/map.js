@@ -81,7 +81,7 @@ function updateMap() {
   //attr.addTo(map);
 
   L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                              {"attributionControl": false, "detectRetina": false, "maxZoom": 16, "minZoom": 4,
+                              {"attributionControl": false, "detectRetina": false, "minZoom": 4,
                                 "noWrap": false, "subdomains": "abc"}).addTo(map);
 
   map.createPane('labels');
@@ -272,7 +272,7 @@ function updateHoverData() {
     var asset_importer = new ImportManager();
       
     asset_importer.addImport('hover', "Hover Data", 'csv', 
-    import_url + `/data/exposure_values/${file_name}`);
+    assets[selected_asset].exposure_file_name);
   
     asset_importer.onComplete(function (imports) {
       imports['hover'].filter(d => d.hazard_scenario == hazard_scenario_tif).forEach(function (d) {
@@ -296,14 +296,8 @@ function mapAssetOnLoad(data) {
       myasset.category,
       null,
       data[selected_asset],
-      (assets_to_tile.includes(myasset.display_name)) // Tile if BIG (names kept in assets_to_tile)
+      (assets_to_tile.includes(myasset.id)) // Tile if BIG (names kept in assets_to_tile)
   );
-
-  if (assets_to_tile.includes(myasset.display_name)) {
-    $(`#vt-info`).css('display', 'block');
-  } else {
-    $(`#vt-info`).css('display', 'none');
-  }
 
   asset_layer.display();
   $("#loading-popup").css("right", "-20rem");
@@ -330,8 +324,6 @@ function mapAsset(asset, asset_label) {
       // Switch Pointer icons to right tab
   $("#page-map .slr-pointers-div img").attr('src', `./icons/${assets[asset].category}-Pointer.png`);
 
-  createAssetReport("map-report-sub-div", asset_label);
-
 
   if (asset_layer) {
       asset_layer.remove();
@@ -345,8 +337,15 @@ function mapAsset(asset, asset_label) {
 
   updateHoverData();
   
-  if (myasset.type == 'shapes') {
+  if (myasset.type == 'topojson') {
     $("#loading-popup").css("right", "3rem");
+
+    // VT WARNING INFO
+    if (assets_to_tile.includes(myasset.id)) {
+      $(`#vt-info`).css('display', 'block');
+    } else {
+      $(`#vt-info`).css('display', 'none');
+    }
 
     
     var asset_importer = new ImportManager();
@@ -363,7 +362,7 @@ function mapAsset(asset, asset_label) {
     // Get Relevant Points
     var points = [];
     if (myasset.category == 'built') {
-      points = built_points.filter(d => d.name == asset_label);
+      points = built_points.filter(d => d.asset_tag == myasset.id);
     }
 
     // Create Markers
@@ -371,7 +370,9 @@ function mapAsset(asset, asset_label) {
       points);
       
     asset_layer.display();
+
   }
+  createAssetReport("map-report-sub-div", myasset);
 }
 
 
@@ -400,103 +401,104 @@ function mapAssetReturn() {
 
 
 function mapDomain(domain) {
-if (selected_domain != domain) {
-  selected_domain = domain;
-  
-  filters_expanded = false;
-  filterPanelRender();
-}
-
-$("#map-assets-td").css("display", "table-cell");
-$("#map-domains-td").css("display", "none");
-$("#map-report-td").css("display", "none");
-
-$("#map-info-table").removeClass();
-$("#map-info-table").addClass("none");
-$("#map-info-table").css("background-color", "white");
-
-$("#map-info-table span.domain").text(domain.substring(0, 1).toUpperCase() + domain.substring(1));
-
-// Switch filter expand icon to right tab
-$('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
-
-// Switch Pointer icons to right tab
-$("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
-
-
-// Generate Asset Menu
-// Get Alphabetical order
-var alphabetical_asset_ids = Object.keys(assets);
-alphabetical_asset_ids.sort((a, b) => {
-  var x = assets[a], y = assets[b];
-  if (x.display_name < y.display_name) {return -1;}
-  if (x.display_name > y.display_name) {return 1;}
-  return 0;
-});
-
-var content = "";
-var odd = true;
-for (var asset_id of alphabetical_asset_ids) {
-  var asset = assets[asset_id];
-
-  if (asset.category == domain) {
-
-    var info_icon = "";
-    if (asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset.display_name.toLowerCase()).length == 0) {
-      // No asset description matching this asset
-      info_icon = `<div class="asset-caution-div"><table>
-      <tr><td class="info">
-      
-      </td><td class="icon">
-      <img src="./icons/Cauton-Dot.svg"/>
-      </td></tr>
-      </table></div>`;
-    } else {
-      // Check if an image exists
-      var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
-      $.ajax({url:`${import_url}/data/report_figures/${asset.name}-${image_file}.jpg`,type:'HEAD',asset_id: asset.id,
-      error: function(e) {
-        console.log(this.asset_id, this);
-        $(`#asset-caution-div-${this.asset_id}`).css("visibility", "visible");
-      }});
-
-      info_icon = `<div class="asset-caution-div" id="asset-caution-div-${asset.id}" style="visibility: hidden;"><table>
-      <tr><td class="info">
-      
-      </td><td class="icon">
-      <img style="height: 20px;margin-right:2px" src="./icons/Missing-Image.svg"/>
-      </td></tr>
-      </table></div>`;
-    }
-
-
-    var type_icon = `<img class="asset-type-img" src="icons/${(asset.type == "shapes" ? "Map-Shape-Black" : "Map-Pointer-Black")}.svg"/>`;
-
-    content += `<tr><td style="background-color: ${(odd ? category_colors[domain] : category_highlight_colors[domain])}"
-                onclick="mapAsset('${asset.id}', '${asset.display_name}')">${type_icon}${asset.display_name}${info_icon}</td></tr>`;
-    odd = !odd;
+  if (selected_domain != domain) {
+    selected_domain = domain;
+    
+    filters_expanded = false;
+    filterPanelRender();
   }
-}
 
-$("#map-assets-menu-table").html(content);
+  $("#map-assets-td").css("display", "table-cell");
+  $("#map-domains-td").css("display", "none");
+  $("#map-report-td").css("display", "none");
+
+  $("#map-info-table").removeClass();
+  $("#map-info-table").addClass("none");
+  $("#map-info-table").css("background-color", "white");
+
+  $("#map-info-table span.domain").text(domain.substring(0, 1).toUpperCase() + domain.substring(1));
+
+  // Switch filter expand icon to right tab
+  $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
+
+  // Switch Pointer icons to right tab
+  $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
+
+
+  // Generate Asset Menu
+
+  var content = "";
+
+  if (Object.keys(assets).filter(d => assets[d].category == domain).length > 0) {
+    // If there ARE assets
+    var odd = true;
+    for (var asset_id in assets) {
+      var asset = assets[asset_id];
+  
+      if (asset.category == domain) {
+  
+        var info_icon = "";
+        if (asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset.display_name.toLowerCase()).length == 0) {
+          // No asset description matching this asset
+          info_icon = `<div class="asset-caution-div"><table>
+          <tr><td class="info">
+          
+          </td><td class="icon">
+          <img src="./icons/Cauton-Dot.svg"/>
+          </td></tr>
+          </table></div>`;
+        } else {
+          // Check if an image exists
+          var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
+          $.ajax({url:`${import_url}/data/report_figures/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.jpg`,type:'HEAD',asset_id: asset.id,
+          error: function(e) {
+            // console.log(this.asset_id, this);
+            $(`#asset-caution-div-${this.asset_id}`).css("visibility", "visible");
+          }});
+  
+          info_icon = `<div class="asset-caution-div" id="asset-caution-div-${asset.id}" style="visibility: hidden;"><table>
+          <tr><td class="info">
+          
+          </td><td class="icon">
+          <img style="height: 20px;margin-right:2px" src="./icons/Missing-Image.svg"/>
+          </td></tr>
+          </table></div>`;
+        }
+  
+  
+        var type_icon = `<img class="asset-type-img" src="icons/${(asset.type == "topojson" ? "Map-Shape-Black" : "Map-Pointer-Black")}.svg"/>`;
+  
+        content += `<tr><td style="background-color: ${(odd ? category_colors[domain] : category_highlight_colors[domain])}"
+                    onclick="mapAsset('${asset.id}', '${asset.display_name}')">${type_icon}${asset.display_name}${info_icon}</td></tr>`;
+        odd = !odd;
+      }
+    }
+  } else {
+    // No Assets
+    content += `<tr><td style="background-color: ${category_colors[domain]};cursor: default;"></td></tr>
+    <tr><td style="background-color: ${category_highlight_colors[domain]};cursor: default;pointer-events: none;font-weight:600;font-style: italic;text-align:center;">Coming Soon</td></tr>
+    <tr><td style="background-color: ${category_colors[domain]};cursor: default;"></td></tr>`;
+  }
+
+  $("#map-assets-menu-table").html(content);
 }
 
 
 function mapDomainReturn() {
-selected_domain = null;
+  selected_domain = null;
 
-$("#map-domains-td").css("display", "table-cell");
-$("#map-assets-td").css("display", "none");
-$("#map-report-td").css("display", "none");
-$("#map-info-table").css("background-color", "white");
+  $("#map-domains-td").css("display", "table-cell");
+  $("#map-assets-td").css("display", "none");
+  $("#map-report-td").css("display", "none");
+  $("#map-info-table").css("background-color", "white");
 
-$("#map-info-table").removeClass();
-$("#map-info-table").addClass("none");
+  $("#map-info-table").removeClass();
+  $("#map-info-table").addClass("none");
 
-// Switch filter expand icon to right tab.asset-reports-td
-$('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
+  // Switch filter expand icon to right tab.asset-reports-td
+  $('#page-map .filters-expanding-icon img').attr('src', `./icons/none-Expand.png`);
 
-    // Switch Pointer icons to right tab
-$("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
+      // Switch Pointer icons to right tab
+  $("#page-map .slr-pointers-div img").attr('src', `./icons/none-Pointer.png`);
 
 }
