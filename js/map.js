@@ -290,6 +290,7 @@ function updateHoverData() {
 
 function mapAssetOnLoad(data) {
   var myasset = assets[selected_asset];
+  console.log(assets, myasset, selected_asset);
 
   asset_layer = new DataLayer(selected_asset,
       myasset.display_name,
@@ -334,8 +335,6 @@ function mapAsset(asset, asset_label) {
   // Render asset on map
 
   selected_asset = asset;
-
-  updateHoverData();
   
   if (myasset.type == 'topojson') {
     $("#loading-popup").css("right", "3rem");
@@ -345,6 +344,8 @@ function mapAsset(asset, asset_label) {
       $(`#vt-info`).css('display', 'block');
     } else {
       $(`#vt-info`).css('display', 'none');
+
+      updateHoverData(); // Only update hover data if not VT (since VT can't handle hover data anyway)
     }
 
     
@@ -358,6 +359,8 @@ function mapAsset(asset, asset_label) {
     asset_importer.runImports();
 
   } else { // Point Data
+
+    updateHoverData();
     
     // Get Relevant Points
     var points = [];
