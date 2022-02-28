@@ -161,7 +161,7 @@ var assets_to_tile = [
   "stormwater_network_pipes",
   "public_road_transport_systems",
   "walkways",
-  //"cycleways",
+  "cycleways",
   "state_highways",
   "residential_buildings",
   "coastal_barriers_and_sea_walls",

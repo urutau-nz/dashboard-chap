@@ -40,7 +40,7 @@
     
 
     <?php
-        require_once("../ui-visual-library/css-links-" . $GLOBALS["domain"] . ".php");
+        require_once("../ui-visual-library/css-links.php");
     ?>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-123686738-4"></script>
@@ -575,11 +575,10 @@
 
 
 <?php
-    require_once("../ui-visual-library/js-scripts-" . $GLOBALS["domain"] . ".php");
+    require_once("../ui-visual-library/js-scripts.php");
 ?>
 
 <!-- LEAFLET GEOJSON VT -->
-<script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
 <script src="deps/leaflet-geojson-vt.js"></script>
 
 <script type="text/javascript" src="js/tools.js"></script>
