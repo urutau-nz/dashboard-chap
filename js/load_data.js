@@ -158,17 +158,9 @@ var assets_to_tile = [
   "water_supply_network_pipes",
   "roads",
   "wastewater_network_pipes",
-  "stormwater_network_pipes",
-  "public_road_transport_systems",
-  "walkways",
-  "cycleways",
-  "state_highways",
-  "residential_buildings",
-  "coastal_barriers_and_sea_walls",
-  "gas_infrastructure",
-  "rail",
-  "stopbanks_and_engineered_flood_management_schemes",
+  "stormwater_network_pipes"
 ]
+
 
 
 
@@ -314,7 +306,7 @@ class DataLayer extends Layer {
               mouse_info.style.visibility = "visible";
               mouse_info.style.background = "rgb(255,255,255)";
 
-              console.log(filter_values.hazard, hover_data, e.target.feature.properties.asset_id, hover_data[e.target.feature.properties.asset_id]);
+              //console.log(filter_values.hazard, hover_data, e.target.feature.properties.asset_id, hover_data[e.target.feature.properties.asset_id]);
               
               var hover_val = "";
               if (hover_data[e.target.feature.properties.asset_id]) {

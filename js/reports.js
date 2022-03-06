@@ -24,19 +24,19 @@ function setReportTab(tab) {
 
             } break;
             case "built": {
-                $("#report-summary-td .title").html(`<h1>Built Domain</h1>`);
+                $("#report-summary-td .title").html(`<h1>Built <span class="field">Domain</span></h1>`);
 
             } break;
             case "natural": {
-                $("#report-summary-td .title").html(`<h1>Natural Domain</h1>`);
+                $("#report-summary-td .title").html(`<h1>Natural <span class="field">Domain</span></h1>`);
 
             } break;
             case "cultural": {
-                $("#report-summary-td .title").html(`<h1>Cultural Domain</h1>`);
+                $("#report-summary-td .title").html(`<h1>Cultural <span class="field">Domain</span></h1>`);
 
             } break;
             case "human": {
-                $("#report-summary-td .title").html(`<h1>Human Domain</h1>`);
+                $("#report-summary-td .title").html(`<h1>Human <span class="field">Domain</span></h1>`);
 
             } break;
         }
@@ -103,31 +103,22 @@ function assetReportImageOnError(e) {
 function createAssetReport(html_id, asset) {
 
     var asset_item = asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset.name.toLowerCase())[0];
-    if (!asset_item) {
-        $(`#${html_id}`).html(`<table style="width:100%;">
-        <tr>
-            <td colspan="2" class="asset-report-title-td">
-                <h2>${asset.name}</h2>
-            </td>
-        </tr>
+    var description = '';
+    if (asset_item) {
+        description = asset_item["Asset Description"];
+        description = `
         <tr>
             <td class="asset-report-description-td">
-                Sorry - we don't have a report for this asset yet.
+                ${description}
             </td>
-        </tr>
-        <tr>
-            <td class="asset-report-domain-td">
-            </td>
-        </tr>
-        </table>
-        `);
-        return false;
+        </tr>`;
     }
 
-    var description = asset_item["Asset Description"];
-    var category = asset_item["Domain"];
+    var category = category_titles[asset.category];
 
     var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
+
+    $(`#${asset.id}-figure-td`).remove();
 
     $(`#${html_id}`).html(`
     <table style="width:100%;">
@@ -137,35 +128,68 @@ function createAssetReport(html_id, asset) {
         </td>
     </tr>
     <tr>
-        <td class="asset-report-description-td">
-            ${description}
-        </td>
-        <td rowspan="3" id="${html_id}-figure-td" class="asset-report-figure-td ${asset.id}-figure-td">
+        <td id="${asset.id}-figure-td" class="asset-report-figure-td ${asset.id}-figure-td">
             
         </td>
     </tr>
+    ${description}
     <tr>
         <td class="asset-report-domain-td" style="color: #934300bb">
-            ${category} Domain
+            ${category}
         </td>
     </tr>
     <tr>
         <td>
         </td>
     </tr>
-    </table>
-    `);
-    updateReportFigures();
-}
-function updateReportFigures() {
+    </table> 
+    `); 
+
+    console.log(asset);
     if (hazard_scenario) {
+        var asset_importer = new ImportManager();
+
+        var graph_data_file = `${import_url}/data/report_data/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.csv`;
+        console.log(graph_data_file);
+
+        asset_importer.addImport(asset.id, asset.display_name, 'csv', 
+        graph_data_file);
+
+        asset_importer.onComplete(updateReportFigures);
+        asset_importer.onError(function (d, e) {
+            for (var asset_id in d) {
+                $(`#${asset_id}-figure-td`).remove();
+            }
+        });
+
+        asset_importer.runImports();
+    }
+    //updateReportFigures();
+}
+function updateReportFigures(data) {
+    for (var asset_id in data) {
+        var graph = new vlGraph(`${asset_id}-figure-td`, data[asset_id], 'exposure', 'cumsum', '', data[asset_id][0].xlabel, data[asset_id][0].ylabel);
+        graph.margin_top(30);
+        graph.margin_right(30);
+        graph.margin_left(60);
+        graph.margin_bottom(60);
+        graph.font_size(14);
+        graph.x_suffix('cm');
+        graph.y_suffix(' assets');
+        graph.background_color('#FFF');
+        graph.lineGraph();
+    }
+}
+
+/*
+
         var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
         for (var asset_id in assets) {
             var asset = assets[asset_id];
             $(`.${asset.id}-figure-td`).html(`<img class="${asset.id}-figure" onerror="assetReportImageOnError(this)" src="${import_url}/data/report_figures/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.jpg"/>`);
         }
-    }
-}
+
+*/
 
 
 function showAssetOnMap(asset_id, asset_name) {

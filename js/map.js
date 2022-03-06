@@ -288,6 +288,8 @@ function updateHoverData() {
   
 }
 
+
+
 function mapAssetOnLoad(data) {
   var myasset = assets[selected_asset];
   console.log(assets, myasset, selected_asset);
@@ -299,6 +301,7 @@ function mapAssetOnLoad(data) {
       data[selected_asset],
       (assets_to_tile.includes(myasset.id)) // Tile if BIG (names kept in assets_to_tile)
   );
+
 
   asset_layer.display();
   $("#loading-popup").css("right", "-20rem");

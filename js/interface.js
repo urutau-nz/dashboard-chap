@@ -72,7 +72,7 @@ var reportYearSlider;
 
 var filter_values = {
     region: null,
-    hazard: 'Erosion',
+    hazard: 'Inundation',
     slr: null,
     frequency: null,
     year: null
@@ -158,7 +158,7 @@ function initFilterPanels() {
                     <table class="filters-slider-table" style="height:100%;width:100%;">
                         <tr>
                             <td>
-                                <h3>SLR</h3>
+                                <h3>Sea Level Rise</h3>
                             </td>
                             <td class="slr-label">
                                 
@@ -248,6 +248,8 @@ function initFilterPanels() {
 
     mapHazardMenu.populate(hazards);
     reportHazardMenu.populate(hazards);
+    mapHazardMenu.setValue("Inundation");
+    reportHazardMenu.setValue("Inundation");
 
     var hazard_onchange = function (value) {
         if (value == 'Inundation') {
@@ -531,7 +533,7 @@ function tncButtonClick() {
 function updateSLRPointers(value) {
         // Update SLR Pointers according to Year
         var index = Object.keys(yearLabels).indexOf(value.toString());
-        console.log(value, yearLabels,  Object.keys(yearLabels), index);
+        //console.log(value, yearLabels,  Object.keys(yearLabels), index);
 
         var low = [0, 0.17, 0.25, 0.5, 0.6][index];
         var med = [0, 0.18, 0.35, 0.65, 0.8][index];

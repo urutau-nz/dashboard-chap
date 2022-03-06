@@ -370,7 +370,7 @@ body .vl-select-body td:hover {
   z-index: 5;
   border-radius: 2rem;
   font-family: 'Rubik', sans-serif;
-  opacity: 0.4;
+  opacity: 0.8;
   transition: opacity 0.1s ease-in-out;
 }
 #map-report-return-div:hover, #map-assets-return-div:hover {
@@ -1060,12 +1060,12 @@ div.intro_tour .introjs-button {
 }
 
 .asset-report-figure-td {
-  width: 50%;
-  padding: 1rem;
+  padding: 20px;
   text-align: center;
     font-size: 1rem;
     font-style: italic;
     vertical-align: top;
+    height: 20rem;
 }
 .asset-report-figure-td img {
   width: 100%;
@@ -1100,9 +1100,6 @@ div.intro_tour .introjs-button {
   font-size: 1.4rem;
 }
 
-#map-report-td .asset-report-figure-td {
-  width: 60%;
-}
 
 
 
@@ -1190,7 +1187,7 @@ body .human .filters-div { box-shadow: 0 0.3rem 0.5rem #0004; }
 #map-report-sub-td {
   text-align: center;
   vertical-align: top; 
-  padding: 1rem;
+  padding: 0;
   border-top: 1px solid;
 }
 
