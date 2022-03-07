@@ -1,4 +1,6 @@
 
+
+var all_graphs = [];
 var current_page = "overview";
 function setPage(page) {
     if (current_page != page) {
@@ -38,6 +40,10 @@ function setPage(page) {
             if (!current_report_tab) {
                 setReportTab('overview');
             }
+        }
+
+        for (var graph of all_graphs) {
+            graph.update();
         }
 
         $(`#page-${current_page}`).removeClass("active");

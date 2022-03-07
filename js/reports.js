@@ -45,6 +45,7 @@ function setReportTab(tab) {
         $(".report-report-table").removeClass('active');
         $(`#report-${tab}-table`).addClass('active');
 
+
         // Append Asset Reports
 
         var contents = `<table style="width: 100%;">`;
@@ -62,11 +63,10 @@ function setReportTab(tab) {
             if (asset.category == tab) {
                 createAssetReport(`${asset.id}-report-td`, asset);
 
-                // Add To Map button
-                $(`#${asset.id}-report-td`).append(`<img class="show-on-map-img" src="icons/${tab}-map.svg" onclick="showAssetOnMap('${asset.id}', '${asset.display_name}')"/>`);
+                // Add To Map button 
+                $(`#${asset.id}-report-td .asset-report-title-td h2`).append(`<img class="show-on-map-img" src="icons/${tab}-glass.svg" onclick="showAssetOnMap('${asset.id}', '${asset.display_name}')"/>`);
             }
         }
-
 
         // Update Domain Status
         var status = domain_status.filter(d => d.domain == tab)[0];
@@ -128,7 +128,7 @@ function createAssetReport(html_id, asset) {
         </td>
     </tr>
     <tr>
-        <td id="${asset.id}-figure-td" class="asset-report-figure-td ${asset.id}-figure-td">
+        <td id="${html_id}-${asset.id}-figure-td" class="asset-report-figure-td ${asset.id}-figure-td">
             
         </td>
     </tr>
@@ -155,10 +155,12 @@ function createAssetReport(html_id, asset) {
         asset_importer.addImport(asset.id, asset.display_name, 'csv', 
         graph_data_file);
 
-        asset_importer.onComplete(updateReportFigures);
+        asset_importer.onComplete(function (d) {
+            updateReportFigures(d, html_id);
+        });
         asset_importer.onError(function (d, e) {
             for (var asset_id in d) {
-                $(`#${asset_id}-figure-td`).remove();
+                $(`#${html_id}-${asset_id}-figure-td`).remove();
             }
         });
 
@@ -166,9 +168,9 @@ function createAssetReport(html_id, asset) {
     }
     //updateReportFigures();
 }
-function updateReportFigures(data) {
+function updateReportFigures(data, html_id) {
     for (var asset_id in data) {
-        var graph = new vlGraph(`${asset_id}-figure-td`, data[asset_id], 'exposure', 'cumsum', '', data[asset_id][0].xlabel, data[asset_id][0].ylabel);
+        var graph = new vlGraph(`${html_id}-${asset_id}-figure-td`, data[asset_id], 'exposure', 'cumsum', '', data[asset_id][0].xlabel, data[asset_id][0].ylabel);
         graph.margin_top(30);
         graph.margin_right(30);
         graph.margin_left(60);
@@ -178,6 +180,8 @@ function updateReportFigures(data) {
         graph.y_suffix(' assets');
         graph.background_color('#FFF');
         graph.lineGraph();
+
+        all_graphs.push(graph);
     }
 }
 
@@ -213,6 +217,11 @@ function reportSwitch(type) {
         
         $(`#report-summary-td .switch .assets`).addClass('active');
         $(`#report-summary-td .switch .summary`).removeClass('active');
+
+        
+        for (var graph of all_graphs) {
+            graph.update();
+        }
 
     }
 }

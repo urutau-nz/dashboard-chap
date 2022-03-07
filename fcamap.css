@@ -1027,7 +1027,7 @@ div.intro_tour .introjs-button {
   display: none;
 }
 .asset-reports-td h2 {
-  text-align: center;
+  text-align: left;
 }
 
 .asset-type-img {
@@ -1060,10 +1060,9 @@ div.intro_tour .introjs-button {
 }
 
 .asset-report-figure-td {
-  padding: 20px;
+  padding: 0.5rem 2rem 2rem 2rem;
   text-align: center;
     font-size: 1rem;
-    font-style: italic;
     vertical-align: top;
     height: 20rem;
 }
@@ -1073,15 +1072,8 @@ div.intro_tour .introjs-button {
 }
 .asset-report-description-td {
   font-size: 1rem;
+  padding: 0.1rem 0rem 2rem;
   text-align: left;
-}
-.asset-report-description-td {
-  padding: 1rem;
-  text-align: left;
-}
-.asset-report-title-td {
-  padding-top: 0.2rem;
-  border-top: 1px solid;
 }
 #map-report-td .asset-report-title-td {
   display: none;
@@ -1092,6 +1084,9 @@ div.intro_tour .introjs-button {
   font-size: 1.1rem;
   font-style: italic;
   font-weight: 500;
+}
+#page-report .asset-report-domain-td {
+  display: none;
 }
 
 
@@ -1235,12 +1230,13 @@ body .human .filters-div { box-shadow: 0 0.3rem 0.5rem #0004; }
 
 
 .show-on-map-img {
-  position: absolute;
-  top: 0.2rem;
-  right: 0;
+  display: inline-block;
+  position: relative;
+  top: 0;
+  left: 8px;
   cursor: pointer;
-  height: 28px;
-  width: 28px;
+  height: 14px;
+  width: 14px;
 }
 
 .asset-report-td {
