@@ -12,7 +12,6 @@ function setPage(page) {
 
         $(`#page-${page}`).addClass("active");
 
-        filterPanelRender();
 
         if (page == "map") {
             updateMap();
@@ -42,16 +41,30 @@ function setPage(page) {
             }
         }
 
-        for (var graph of all_graphs) {
-            graph.update();
-        }
 
         $(`#page-${current_page}`).removeClass("active");
 
         
         current_page = page;
-        
-        filtersApplyChanges();
+    }
+}
+
+
+
+function tncCheckboxChange() {
+    if (assets) {
+        $("#tnc-button").text("Continue");
+    }
+    if ($("#tnc-checkbox").is(':checked') && assets) {
+        $("#tnc-button").addClass("active");
+    } else {
+        $("#tnc-button").removeClass("active");
+    }
+}
+
+function tncButtonClick() {
+    if ($("#tnc-checkbox").is(':checked')) {
+        $("#tnc-popup-backdrop").css("display", "none");
     }
 }
 
@@ -303,8 +316,8 @@ function initFilterPanels() {
 
 
     // Frequencies
-    mapFrequencySlider = new vlSlider("map-frequency-slider", 0, 0, 1, true);
-    reportFrequencySlider = new vlSlider("report-frequency-slider", 0, 0, 1, true);
+    mapFrequencySlider = new vlSlider("map-frequency-slider", 0, 2, 1, true);
+    reportFrequencySlider = new vlSlider("report-frequency-slider", 0, 2, 1, true);
     var frequency_onchange = function (value) {
         if (hazard_frequencies[filter_values.hazard]) {
             var label = hazard_frequencies[filter_values.hazard][value];
@@ -317,7 +330,7 @@ function initFilterPanels() {
     mapFrequencySlider.setOnChange(frequency_onchange);
     reportFrequencySlider.setOnChange(frequency_onchange);
 
-    $(".frequency-tr").css('display', 'none');
+    //$(".frequency-tr").css('display', 'none');
 
     // Years
     mapYearSlider = new vlSlider("map-year-slider", 2020, 2150, Object.keys(yearLabels));
@@ -507,31 +520,29 @@ function filtersApplyChanges() {
         updateHoverData();
     }
 
-    updateReportFigures();
+    
+    /*for (var graph of all_graphs) {
+        graph.update();
+    }  */
+
+    if (current_page == 'map') {
+        console.log(selected_asset);
+        updateReportFigures(selected_asset);
+
+    } else if (current_page == 'report') {
+        for (var asset_id in assets) {
+            updateReportFigures(assets[asset_id]);
+        }
+    }
+
     /*if (selected_asset) {
         createAssetReport("map-report-sub-div", assets[selected_asset]);
-    }*/
+    } */
 }
 
 
 
 
-function tncCheckboxChange() {
-    if (assets) {
-        $("#tnc-button").text("Continue");
-    }
-    if ($("#tnc-checkbox").is(':checked') && assets) {
-        $("#tnc-button").addClass("active");
-    } else {
-        $("#tnc-button").removeClass("active");
-    }
-}
-
-function tncButtonClick() {
-    if ($("#tnc-checkbox").is(':checked')) {
-        $("#tnc-popup-backdrop").css("display", "none");
-    }
-}
 
 
 
@@ -568,3 +579,4 @@ function showFiltersHelp() {
 function filtersHelpButtonClick() {
     $("#filters-help-popup-backdrop").css("display", "none");
 }
+

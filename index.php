@@ -163,20 +163,6 @@
 
                           </td>
                         </tr>
-                        <tr style="height: 0;">
-                          <td class="switch">
-                            <table>
-                              <tr>
-                                <td class="summary active" onclick="reportSwitch('summary')">
-                                  Summary
-                                </td>
-                                <td class="assets" onclick="reportSwitch('assets')">
-                                  Assets
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
                         <tr>
                           <td class="content">
                             <div style="height: 100%;width: 100%;" class="nice-scroll">
@@ -268,6 +254,11 @@
                                 </tr>
                               </table>
                             </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td id="asset-reports-pagination" colspan="100%" style="width:100%;">
+                            ABCD
                           </td>
                         </tr>
                       </table>

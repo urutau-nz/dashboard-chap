@@ -49,14 +49,44 @@ function setReportTab(tab) {
         // Append Asset Reports
 
         var contents = `<table style="width: 100%;">`;
+        var page_index = 0;
+        var page_length = 0;
+        var last_letter = ' ';
+        var page_letters = [];
         for (var asset_id of Object.keys(assets)) {
             asset = assets[asset_id];
             if (asset.category == tab) {
-                contents += `<tr><td id="${asset.id}-report-td" class="asset-report-td"></td></tr>`;
+                if (page_letters.length == 0) {
+                    page_letters.push(asset.name[0])
+                }
+                if (page_length > 6 && asset.name[0] != last_letter) {
+                    page_letters[page_index] += '-' + last_letter;
+                    page_letters.push(asset.name[0]);
+                    page_index += 1;
+                    page_length = 0;
+                }
+                contents += `<tr><td id="${asset.id}-report-td" class="asset-report-td page-${page_index}"></td></tr>`;
+                page_length ++;
+                last_letter = asset.name[0];
             }
         }
         contents += '</table>';
         $(`#report-${tab}-table .asset-reports-td`).html(contents);
+
+        // Fill out Paginations
+        
+        contents = `<span class="page-summary" onclick="reportPaginate('summary')">Summary</span>`;
+        for (var letter_i in page_letters) {
+            var letter = page_letters[letter_i];
+            if (letter_i != -1) {
+                contents += ' • ';
+            }
+            contents += `<span class="page-${letter_i}" onclick="reportPaginate(${letter_i})">${letter}</span>`;
+        }
+        $(`#asset-reports-pagination`).html(contents);
+        reportPaginate('summary');
+
+        // Fill out Asset Reports
         
         for (var asset_id of Object.keys(assets)) {
             asset = assets[asset_id];
@@ -75,14 +105,13 @@ function setReportTab(tab) {
             $(`#report-${tab}-table .status`).html(status.status);
         }
 
-        // Hide Switch if Overview
+        // Hide Pagination if Overview
         if (tab == 'overview') {
             reportSwitch("summary");
-            $(`#report-summary-td .switch`).css('display', 'none');
+            $(`#asset-reports-pagination`).css('display', 'none');
             
         } else {
-            $(`#report-summary-td .switch`).css('display', 'table-cell');
-        
+            $(`#asset-reports-pagination`).css('display', 'table-cell');
         }
     }
 }
@@ -105,7 +134,7 @@ function createAssetReport(html_id, asset) {
     var asset_item = asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset.name.toLowerCase())[0];
     var description = '';
     if (asset_item) {
-        description = asset_item["Asset Description"];
+        description = (asset_item["Asset Description"] ? asset_item["Asset Description"] : asset_item["asset_description"]);
         description = `
         <tr>
             <td class="asset-report-description-td">
@@ -114,9 +143,7 @@ function createAssetReport(html_id, asset) {
         </tr>`;
     }
 
-    var category = category_titles[asset.category];
 
-    var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
 
     $(`#${asset.id}-figure-td`).remove();
 
@@ -134,11 +161,6 @@ function createAssetReport(html_id, asset) {
     </tr>
     ${description}
     <tr>
-        <td class="asset-report-domain-td" style="color: #934300bb">
-            ${category}
-        </td>
-    </tr>
-    <tr>
         <td>
         </td>
     </tr>
@@ -147,38 +169,65 @@ function createAssetReport(html_id, asset) {
 
     console.log(asset);
     if (hazard_scenario) {
-        var asset_importer = new ImportManager();
-
-        var graph_data_file = `${import_url}/data/report_data/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.csv`;
-        console.log(graph_data_file);
-
-        asset_importer.addImport(asset.id, asset.display_name, 'csv', 
-        graph_data_file);
-
-        asset_importer.onComplete(function (d) {
-            updateReportFigures(d, html_id);
-        });
-        asset_importer.onError(function (d, e) {
-            for (var asset_id in d) {
-                $(`#${html_id}-${asset_id}-figure-td`).remove();
-            }
-        });
-
-        asset_importer.runImports();
+        updateReportFigures(asset);
     }
-    //updateReportFigures();
 }
-function updateReportFigures(data, html_id) {
+function updateReportFigures(asset) {
+    if (!asset) return false;
+    
+    var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
+    var asset_importer = new ImportManager();
+
+    var graph_data_file = `${import_url}/data/report_data/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.csv`;
+    console.log(graph_data_file);
+
+    asset_importer.addImport(asset.id, asset.display_name, 'csv', 
+    graph_data_file);
+
+    asset_importer.onComplete(function (d) {
+        updateReportFiguresOnComplete(d);
+    });
+    asset_importer.onError(function (d, e) {
+        for (var asset_id in d) {
+            // Determine html_id
+            if (current_page == 'map') {
+                var html_id = 'map-report-sub-div';
+            }else {
+                var html_id = `${asset_id}-report-td`;
+            }
+
+            $(`#${html_id}-${asset_id}-figure-td`).remove();
+        }
+    });
+
+    asset_importer.runImports();
+}
+function updateReportFiguresOnComplete(data) {
+    var html_id = "";
     for (var asset_id in data) {
-        var graph = new vlGraph(`${html_id}-${asset_id}-figure-td`, data[asset_id], 'exposure', 'cumsum', '', data[asset_id][0].xlabel, data[asset_id][0].ylabel);
-        graph.margin_top(30);
+        // Determine html_id
+        if (current_page == 'map') {
+            var html_id = 'map-report-sub-div';
+        }else {
+            var html_id = `${asset_id}-report-td`;
+        }
+
+        var graph = new vlGraph(`${html_id}-${asset_id}-figure-td`, data[asset_id], 'exposure', 'cumsum');
+        graph.x_axis_label(data[asset_id][0].xlabel);
+        graph.y_axis_label(data[asset_id][0].ylabel);
+        graph.margin_top(10);
         graph.margin_right(30);
-        graph.margin_left(60);
+        graph.margin_left(70);
         graph.margin_bottom(60);
-        graph.font_size(14);
+        graph.min_y(0);
+        graph.font_size(12);
         graph.x_suffix('cm');
-        graph.y_suffix(' assets');
-        graph.background_color('#FFF');
+        //graph.y_suffix(' assets');
+        //graph.background_color('#FFF');, 
+        graph.colors(['#0009']);
+        graph.x_ticks(8);
+        graph.line_width(2);
+        graph.dots(false);
         graph.lineGraph();
 
         all_graphs.push(graph);
@@ -213,6 +262,7 @@ function reportSwitch(type) {
 
     } else if (type == 'assets') {
         $(`.asset-reports-td`).css('display', 'table-cell');
+        //$(`#asset-reports-pagination`).css('display', 'table-cell');
         $(`.domain-summary-td`).css('display', 'none');
         
         $(`#report-summary-td .switch .assets`).addClass('active');
@@ -224,4 +274,26 @@ function reportSwitch(type) {
         }
 
     }
+}
+
+
+
+
+function reportPaginate(page_num) {
+    if (page_num == 'summary') {
+        reportSwitch('summary');
+        $('#report-summary-td .title .field').html('Domain');
+
+    } else {
+
+        $('.asset-report-td').css('display', 'none');
+        $(`.asset-report-td.page-${page_num}`).css('display', 'table-cell');
+        reportSwitch('assets');
+
+        var letters = $(`#asset-reports-pagination .page-${page_num}`).text();
+        $('#report-summary-td .title .field').html('Assets <span style="position: absolute;right: 2rem;">' + letters + '</span>');
+    }
+
+    $(`#asset-reports-pagination span`).removeClass('active');
+    $(`#asset-reports-pagination .page-${page_num}`).addClass('active');
 }

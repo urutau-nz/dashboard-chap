@@ -297,7 +297,7 @@ function mapAssetOnLoad(data) {
   asset_layer = new DataLayer(selected_asset,
       myasset.display_name,
       myasset.category,
-      null,
+      myasset.type,
       data[selected_asset],
       (assets_to_tile.includes(myasset.id)) // Tile if BIG (names kept in assets_to_tile)
   );
@@ -339,7 +339,7 @@ function mapAsset(asset, asset_label) {
 
   selected_asset = asset;
   
-  if (myasset.type == 'topojson') {
+  if (myasset.type != 'point') {
     $("#loading-popup").css("right", "3rem");
 
     // VT WARNING INFO
@@ -453,10 +453,10 @@ function mapDomain(domain) {
           <img src="./icons/Cauton-Dot.svg"/>
           </td></tr>
           </table></div>`;
-        } else {
+        } else { /*
           // Check if an image exists
           var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
-          $.ajax({url:`${import_url}/data/report_figures/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.jpg`,type:'HEAD',asset_id: asset.id,
+          $.ajax({url:`${import_url}/data/report_data/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.csv`,type:'HEAD',asset_id: asset.id,
           error: function(e) {
             // console.log(this.asset_id, this);
             $(`#asset-caution-div-${this.asset_id}`).css("visibility", "visible");
@@ -468,11 +468,18 @@ function mapDomain(domain) {
           </td><td class="icon">
           <img style="height: 20px;margin-right:2px" src="./icons/Missing-Image.svg"/>
           </td></tr>
-          </table></div>`;
+          </table></div>`; */
         }
-  
-  
-        var type_icon = `<img class="asset-type-img" src="icons/${(asset.type == "topojson" ? "Map-Shape-Black" : "Map-Pointer-Black")}.svg"/>`;
+        var image_name = '';
+        if (asset.type == 'point') {
+          image_name = "Map-Pointer-Black";
+        } else if (asset.type == 'polygon') {
+          image_name = "Map-Shape-Black";
+        } else if (asset.type == 'polyline') {
+          image_name = "Map-Line-Black";
+        }
+
+        var type_icon = `<img class="asset-type-img" src="icons/${image_name}.svg"/>`;
   
         content += `<tr><td style="background-color: ${(odd ? category_colors[domain] : category_highlight_colors[domain])}"
                     onclick="mapAsset('${asset.id}', '${asset.display_name}')">${type_icon}${asset.display_name}${info_icon}</td></tr>`;

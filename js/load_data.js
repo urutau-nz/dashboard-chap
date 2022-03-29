@@ -82,7 +82,7 @@ function importsComplete(imports) {
         exposure_file_name: import_url + '/data/exposure_values/exposure_' + d.asset_tag + '.csv',
         category: d.domain,
         id: d.asset_tag,
-        type: d.file_type // Either TOPOJSON or POINTS
+        type: d.file_type // Either POLYGON, POLYLINE or POINTS
       };
 
       index ++;
@@ -154,11 +154,11 @@ var category_highlight_colors = {'built': '#ffe2af',
 "overview": "#a1f4da"
 };
 
-var assets_to_tile = [
+var assets_to_tile = [/*
   "water_supply_network_pipes",
   "roads",
   "wastewater_network_pipes",
-  "stormwater_network_pipes"
+  "stormwater_network_pipes"*/
 ]
 
 
@@ -273,7 +273,7 @@ class Layer {
 
 
 class DataLayer extends Layer {
-  constructor(id, name, category, color, topojson, tiling=false, style_func=null) {
+  constructor(id, name, category, layer_type, topojson, tiling=false, style_func=null) {
     super(id, name, category);
 
     this.topojson = topojson;
@@ -281,7 +281,13 @@ class DataLayer extends Layer {
 
     this.style_func = style_func;
 
-    this.opacity = 0.4;
+    if (layer_type == 'polyline') {
+      this.weight = 4;
+      this.opacity = 0;
+    } else {
+      this.weight = 1;
+      this.opacity = 0.2;
+    }
 
     this.tiled = tiling;
 
@@ -296,9 +302,9 @@ class DataLayer extends Layer {
           mouseover: function(e) {
             var color = category_text_colors[myself.category];
               e.target.setStyle({
-                weight: 8,
+                weight: myself.weight * 2,
                 opacity: 1,
-                fillOpacity: 1,
+                fillOpacity: myself.opacity * 1.5,
               });
 
               // Update Mouse Info
@@ -327,7 +333,7 @@ class DataLayer extends Layer {
           mouseout: function(e) {
             var color = category_map_colors[myself.category];
             e.target.setStyle({
-              weight: 4,
+              weight: myself.weight,
               opacity: 1,
               fillOpacity: myself.opacity,
             });
@@ -345,7 +351,7 @@ class DataLayer extends Layer {
     return function (feature) { 
       //var color = ( hover_data[feature.properties.asset_id] ? category_colors[myself.category] : "#000");
       var color = category_map_colors[myself.category];
-      return { fillColor: color, weight: 4, color: color, opacity: 1, fillOpacity: myself.opacity}; 
+      return { fillColor: color, weight: myself.weight, color: color, opacity: 1, fillOpacity: myself.opacity}; 
     }
   }
   display () {
