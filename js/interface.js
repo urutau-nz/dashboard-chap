@@ -324,11 +324,15 @@ function initFilterPanels() {
             $(".frequency-label").html(`<h3>ARI ${label}</h3>`);
             onFiltersChange();
         } else {
-            $(".frequency-label").html(`<h3>ARI 1</h3>`); 
+            $(".frequency-label").html(`<h3>ARI 10</h3>`); 
         }
     }
     mapFrequencySlider.setOnChange(frequency_onchange);
     reportFrequencySlider.setOnChange(frequency_onchange);
+    mapFrequencySlider.setValue(1);
+    reportFrequencySlider.setValue(1);
+    mapFrequencySlider.updateMarker();
+    reportFrequencySlider.updateMarker();
 
     //$(".frequency-tr").css('display', 'none');
 
@@ -495,29 +499,34 @@ function filtersApplyChanges() {
             });
         }
 
-        var target_hazard = target_hazards[0];
+        if (target_hazards.length > 0) {
 
-        hazard_scenario = target_hazard.file_name;
-        
-        var url = import_url + `/data/hazards/${target_hazard.file_name}`;
-        
-        hazard_layer = new ImageLayer('hazard_overlay',
-        'Hazard Overlay',
-        null,
-        url,
-        target_hazard.ne_lat , target_hazard.ne_lon,
-        target_hazard.sw_lat , target_hazard.sw_lon,
-        ); 
+            var target_hazard = target_hazards[0];
     
-        hazard_layer.display();
-
-
-        // Update Hazard Legends
-        $('#hazard-legend table').css('display', 'none');
-        $(`#${filter_values.hazard.toLowerCase()}-legend`).css('display', 'table');
+            hazard_scenario = target_hazard.file_name;
+            
+            var url = import_url + `/data/hazards/${target_hazard.file_name.slice(0, target_hazard.file_name.length-4)}.png`;
+            
+            hazard_layer = new ImageLayer('hazard_overlay',
+            'Hazard Overlay',
+            null,
+            url,
+            target_hazard.ne_lat , target_hazard.ne_lon,
+            target_hazard.sw_lat , target_hazard.sw_lon,
+            ); 
+        
+            hazard_layer.display();
     
-        // Collect Hover Data
-        updateHoverData();
+    
+            // Update Hazard Legends
+            $('#hazard-legend table').css('display', 'none');
+            $(`#${filter_values.hazard.toLowerCase()}-legend`).css('display', 'table');
+        
+            // Collect Hover Data
+            updateHoverData();
+        } else {
+            alert("No data for specified hazard.");
+        }  
     }
 
     

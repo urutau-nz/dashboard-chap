@@ -18,7 +18,7 @@ if (domain == 'test') {
 }
 
 import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
-import_url + `/data/adaptation_priority_areas.json`);
+import_url + `/data/adaptation_priority_areas.topojson`);
 
 import_manager.addImport('hazard_info', 'Hazard CSV', 'csv', 
 import_url + `/data/hazard_info.csv`);
@@ -79,7 +79,7 @@ function importsComplete(imports) {
         display_name: d.display_name,
         name: d.display_name,
         file_name: import_url + '/data/' + d.domain + '_assets/' + d.asset_tag + '.topojson',
-        exposure_file_name: import_url + '/data/exposure_values/exposure_' + d.asset_tag + '.csv',
+        instances_file_name: import_url + '/data/asset_instances/' + d.asset_tag + '.csv',
         category: d.domain,
         id: d.asset_tag,
         type: d.file_type // Either POLYGON, POLYLINE or POINTS
@@ -285,8 +285,8 @@ class DataLayer extends Layer {
       this.weight = 4;
       this.opacity = 0;
     } else {
-      this.weight = 1;
-      this.opacity = 0.2;
+      this.weight = 2;
+      this.opacity = 0.1;
     }
 
     this.tiled = tiling;
@@ -304,7 +304,7 @@ class DataLayer extends Layer {
               e.target.setStyle({
                 weight: myself.weight * 2,
                 opacity: 1,
-                fillOpacity: myself.opacity * 1.5,
+                fillOpacity: myself.opacity * 2,
               });
 
               // Update Mouse Info

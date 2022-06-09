@@ -267,12 +267,12 @@ function updateHoverData() {
   if (selected_asset && hazard_scenario) {
     var hazard_scenario_tif = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
 
-    var file_name = asset_info.filter(d => d.display_name == assets[selected_asset].display_name)[0].exposure_file_name;
+    var file_name = asset_info.filter(d => d.display_name == assets[selected_asset].display_name)[0].instances_file_name;
   
     var asset_importer = new ImportManager();
       
     asset_importer.addImport('hover', "Hover Data", 'csv', 
-    assets[selected_asset].exposure_file_name);
+    assets[selected_asset].instances_file_name);
   
     asset_importer.onComplete(function (imports) {
       imports['hover'].filter(d => d.hazard_scenario == hazard_scenario_tif).forEach(function (d) {

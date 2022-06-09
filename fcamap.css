@@ -1060,6 +1060,13 @@ div.intro_tour .introjs-button {
   text-align: center;
 }
 
+.asset-report-vulnerability-figure-td {
+  text-align: center;
+  font-size: 1rem;
+  vertical-align: top;
+  padding: 0.6rem 4rem 0rem 4rem;
+  height: 10rem;
+}
 .asset-report-figure-td {
   text-align: center;
   font-size: 1rem;

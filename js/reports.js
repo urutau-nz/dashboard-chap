@@ -161,7 +161,7 @@ function createAssetReport(html_id, asset) {
     </tr>
     ${description}
     <tr>
-        <td>
+        <td id="${html_id}-${asset.id}-vulnerability-figure-td" class="asset-report-vulnerability-figure-td ${asset.id}-vulnerability-figure-td">
         </td>
     </tr>
     </table> 
@@ -175,11 +175,11 @@ function createAssetReport(html_id, asset) {
 function updateReportFigures(asset) {
     if (!asset) return false;
     
+    // EXPOSURE FIGURE
     var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
     var asset_importer = new ImportManager();
 
     var graph_data_file = `${import_url}/data/report_data/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.csv`;
-    console.log(graph_data_file);
 
     asset_importer.addImport(asset.id, asset.display_name, 'csv', 
     graph_data_file);
@@ -201,6 +201,34 @@ function updateReportFigures(asset) {
     });
 
     asset_importer.runImports();
+
+
+
+
+    // VULNERABILITY FIGURE
+    var asset_importer = new ImportManager();
+    asset_importer.addImport(asset.id, asset.display_name, 'csv', asset.instances_file_name);
+
+    asset_importer.onComplete(function (d) {
+        updateReportVulnerabilityFiguresOnComplete(d);
+    });
+    asset_importer.onError(function (d, e) {
+        for (var asset_id in d) {
+            // Determine html_id
+            if (current_page == 'map') {
+                var html_id = 'map-report-sub-div';
+            }else {
+                var html_id = `${asset_id}-report-td`;
+            }
+
+            $(`#${html_id}-${asset_id}-vulnerability-figure-td`).remove();
+        }
+    });
+
+    asset_importer.runImports();
+
+
+
 }
 function updateReportFiguresOnComplete(data) {
     var html_id = "";
@@ -217,12 +245,12 @@ function updateReportFiguresOnComplete(data) {
         graph.y_axis_label(data[asset_id][0].ylabel);
         graph.margin_top(10);
         graph.margin_right(30);
-        graph.margin_left(70);
+        graph.margin_left(30);
         graph.margin_bottom(60);
         graph.min_y(0);
         graph.font_size(12);
         graph.x_suffix('cm');
-        //graph.y_suffix(' assets');
+        graph.y_suffix(data[asset_id][0].unit);
         //graph.background_color('#FFF');, 
         graph.colors(['#0009']);
         graph.x_ticks(8);
@@ -231,6 +259,41 @@ function updateReportFiguresOnComplete(data) {
         graph.lineGraph();
 
         all_graphs.push(graph);
+
+    }
+}
+function updateReportVulnerabilityFiguresOnComplete(data) {
+    var html_id = "";
+    for (var asset_id in data) {
+        // Determine html_id
+        if (current_page == 'map') {
+            var html_id = 'map-report-sub-div';
+        }else {
+            var html_id = `${asset_id}-report-td`;
+        }
+
+        var graph = new vlGraph(`${html_id}-${asset_id}-vulnerability-figure-td`, data[asset_id], 'vulnerability', null, {
+            count_matches: true
+        });
+        graph.x_axis_label("Vulnerability");
+        graph.y_axis_label("Number of Assets");
+        graph.margin_top(10);
+        graph.margin_right(30);
+        graph.margin_left(30);
+        graph.margin_bottom(60);
+        graph.min_y(0);
+        graph.font_size(12);
+        graph.y_suffix(' assets');
+        //graph.background_color('#FFF');, 
+        graph.colors(['#0009']);
+        graph.x_ticks(8);
+        graph.line_width(2);
+        graph.dots(false);
+        graph.x_categories({'low': 'Low', 'medium': 'Medium', 'high': 'High'});
+        graph.barGraph();
+
+        all_graphs.push(graph);
+
     }
 }
 
