@@ -1,218 +1,435 @@
 
-var current_report_tab = null;
-function setReportTab(tab) {
-    if (tab != current_report_tab) {
-        $(`#report-menu-${current_report_tab}-td`).removeClass("active");
-        $('#report-info-table').removeClass(current_report_tab);
-        $('#report-info-table').addClass(tab)
+var report_asset_selected = null;
 
-        // Switch filter expand icon to right tab
-        $('#page-report .filters-expanding-icon img').attr('src', `./icons/${tab}-Expand.png`);
+var report_map;
+var report_map_asset_layer;
+var report_domain_dropdown;
+var report_region_dropdown;
 
-        // Switch Pointer icons to right tab
-        $("#page-report .slr-pointers-div img").attr('src', `./icons/${tab}-Pointer.png`);
+var report_vulnerability_graphs = [];
+var report_exposure_graph = null;
 
-        current_report_tab = tab;
+var report_relevant_instances = null; // Asset Instance data relevant to this asset, hazard & region
 
-        // Set Report Info BG to color of tab
-        $("#report-info-td").css("background-color", category_colors[tab]);
-        $(`#report-menu-${current_report_tab}-td`).addClass("active");
+function initPageReports() {
+    // Run on website open
 
-        switch(tab) {
-            case "overview": {
-                $("#report-summary-td .title").html(`<h1>Overview</h1>`);
+    // Domain Dropdown
+    report_domain_dropdown = new vlDropDown("report-domain-dropdown");
+    report_domain_dropdown.populate([["any", "All Domains"], ["built", "Built Domain"], ["human", "Social Domain"], ["cultural", "Cultural Domain"], ["natural", "Natural Domain"]]);
+    report_domain_dropdown.setOnChange(filterReportResults);
 
-            } break;
-            case "built": {
-                $("#report-summary-td .title").html(`<h1>Built <span class="field">Domain</span></h1>`);
+    // Create results list
+    var contents = '';
+    for (var asset_id in assets) {
+        var asset = assets[asset_id];
 
-            } break;
-            case "natural": {
-                $("#report-summary-td .title").html(`<h1>Natural <span class="field">Domain</span></h1>`);
-
-            } break;
-            case "cultural": {
-                $("#report-summary-td .title").html(`<h1>Cultural <span class="field">Domain</span></h1>`);
-
-            } break;
-            case "human": {
-                $("#report-summary-td .title").html(`<h1>Human <span class="field">Domain</span></h1>`);
-
-            } break;
-        }
-        
-        // Switch shown contents
-        $(".report-report-table").removeClass('active');
-        $(`#report-${tab}-table`).addClass('active');
-
-        // Append Asset Reports
-
-        var contents = `<table style="width: 100%;">`;
-        for (var asset_id of Object.keys(assets)) {
-            asset = assets[asset_id];
-            if (asset.category == tab) {
-                contents += `<tr><td id="${asset.id}-report-td" class="asset-report-td"></td></tr>`;
-            }
-        }
-        contents += '</table>';
-        $(`#report-${tab}-table .asset-reports-td`).html(contents);
-        
-        for (var asset_id of Object.keys(assets)) {
-            asset = assets[asset_id];
-            if (asset.category == tab) {
-                createAssetReport(`${asset.id}-report-td`, asset);
-
-                // Add To Map button
-                $(`#${asset.id}-report-td`).append(`<img class="show-on-map-img" src="icons/${tab}-map.svg" onclick="showAssetOnMap('${asset.id}', '${asset.display_name}')"/>`);
-            }
+        var domain = capitalize(asset.domain);
+        var shape = '';
+        if (asset.type == 'point') { shape = 'Pointer';
+        } else if (asset.type == 'polygon') { shape = 'Shape';
+        } else if (asset.type == 'polyline') { shape = 'Line';
         }
 
-
-        // Update Domain Status
-        var status = domain_status.filter(d => d.domain == tab)[0];
-        if (status) {
-            $(`#report-${tab}-table .last-updated`).html(status.updated_date);
-            $(`#report-${tab}-table .status`).html(status.status);
-        }
-
-        // Hide Switch if Overview
-        if (tab == 'overview') {
-            reportSwitch("summary");
-            $(`#report-summary-td .switch`).css('display', 'none');
-            
-        } else {
-            $(`#report-summary-td .switch`).css('display', 'table-cell');
-        
-        }
+        contents += `<tr id="asset-result-${asset_id}"><td style="width:100%;" class="result" onclick="openAssetReport('${asset_id}')">
+            <table style="width: 100%;table-layout: fixed;">
+                <tr>
+                    <td style="width: 55px;padding: 5px;">
+                        <img src="icons/${domain}-Tab-Blue.svg" style="height: 45px;width: 45px;" />
+                    </td>
+                    <td class="result-text">
+                        ${asset.display_name}
+                    </td>
+                    <td style="width: 20px; border-left: 2px solid #eef5f9; padding: 17.5px;">
+                    <img src="icons/Map-${shape}-Blue.svg" style="height: 20px;width: 20px;" />
+                    </td>
+                </tr>
+            </table>
+        </td></tr>`;
     }
-}
+    $("#report-menu-results-table").html(`${contents}`)
 
-var report_colors = {"overview": "#005652",
-"built": "#763100",
-"natural": "#037c09",
-"cultural": "#780021",
-"human": "#34229d"};
+    // Trigger Filtering when typing in search box
+    $("#report-searchbar").on('input', filterReportResults);
 
-
-
-
-function assetReportImageOnError(e) {
-    //console.log("Image Error:",e,`${e.className}-td`);
-    $(`.${e.className}-td`).html('Sorry - we don\'t have a figure for this asset in this scenario yet.');
-}
-function createAssetReport(html_id, asset) {
-
-    var asset_item = asset_descriptions.filter(d => d["Asset"].toLowerCase() == asset.name.toLowerCase())[0];
-    var description = '';
-    if (asset_item) {
-        description = asset_item["Asset Description"];
-        description = `
-        <tr>
-            <td class="asset-report-description-td">
-                ${description}
-            </td>
-        </tr>`;
-    }
-
-    var category = category_titles[asset.category];
-
-    var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
-
-    $(`#${asset.id}-figure-td`).remove();
-
-    $(`#${html_id}`).html(`
-    <table style="width:100%;">
-    <tr>
-        <td colspan="2" class="asset-report-title-td">
-            <h2>${asset.name}</h2>
-        </td>
-    </tr>
-    <tr>
-        <td id="${asset.id}-figure-td" class="asset-report-figure-td ${asset.id}-figure-td">
-            
-        </td>
-    </tr>
-    ${description}
-    <tr>
-        <td class="asset-report-domain-td" style="color: #934300bb">
-            ${category}
-        </td>
-    </tr>
-    <tr>
-        <td>
-        </td>
-    </tr>
-    </table> 
-    `); 
-
-    console.log(asset);
-    if (hazard_scenario) {
-        var asset_importer = new ImportManager();
-
-        var graph_data_file = `${import_url}/data/report_data/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.csv`;
-        console.log(graph_data_file);
-
-        asset_importer.addImport(asset.id, asset.display_name, 'csv', 
-        graph_data_file);
-
-        asset_importer.onComplete(updateReportFigures);
-        asset_importer.onError(function (d, e) {
-            for (var asset_id in d) {
-                $(`#${asset_id}-figure-td`).remove();
-            }
-        });
-
-        asset_importer.runImports();
-    }
-    //updateReportFigures();
-}
-function updateReportFigures(data) {
-    for (var asset_id in data) {
-        var graph = new vlGraph(`${asset_id}-figure-td`, data[asset_id], 'exposure', 'cumsum', '', data[asset_id][0].xlabel, data[asset_id][0].ylabel);
-        graph.margin_top(30);
-        graph.margin_right(30);
-        graph.margin_left(60);
-        graph.margin_bottom(60);
-        graph.font_size(14);
-        graph.x_suffix('cm');
-        graph.y_suffix(' assets');
-        graph.background_color('#FFF');
-        graph.lineGraph();
-    }
-}
-
-/*
-
-        var image_file = hazard_scenario.substring(0, hazard_scenario.length - 4) + '.tif';
-        for (var asset_id in assets) {
-            var asset = assets[asset_id];
-            $(`.${asset.id}-figure-td`).html(`<img class="${asset.id}-figure" onerror="assetReportImageOnError(this)" src="${import_url}/data/report_figures/${asset.id}/${asset.id}-${image_file}-${region_ids[filter_values.region]}.jpg"/>`);
-        }
-
-*/
-
-
-function showAssetOnMap(asset_id, asset_name) {
-    setPage('map');
-    mapAsset(asset_id, asset_name);
-}
-
-
-function reportSwitch(type) {
+    // Create Report Map
+    report_map = new vlMap('reports-map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
+    report_map.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
+                            {"attributionControl": false, "detectRetina": false, "minZoom": 4,
+                            "noWrap": false, "subdomains": "abc"});
     
-    if (type == 'summary') {
-        $(`.domain-summary-td`).css('display', 'table-cell');
-        $(`.asset-reports-td`).css('display', 'none');
-        
-        $(`#report-summary-td .switch .summary`).addClass('active');
-        $(`#report-summary-td .switch .assets`).removeClass('active');
+    report_map.createPane('labels', 650);
+    report_map.getPane('labels').style.pointerEvents = 'none';
 
-    } else if (type == 'assets') {
-        $(`.asset-reports-td`).css('display', 'table-cell');
-        $(`.domain-summary-td`).css('display', 'none');
-        
-        $(`#report-summary-td .switch .assets`).addClass('active');
-        $(`#report-summary-td .switch .summary`).removeClass('active');
+    report_map.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}{r}.png',
+                {pane: 'labels'});
+    
+    // Update Hazard Layer on Map
+    updateMapHazard(report_map);
+
+    // Add map zoom controls
+    var zoom = L.control.zoom({
+        zoomInText: '+',
+        zoomOutText: '-',
+        position: 'bottomleft'
+        });
+    zoom.addTo(report_map.map);
+
+    
+    // Create Report Vulnerability Graphs
+    var low_graph = new vlCircleBar("report-vulnerability-graph1", "Low<br>Vulnerability",
+                611, 1000, "#32b888", "ASSETS");
+    report_vulnerability_graphs.push(low_graph)
+
+    var medium_graph = new vlCircleBar("report-vulnerability-graph2", "Medium<br>Vulnerability",
+                376, 1000, "#db7900", "ASSETS");
+    report_vulnerability_graphs.push(medium_graph)
+    
+    var high_graph = new vlCircleBar("report-vulnerability-graph3", "High<br>Vulnerability",
+                123, 1000, "#c94040", "ASSETS");
+    report_vulnerability_graphs.push(high_graph)
+
+
+    // Create exposure Graph
+    report_exposure_graph = new vlGraph("report-exposure-graph", [], 'exposure', 'cumsum');
+    report_exposure_graph.x_axis_label("X Axis Placeholder");
+    report_exposure_graph.x_axis_adjust(3);
+    report_exposure_graph.y_axis_label("Y Axis Placeholder");
+    report_exposure_graph.y_axis_adjust(2);
+    report_exposure_graph.margin_top(20);
+    report_exposure_graph.margin_right(25);
+    report_exposure_graph.margin_left(35);
+    report_exposure_graph.margin_bottom(50);
+    report_exposure_graph.font_size(13);
+    report_exposure_graph.x_suffix('cm');
+    report_exposure_graph.y_suffix(" Unit");
+    report_exposure_graph.colors(['#51daed']);
+    report_exposure_graph.x_ticks(7);
+    report_exposure_graph.line_width(2);
+    report_exposure_graph.y_tick_size(1);
+    report_exposure_graph.x_tick_size(3);
+    report_exposure_graph.y_outer_tick_size(0);
+    report_exposure_graph.x_outer_tick_size(0);
+    report_exposure_graph.dots(false);
+
+
+    // Create map Legends
+    addLegendsToMap(report_map);
+
+    // Create Region dropdown
+    report_region_dropdown = new vlDropDown("report-map-region-dropdown");
+    initializeRegionDropdown(report_region_dropdown, report_map);
+
+}
+function openPageReports() {
+    report_map.invalidateSize();
+}
+function closePageReports() {
+    
+}
+
+
+function filterReportResults() {
+    var search_term = $("#report-searchbar").val().toLowerCase();
+    var domain = report_domain_dropdown.value.toLowerCase();
+    console.log(domain, search_term);
+
+    
+    for (var asset_id in assets) {
+        var asset = assets[asset_id];
+
+        // Hide if not matching criteria
+        $("#asset-result-" + asset_id).css("display", "none");
+        if (search_term.length == 0 || asset.display_name.toLowerCase().includes(search_term)) {
+            if (domain == 'any' || asset.domain.toLowerCase() == domain) {
+                // Matches Criteria! Show it
+                $("#asset-result-" + asset_id).css("display", "");
+                
+                // If there's a search term, highlight matching text
+                var result_text = "";
+                var dn = asset.display_name;
+                if (search_term.length > 0) {
+                    var term_index = dn.toLowerCase().indexOf(search_term);
+                    result_text += dn.slice(0, term_index);
+                    result_text += '<span style="background-color:#ffdecbdd;">';
+                    result_text += dn.slice(term_index, term_index + search_term.length);
+                    result_text += '</span>';
+                    result_text += dn.slice(term_index + search_term.length);
+                } else { 
+                    result_text = asset.display_name;
+                }
+                $("#asset-result-" + asset_id + " .result-text").html(result_text);
+            }
+        }
 
     }
+}
+
+
+function halfBoldenText(text) {
+    // Emboldens the latter half of a given sentence. Used for asset report headers.
+
+    var midpoint = text.length / 2;
+    var closest_value = text.length ** 2;
+    var closest_index = null; // This iterates over the text, finding the whitespace closest to it's centre.
+    for (var i = 0; i < text.length; i++) {
+        var char = text[i];
+        if (char == ' ' && (i - midpoint) ** 2 < closest_value) {
+            closest_value = (i - midpoint) ** 2;
+            closest_index = i;
+        }
+    }
+    var out;
+    if (closest_index != null) {
+        // if there was a space found, separate by closest_index
+        out = '<div>' + text.slice(0, closest_index) + 
+                '&nbsp;</div><div style="font-weight: 700">' + text.slice(closest_index+1) + '</div>';
+    } else {
+        // otherwise, make it all bold
+        out = '<span style="font-weight: 700">' + text + '</span>';
+    }
+    
+    return out;
+}
+
+
+
+function reportMapOnMouseOver(hover_element, target, properties) {
+    var instance = report_relevant_instances.filter(d => d.asset_id == properties.asset_id)[0];
+    var asset = report_asset_selected;
+    
+    var exposure_text = 'No Data';
+    var icon_top = '';
+    var icon_bottom = '';
+    if (instance) {
+        // If we have instance data for this instance...
+        exposure_text = `${instance.exposure}cm of Exposure`;
+
+        if (instance.show_inundation_icon == "True") {
+            // Always top
+            icon_top = `<img src="icons/Inundation-Grey.svg">`;
+
+        } else if (instance.show_groundwater_icon == "True") {
+            // Either top or bottom, depending on selected asset
+            if (getHazard() == 'inundation') {
+                // Top
+                icon_top = `<img src="icons/Groundwater-Grey.svg">`;
+
+            } else {
+                // Bottom
+                icon_bottom = `<img src="icons/Groundwater-Grey.svg">`;
+
+            }
+
+        } else if (instance.show_erosion_icon == "True") {
+            // Always bottom
+            icon_bottom = `<img src="icons/Erosion-Grey.svg">`;
+            
+        }
+    }
+
+    var color = reportAssetInstanceColor(instance);
+              
+    hover_element.html(`
+    <div class="vulnerability-highlight" style="background-color:${color}"></div>
+    <table>
+        <tr>
+            <td class="header-td">
+                <b>${asset.display_name}&nbsp;&nbsp;</b><span class="asset-id">#${properties.asset_id}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ${exposure_text}
+            </td>
+        </tr>
+    </table>
+    <div class="other-hazards-div">
+        <div>${icon_top}</div>
+        <div>${icon_bottom}</div>
+    </div>
+    `);
+}
+
+function reportAssetInstanceColor(instance) {
+    // Colors individual asset instances by their instance data
+    if (instance) {
+        // Determine color by vulnerability (in future! TODO)
+        if (instance.exposure > 150) {
+            var color = "#c94040"; // RED
+        } else if (instance.exposure > 0) {
+            var color = "#db7900"; // ORANGE
+        } else {
+            var color = "#32b888"; // GREEN
+        }
+    } else {
+        // There's no instance data for this instance.
+            var color = "#32b888"; // GREEN
+    }
+    return color;
+}
+
+function reportMapTopoPolygonStyle(feature) { return reportMapTopoStyle(feature, "polygon");
+}
+function reportMapTopoPolylineStyle(feature) { return reportMapTopoStyle(feature, "polyline");
+}
+function reportMapTopoStyle(feature, layer_type) {
+    // STYLE FOR POLYGONS & POLYLINES
+    var properties = feature.properties;
+    var instance = report_relevant_instances.filter(d => d.asset_id == properties.asset_id)[0];
+    
+    // Difference between polygon & polyline
+    if (layer_type == "polygon") {
+        var relevant_style = {weight: 2.5};
+    } else if (layer_type == "polyline") {
+        var relevant_style = {weight: 5};
+    }
+
+    var color = reportAssetInstanceColor(instance);
+
+    return { fillColor: color, weight: relevant_style.weight, color: color, opacity: 1, fillOpacity: 0.2};
+}
+
+
+function reportMapMarkerStyle(feature) {
+    // STYLE FOR POINT
+    var properties = feature.properties;
+    var instance = report_relevant_instances.filter(d => d.asset_id == properties.asset_id)[0];
+
+    var color = reportAssetInstanceColor(instance);
+
+    return {radius: 4, fillColor: "#FFF", color: color, weight: 3, opacity: 1, fillOpacity: 1};
+}
+
+
+
+function openAssetReport(asset_id) {
+    // Ran on click when a choice is made in the reports menu
+    showLoading();
+    
+    // Show legend
+    report_map.showLegend('vulnerability');
+
+    // Update global variable
+    report_asset_selected = assets[asset_id];
+
+    // Hide Report Menu, show report report
+    $("#reports-menu-table").css("display", "none");
+    $("#reports-report-table").css("display", "table");
+
+
+    // Fill in Title
+    var title = halfBoldenText(report_asset_selected.display_name.toUpperCase());
+    
+    $("#reports-report-table .asset-display-name").html(title);
+
+    
+    // Edit Vulnerability Graphs
+    //var max_value = sum of all
+    //report_vulnerability_graphs[0].value = 611;
+    report_vulnerability_graphs[0].graph();
+    //report_vulnerability_graphs[0].value = 611;
+    report_vulnerability_graphs[1].graph();
+    report_vulnerability_graphs[2].graph();
+
+
+    // Clear Exposure Graph
+    //report_exposure_graph.setData([], 'exposure', 'cumsum');
+    //report_exposure_graph.areaGraph();
+
+    // Import & Update Exposure Graph
+    var hazard_scenario = getHazardScenarioTif();
+    var current_region = getCurrentRegionId();
+    var exposure_filename = `${import_url}/data/report_data/${asset_id}/${asset_id}-${hazard_scenario}-${current_region}.csv`;
+    vlQuickImport(exposure_filename, 'csv', function (d) {
+        report_exposure_graph.setData(d, 'exposure', 'cumsum');
+        if (d[0]) {
+            report_exposure_graph.y_axis_label(d[0].ylabel);
+            report_exposure_graph.x_axis_label(d[0].xlabel);
+            report_exposure_graph.y_suffix(d[0].unit);
+        }
+        report_exposure_graph.colors(['#61a1d6']);
+        report_exposure_graph.areaGraph();
+    });
+
+
+    // Load Asset Instance Data (per-asset-id data)    and then make map
+    var current_hazard = getHazard();
+    vlQuickImport(report_asset_selected.instances_file_name, 'csv', function (instances) {
+        // Successfully loaded vulnerability data!
+
+        // remove last one, if it exists
+        report_map.removeLayer(report_map_asset_layer);
+        
+        report_relevant_instances = instances.filter(d => d.hazard_scenario == hazard_scenario && d.hazard_type == current_hazard);
+        
+        // Hide Loading in a bit
+        setTimeout(hideLoading, 500);
+
+        if (report_asset_selected.type == "point") {
+            // ASSET IS POINTS
+            // Load Map Layer
+            report_map_asset_layer = report_map.addMarkerLayer(report_asset_selected.points, reportMapMarkerStyle, "lat", "lon",
+                {
+                    hover: true,
+                    hover_style: { radius: 12, weight: 8 },
+                    onmouseover: reportMapOnMouseOver
+                });
+
+        } else {
+            // ASSET IS EITHER POLYGON OR POLYLINE, MAKE TOPOLAYER
+            // Difference between polygon & polyline
+            if (report_asset_selected.type == "polygon") { var relevant_style = {weight: 2.5};
+            } else if (report_asset_selected.type == "polyline") { var relevant_style = {weight: 6}
+            }
+            console.log(report_asset_selected, relevant_style);
+
+            // Load Map Layer
+            report_map_asset_layer = report_map.loadTopoLayer(report_asset_selected.file_name, (report_asset_selected.type == 'polygon' ? reportMapTopoPolygonStyle : reportMapTopoPolylineStyle), 
+                {
+                    hover: true,
+                    hover_style: { opacity: 1, weight: relevant_style.weight * 1.4, fillOpacity: 0.5},
+                    not_hover_style: { opacity: 0.4, weight: relevant_style.weight * 0.6, fillOpacity: 0.1},
+                    onmouseover: reportMapOnMouseOver
+                });
+        }
+        
+    });
+
+
+
+
+    // Fill in report text
+    var report = asset_descriptions.filter(d => d.asset_tag == asset_id)[0];
+
+    if (report) {
+        $("#report-exposure-text1").html(report.exposure_text_1);
+        $("#report-exposure-text2").html(report.exposure_text_2);
+        $("#report-vulnerability-text1").html(report.vulnerability_text_1);
+        $("#report-vulnerability-text2").html(report.vulnerability_text_low);
+        $("#report-vulnerability-text3").html(report.vulnerability_text_medium);
+        $("#report-vulnerability-text4").html(report.vulnerability_text_high);
+        $("#report-uncertainty-text1").html(report.uncertainty_text_1);
+        $("#report-uncertainty-text2").html(report.uncertainty_text_2);
+        $("#report-data-source-text1").html(report.data_source_text_1);
+        $("#report-data-source-text2").html(report.data_source_text_2);
+    }
+
+}
+
+
+
+function closeAssetReport() {
+    // Ran on click when returning from a asset report
+
+    report_asset_selected = null;// Update global variable
+
+    // Show Report Menu, hide report report
+    $("#reports-report-table").css("display", "none");
+    $("#reports-menu-table").css("display", "table");
+
+    report_map.removeLayer(report_map_asset_layer);
+
+    // Hide legend
+    report_map.hideLegend('vulnerability');
 }
