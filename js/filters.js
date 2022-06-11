@@ -292,6 +292,10 @@ function updateHazard() {
         // Disable "Apply" button
         $('#hazard-popup-apply-button').removeClass('active');
         $('#hazard-settings-popup .vl-popup-exit-button').text('Close');
+
+        // Update Icon
+        $(`.hazard-button .hazard-symbol`).css('display', 'none');
+        $(`.hazard-button .hazard-symbol.${hazardMenu.value}`).css('display', 'block');
     
     
         // Update Map & Report accordingly
@@ -426,7 +430,11 @@ function getCurrentRegionId() {
             return "all";
         }
     } else if (current_page == "map") {
-        alert("NO REGION DROPDOWN FOR MAP TAB");
+        if (map_region_dropdown) {
+            return region_ids[map_region_dropdown.value];
+        } else {
+            return "all";
+        }
     }
 }
 

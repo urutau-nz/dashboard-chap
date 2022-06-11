@@ -129,10 +129,20 @@
                       <br>This website highlights the vulnerability of assets, and places of environmental, cultural and social value that will be exposed to coastal hazards across the Christchurch District. <br>
                       <br>The assessment of vulnerability has been completed by the <a href="https://www.canterbury.ac.nz/engineering/schools/cnre/research/systems/"  target="_blank">University of Canterbury</a> and uses hazard information from the <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards/how-we-assess-coastal-hazards/" target="_blank">2021 Coastal Hazard Assessment</a>. This explorer has been developed by Urban Intelligence Ltd as a tool to support the <a href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/" target="_blank">Christchurch City Council’s coastal hazards adaptation planning programme</a>.
                       <br><br>You can browse the explorer by clicking the three other tabs across the top of the page:
-                      <br><br>Home: An introduction to the Coastal Risk Explorer, the methodology that sits behind it, and the answers to some frequently asked questions.
-                      <br><br><a onclick="setPage('overview')">Overview:</a> A summary of each domain considered in the Explorer.
-                      <br><br><a onclick="setPage('reports')">Reports:</a> Individual asset information and risk assessment results.
-                      <br><br><a onclick="setPage('map')">Map:</a> Maps that allow you to visualise the exposure and understand the vulnerability of different assets and places of value to coastal hazards. 
+                      <ul>
+                        <li>
+                          <span>Home:</span> An introduction to the Coastal Risk Explorer, the methodology that sits behind it, and the answers to some frequently asked questions.
+                        </li>
+                        <li>
+                        <a onclick="setPage('overview')">Overview:</a> A summary of each domain considered in the Explorer.
+                        </li>
+                        <li>
+                        <a onclick="setPage('reports')">Reports:</a> Individual asset information and risk assessment results.
+                        </li>
+                        <li>
+                        <a onclick="setPage('map')">Map:</a> Maps that allow you to visualise the exposure and understand the vulnerability of different assets and places of value to coastal hazards. 
+                        </li>
+                      </ul>
                       <div class="contact">Note: This work is currently draft and will be ongoing</div>
                   </div>
                 </td>
@@ -345,14 +355,14 @@
                                 <tr>
                                   <td>
                                     <p>
-                                      Welcome to the Coastal Hazards Risk Explorer for Christchurch City. This tool explores the effects of coastal hazards on our communities in Christchurch, through four different domains. These domains were chosen because they encompass all aspects that are critical to a safe, sustainable, and liveable city.
+                                    Welcome to the Coastal Risk & Vulnerability Explorer for Christchurch. This tool explores the effects that coastal hazards may have on communities across the Christchurch District over time. You can explore this risk through four 'value domains’ – the built, natural, social and cultural environments. These domains reflect the NZ Treasury’s wellbeing framework and underpin the wellbeing of our communities and environment. 
                                       <br><br>
                                       To use the tool:
                                     </p>
                                       <ul>
-                                        <li>Select the domain of interest</li>
-                                        <li>Select a hazard scenario in the filter box below</li>
-                                        <li>View the available report section or map using the tabs in the top right-hand side of the screen</li>
+                                        <li>Select the domain you would like to explore</li>
+                                        <li>Select a hazard scenario you would like to explore</li>
+                                        <li>View the corresponding report or map using the tabs at the top of the page.</li>
                                       </ul>
                                   </td>
                                 </tr>
@@ -361,8 +371,14 @@
                                 <tr>
                                   <td class="domain-summary-td">
                                     <p>
-                                      The built domain contains all aspects of our constructed environment, these assets provide critical supporting services to the livelihoods of our residents. Assessing and protecting our built domain ensures that communities have a roof over their heads, water to drink, electricity to heat and cook with, ways to get around and more. Including this domain allows for the exploration of the impact on the built infrastructure and it’s cascading impacts to other domains.
+                                    The built domain has information on a range of infrastructure across the district. Many of the assets included in this domain play an important role in day to day life, such as providing provide shelter, drinking water, electricity to heat and cook with, or the ability to travel around the district. The built domain is therefore an important consideration in coastal hazards adaptation planning. The Explorer helps us to understand:
                                     </p>
+                                    <ul>
+                                      <li>What elements are exposed to coastal hazards?</li>
+                                      <li>How vulnerable each elements is and the service it provides to coastal hazards?</li>
+                                      <li>What would be the consequence of losing that infrastructure, asset or service for communities and for the Council?</li>
+                                      <li>Would the loss of that infrastructure, asset, or service have a domino effect, impacting other built, natural, cultural, or social sectors, assets, and taonga (elements)?</li>
+                                    </ul>
                                     <h2>Status</h2>
                                     <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
                                     <p class="status"></p>
@@ -400,10 +416,16 @@
                                 <tr>
                                   <td class="domain-summary-td">
                                     <p>
-                                    The natural domain pertains to all aspects of the natural environment that support the full range of our indigenous species, he kura taiao (living treasures), and the ecosystems in terrestrial, freshwater and marine environments. As Kaitaki it is our responsibility to assess and manage risks to the natural environment. But we do not do this merely out of responsibility, but also to protect our social, cultural, spiritual and economic wellbeing of communities. Through the NCCRA we know that these attributes can become impacted due to degradation of land, waterways, mahinga kai, and more.
+                                    The natural domain has information on terrestrial, freshwater and marine ecosystems that support indigenous flora and fauna – he kura taiao (living treasures). We have a number of nationally and internationally significant ecosystems and species across the Christchurch district. As kaitiaki, it is our responsibility to protect the integrity of these ecosystems and understand the impact that the loss of these taonga would have on the wider wellbeing of communities. 
                                     <br><br>
-                                    This inclusion of this domain aims to understand natural species, ecosystems, and sites of natural amenity may be impacted over the next 100+ years and identify if there are options to protect these assets.
+                                    Many species have the adaptive capacity enabling them to respond to changes in their environment, allowing them to be more resilient to coastal hazards than others. How these dynamic ecosystems and species might respond to climate change and coastal hazards has been estimated, allowing us to consider how different adaptation options might impact these significant ecosystems both now and in the future. Including the natural domain in the Explorer allows us to understand:
                                     </p>
+                                    <ul>
+                                      <li>What significant ecosystems, flora and fauna will be exposed to coastal hazards over time?</li>
+                                      <li>How vulnerable are those ecosystems, flora and fauna to coastal hazards over time?</li>
+                                      <li>Where do potential adaptation options need to align with the natural value of an area?</li>
+                                      <li>Where can coastal hazards adaptation planning support the continued adaptation and migration of natural systems and species in response to climate change?</li>
+                                    </ul>
                                     <h2>Status</h2>
                                     <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
                                     
@@ -420,7 +442,21 @@
                                 <tr>
                                   <td class="domain-summary-td">
                                     <p>
-                                    The social domain includes the health and wellbeing of people as individuals and as a community. It takes a Hauora approach (Holistic health philosophy) and includes our physical, social, mental and spiritual health. This domain has been included with the aim of understanding how the capacity and health of our communities will be impacted whilst highlighting potential areas for adaptation.
+                                    The human domain has information on indicators of social vulnerability. Social vulnerability acknowledges that some communities and people may have less capacity to prepare for, respond to, and recover from coastal hazards than others. We will be looking to support communities throughout the adaptation planning process and to do this we need to understand where there might be:
+                                    </p>
+                                    <ul>
+                                      <li>Risks to social cohesion and community wellbeing</li>
+                                      <li>Risk of exacerbating existing inequities and creating new inequities</li>
+                                      <li>Risks to physical health</li>
+                                      <li>Risks of conflict, disruption, and loss of trust in local government</li>
+                                      <li>Risks to Maori social, cultural, spiritual, and economic wellbeing</li>
+                                      <li>Risks to mental health, identity, autonomy, and sense of belonging and wellbeing</li>
+                                      <li>Risks to Maori and European cultural heritage sites</li>
+                                    </ul>
+                                    <p>
+                                    It is not possible to quantify the impacts on our communities using the same top-down approach used for built infrastructure in this Explorer. The layers of information we have mapped in this domain help to indicate where communities may be impacted by these vulnerabilities. For example, the exposure of a residential home may result in impacts on the physical and mental health of the residents. 
+                                    <br><br>
+                                    Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can either add into the Explorer or use to help ensure steps are taken to support the health and wellbeing of communities. 
                                     </p>
                                     <h2>Status</h2>
                                     <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
@@ -673,7 +709,9 @@
                 <div id="reports-map-div"></div>
                 <div id="report-map-filters-overlay">
                   <div id="report-map-hazard-button" class="hazard-button">
-                    <img class="hazard-symbol" src="icons/Hazard-Symbol-Blue.svg"/>
+                    <img class="hazard-symbol inundation" src="icons/Inundation-Blue.svg"/>
+                    <img class="hazard-symbol groundwater" src="icons/Groundwater-Blue.svg"/>
+                    <img class="hazard-symbol erosion" src="icons/Erosion-Blue.svg"/>
                     <div class="hazard-summary">
   
                     </div>
@@ -698,7 +736,9 @@
           </div>
           <div id="map-region-overlay">
             <div id="report-map-hazard-button" class="hazard-button">
-              <img class="hazard-symbol" src="icons/Hazard-Symbol-Blue.svg"/>
+              <img class="hazard-symbol inundation" src="icons/Inundation-Blue.svg"/>
+              <img class="hazard-symbol groundwater" src="icons/Groundwater-Blue.svg"/>
+              <img class="hazard-symbol erosion" src="icons/Erosion-Blue.svg"/>
               <div class="hazard-summary">
 
               </div>

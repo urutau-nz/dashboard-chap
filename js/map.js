@@ -160,25 +160,7 @@ function populateNewLayerPopup(new_domain = null) {
     $(`#new-layer-popup .domain-heading-td`).html(`${new_domain} Domain Assets`);
     
 
-    // Collect options, layers & groups
-    var options = [];
-    for (var asset_id in assets) {
-        var asset = assets[asset_id];
 
-        if (!asset.group) {
-            // Not in a group, so add
-            options.push(asset_id);
-        } else if (!options.includes(asset.group)) {
-            // Group is not yet added, so add
-            options.push(asset.group);
-        }
-    }
-    // Arrage alphabetically
-    options.sort((x, y) => {
-        if (x.toLowerCase() < y.toLowerCase()) {return -1;}
-        if (x.toLowerCase() > y.toLowerCase()) {return 1;}
-        return 0;
-    });
 
 
 
@@ -190,10 +172,9 @@ function populateNewLayerPopup(new_domain = null) {
     var right_column_length = 0;
     var column = 0;
     var last_letter = ' ';
-    for (var asset_id of options) {
+    for (var asset_id of groups_and_single_layers) {
 
         var is_group = Object.keys(asset_groups).includes(asset_id);
-        console.log(asset_id, asset_groups);
 
         if (is_group) {
             // Store first asset in group as asset temporarily
@@ -277,6 +258,9 @@ function populateNewLayerPopup(new_domain = null) {
                     <div data-value="${asset_id}" class="asset-group closed">
                         <div class="asset-item header" onclick="openNewAssetGroup('${asset_id}')">
                             ${asset_id}<span>(${asset_groups[asset_id].length} assets)</span>
+                            <div class="dropdown-arrow">
+                                <img src="icons/Down-Arrow-Green.svg">
+                            </div>
                         </div>
                         <div class="asset-group-contents">
                             <div>
@@ -482,6 +466,7 @@ function addLayerToMap(asset_id) {
                         hover: true,
                         hover_style: { radius: 12, weight: 8 },
                         onmouseover: mapMapOnMouseOver,
+                        filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; },
                         properties: {
                             asset_key: asset_id
                         },
@@ -503,6 +488,7 @@ function addLayerToMap(asset_id) {
                         hover_style: { opacity: 1, weight: relevant_style.weight * 1.4, fillOpacity: 0.5},
                         //not_hover_style: { opacity: 0.4, weight: relevant_style.weight * 0.6, fillOpacity: 0.1},
                         onmouseover: mapMapOnMouseOver,
+                        filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; },
                         properties: {
                             asset_key: asset_id
                         }
@@ -587,10 +573,44 @@ function mapMapOnMouseOver(hover_element, target, properties) {
     var instance = map_relevant_instances[properties.asset_key].filter(d => d.asset_id == properties.asset_id)[0];
     var asset = assets[properties.asset_key];
 
-    var exposure_text = 'No Data';
+    var exposure_text = 'Asset Not Exposed';
+    var icon_top = '';
+    var icon_bottom = '';
+    var description = '';
     if (instance) {
         // If we have instance data for this instance...
         exposure_text = `${instance.exposure}cm of Exposure`;
+        
+        if (instance.show_inundation_icon == "True") {
+            // Always top
+            icon_top = `<img src="icons/Inundation-Grey.svg">`;
+
+        } else if (instance.show_groundwater_icon == "True") {
+            // Either top or bottom, depending on selected asset
+            if (getHazard() == 'inundation') {
+                // Top
+                icon_top = `<img src="icons/Groundwater-Grey.svg">`;
+
+            } else {
+                // Bottom
+                icon_bottom = `<img src="icons/Groundwater-Grey.svg">`;
+
+            }
+
+        } else if (instance.show_erosion_icon == "True") {
+            // Always bottom
+            icon_bottom = `<img src="icons/Erosion-Grey.svg">`;
+        }
+
+        // Add description 
+        if (instance.hover_comment) {
+            description = `
+            <tr>
+                <td class="description-td">
+                    ${instance.hover_comment}
+                </td>
+            </tr>`;
+        }
     }
 
     var color = reportAssetInstanceColor(instance);
@@ -608,7 +628,12 @@ function mapMapOnMouseOver(hover_element, target, properties) {
                 ${exposure_text}
             </td>
         </tr>
+        ${description}
     </table>
+    <div class="other-hazards-div">
+        <div>${icon_top}</div>
+        <div>${icon_bottom}</div>
+    </div>
     `);
 }
 

@@ -142,9 +142,10 @@ function addLegendsToMap(given_map) {
     });
 
     given_map.addLegend("Vulnerability", [
-        ["Low", "#32b888"],
+        ["High", "#c94040"],
         ["Medium", "#db7900"],
-        ["High", "#c94040"]
+        ["Low", "#32b888"],
+        ["Undefined", "#666"]
     ], {
         legend_id: "vulnerability",
         visible: false
@@ -169,13 +170,15 @@ function initializeRegionDropdown(region_dropdown, given_map) {
     given_map.addTopoLayer(areas, {weight: 1, color: "#d4dadc", fillColor: "#d4dadc", opacity: 1, fillOpacity: 0.7}, {
         filter: function() { return false; },
         layer_id: "regions",
+        hover: false,
         pane: "marker"
     });
-    given_map.addTopoLayer(areas, {weight: 1, color: "#6d858d", fillColor: "#6d858d", opacity: 0.6, fillOpacity: 0}, {
+    /*given_map.addTopoLayer(areas, {weight: 1, color: "#6d858d", fillColor: "#6d858d", opacity: 0.6, fillOpacity: 0}, {
         filter: function() { return false; },
         layer_id: "regions_heightlight",
+        hover: false,
         pane: "marker"
-    });
+    });*/
 
     // Populate Regions Dropdown
     for (var region_name in region_ids) {
@@ -191,9 +194,9 @@ function initializeRegionDropdown(region_dropdown, given_map) {
         given_map.applySettings("regions", {
             filter: function(feature) { return feature.properties.Area != value && value != "All Regions"; }
         });
-        given_map.applySettings("regions_heightlight", {
+        /*given_map.applySettings("regions_heightlight", {
             filter: function(feature) { return feature.properties.Area == value && value != "All Regions"; }
-        });
+        });*/
 
         if (current_page == 'reports' && report_asset_selected) {
             // Only update report data if report tab is open & an asset is selected
