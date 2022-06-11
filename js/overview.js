@@ -57,7 +57,7 @@ function setOverviewTab(tab) {
         $(`#overview-${tab}-table`).addClass('active');
 
         // Update Domain Status
-        var status = domain_status.filter(d => d.domain == tab)[0];
+        var status = domain_status.filter(d => d.domain == tab || (d.domain == 'social' && tab == 'human'))[0];
         if (status) {
             $(`#overview-${tab}-table .last-updated`).html(status.updated_date);
             $(`#overview-${tab}-table .status`).html(status.status);

@@ -47,6 +47,9 @@ import_url + `/data/natural_points.csv`);
 import_manager.addImport('human_points', 'Human Points CSV', 'csv', 
 import_url + `/data/human_points.csv`);
 
+import_manager.addImport('cultural_points', 'Cultural Points CSV', 'csv', 
+import_url + `/data/cultural_points.csv`);
+
 import_manager.addImport('domain_status', 'Domain Statuses CSV', 'csv', 
 import_url + `/data/domain_status.csv`);
 
@@ -64,8 +67,11 @@ var asset_descriptions;
 var built_points;
 var human_points;
 var natural_points;
+var cultural_points;
 var domain_status;
 var non_study_area;
+
+var groups_and_single_layers = [];
 
 var asset_groups = {};
 
@@ -79,6 +85,7 @@ function importsComplete(imports) {
   built_points = imports['built_points'];
   human_points = imports['human_points'];
   natural_points = imports['natural_points'];
+  cultural_points = imports['cultural_points'];
   asset_descriptions = imports['asset_descriptions'];
   domain_status = imports['domain_status'];
 
@@ -104,7 +111,7 @@ function importsComplete(imports) {
         } else if (d.domain == 'human') {
           points = human_points.filter(f => f.asset_tag == d.asset_tag);
         } else if (d.domain == 'cultural') {
-          throw "[ERR] Cultural Points aren't yet loaded in load_data.js!";
+          points = cultural_points.filter(f => f.asset_tag == d.asset_tag);
         }
       }
 
@@ -148,8 +155,26 @@ function importsComplete(imports) {
       index ++;
     }
   );
+  
 
+  // Collect options, both layers & groups
+  for (var asset_id in assets) {
+      var asset = assets[asset_id];
 
+      if (!asset.group) {
+          // Not in a group, so add
+          groups_and_single_layers.push(asset_id);
+      } else if (!groups_and_single_layers.includes(asset.group)) {
+          // Group is not yet added, so add
+          groups_and_single_layers.push(asset.group);
+      }
+  }
+  // Arrage alphabetically
+  groups_and_single_layers.sort((x, y) => {
+      if (x.toLowerCase() < y.toLowerCase()) {return -1;}
+      if (x.toLowerCase() > y.toLowerCase()) {return 1;}
+      return 0;
+  });
 
   initMap();
 }

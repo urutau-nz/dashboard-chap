@@ -18,34 +18,90 @@ function initPageReports() {
     report_domain_dropdown = new vlDropDown("report-domain-dropdown");
     report_domain_dropdown.populate([["any", "All Domains"], ["built", "Built Domain"], ["human", "Social Domain"], ["cultural", "Cultural Domain"], ["natural", "Natural Domain"]]);
     report_domain_dropdown.setOnChange(filterReportResults);
+    
+
 
     // Create results list
     var contents = '';
-    for (var asset_id in assets) {
-        var asset = assets[asset_id];
+    for (var asset_id of groups_and_single_layers) {
 
-        var domain = capitalize(asset.domain);
-        var shape = '';
-        if (asset.type == 'point') { shape = 'Pointer';
-        } else if (asset.type == 'polygon') { shape = 'Shape';
-        } else if (asset.type == 'polyline') { shape = 'Line';
+        var is_group = Object.keys(asset_groups).includes(asset_id);
+
+        if (!is_group) {
+            // Individual asset to add
+            var asset = assets[asset_id];
+    
+            var domain = capitalize(asset.domain);
+            var shape = '';
+            if (asset.type == 'point') { shape = 'Pointer';
+            } else if (asset.type == 'polygon') { shape = 'Shape';
+            } else if (asset.type == 'polyline') { shape = 'Line';
+            }
+    
+            contents += `<tr id="asset-result-${asset_id}"><td style="width:100%;">
+                <table class="report-result result" onclick="openAssetReport('${asset_id}')">
+                    <tr>
+                        <td class="domain-td">
+                            <img src="icons/${domain}-Tab-Blue.svg" />
+                        </td>
+                        <td class="result-text">
+                            ${asset.display_name}
+                        </td>
+                        <td class="type-td">
+                        <img src="icons/Map-${shape}-Blue.svg" />
+                        </td>
+                    </tr>
+                </table>
+            </td></tr>`;
+        } else {
+            // A group to add
+
+            var group_contents = ``;
+            for (var inner_asset_id of asset_groups[asset_id]) {
+                var inner_asset = assets[inner_asset_id];
+                var domain = capitalize(inner_asset.domain);
+                
+                var shape = '';
+                if (inner_asset.type == 'point') { shape = 'Pointer';
+                } else if (inner_asset.type == 'polygon') { shape = 'Shape';
+                } else if (inner_asset.type == 'polyline') { shape = 'Line';
+                }
+
+                group_contents += `
+                <table class="report-result result" onclick="openAssetReport('${inner_asset_id}')">
+                    <tr>
+                        <td class="domain-td">
+                            <img src="icons/${domain}-Tab-Blue.svg" />
+                        </td>
+                        <td class="result-text">
+                            ${inner_asset.display_name}
+                        </td>
+                        <td class="type-td">
+                        <img src="icons/Map-${shape}-Blue.svg" />
+                        </td>
+                    </tr>
+                </table>`;
+            }
+            
+
+            contents += `<tr class="result-group-tr" data-value="${asset_id}"><td style="width:100%;" class="result-group" data-value="${asset_id}">
+                <div class="report-result-group">
+                    <table class="report-result group-header" onclick="toggleAssetReportGroup('${asset_id}')">
+                        <tr>
+                            <td class="result-text">
+                                <span class="text-span">${asset_id}</span>
+                                <div class="dropdown-arrow">
+                                    <img src="icons/Down-Arrow-Green.svg">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="group-contents">
+                        ${group_contents}
+                    </div>
+                </td></tr>`;
+
         }
-
-        contents += `<tr id="asset-result-${asset_id}"><td style="width:100%;" class="result" onclick="openAssetReport('${asset_id}')">
-            <table style="width: 100%;table-layout: fixed;">
-                <tr>
-                    <td style="width: 55px;padding: 5px;">
-                        <img src="icons/${domain}-Tab-Blue.svg" style="height: 45px;width: 45px;" />
-                    </td>
-                    <td class="result-text">
-                        ${asset.display_name}
-                    </td>
-                    <td style="width: 20px; border-left: 2px solid #eef5f9; padding: 17.5px;">
-                    <img src="icons/Map-${shape}-Blue.svg" style="height: 20px;width: 20px;" />
-                    </td>
-                </tr>
-            </table>
-        </td></tr>`;
     }
     $("#report-menu-results-table").html(`${contents}`)
 
@@ -129,25 +185,43 @@ function closePageReports() {
 }
 
 
+
+function toggleAssetReportGroup(group_name) {
+    $(`#report-menu-results-table .result-group[data-value="${group_name}"]`).toggleClass('active');
+}
+
 function filterReportResults() {
     var search_term = $("#report-searchbar").val().toLowerCase();
     var domain = report_domain_dropdown.value.toLowerCase();
     console.log(domain, search_term);
 
     
-    for (var asset_id in assets) {
-        var asset = assets[asset_id];
+    for (var asset_id of groups_and_single_layers) {
+        var is_group = Object.keys(asset_groups).includes(asset_id);
+
+
+        if (is_group) {
+            var asset = assets[asset_groups[asset_id][0]];
+            var matching_value = asset_id;
+            var list_item = $(`#report-menu-results-table .result-group-tr[data-value="${asset_id}"]`);
+            var text_item = list_item.find(".group-header .result-text .text-span");
+        } else {
+            var asset = assets[asset_id];
+            var matching_value = asset.display_name;
+            var list_item = $("#asset-result-" + asset_id);
+            var text_item = list_item.find(".result-text");
+        }
 
         // Hide if not matching criteria
-        $("#asset-result-" + asset_id).css("display", "none");
-        if (search_term.length == 0 || asset.display_name.toLowerCase().includes(search_term)) {
+        list_item.css("display", "none");
+        if (search_term.length == 0 || matching_value.toLowerCase().includes(search_term)) {
             if (domain == 'any' || asset.domain.toLowerCase() == domain) {
                 // Matches Criteria! Show it
-                $("#asset-result-" + asset_id).css("display", "");
+                list_item.css("display", "");
                 
                 // If there's a search term, highlight matching text
                 var result_text = "";
-                var dn = asset.display_name;
+                var dn = matching_value;
                 if (search_term.length > 0) {
                     var term_index = dn.toLowerCase().indexOf(search_term);
                     result_text += dn.slice(0, term_index);
@@ -155,10 +229,10 @@ function filterReportResults() {
                     result_text += dn.slice(term_index, term_index + search_term.length);
                     result_text += '</span>';
                     result_text += dn.slice(term_index + search_term.length);
-                } else { 
-                    result_text = asset.display_name;
+                } else {
+                    result_text = matching_value;
                 }
-                $("#asset-result-" + asset_id + " .result-text").html(result_text);
+                text_item.html(result_text);
             }
         }
 
@@ -198,9 +272,10 @@ function reportMapOnMouseOver(hover_element, target, properties) {
     var instance = report_relevant_instances.filter(d => d.asset_id == properties.asset_id)[0];
     var asset = report_asset_selected;
     
-    var exposure_text = 'No Data';
+    var exposure_text = 'Asset Not Exposed';
     var icon_top = '';
     var icon_bottom = '';
+    var description = '';
     if (instance) {
         // If we have instance data for this instance...
         exposure_text = `${instance.exposure}cm of Exposure`;
@@ -224,7 +299,16 @@ function reportMapOnMouseOver(hover_element, target, properties) {
         } else if (instance.show_erosion_icon == "True") {
             // Always bottom
             icon_bottom = `<img src="icons/Erosion-Grey.svg">`;
-            
+        }
+
+        // Add description 
+        if (instance.hover_comment) {
+            description = `
+            <tr>
+                <td class="description-td">
+                    ${instance.hover_comment}
+                </td>
+            </tr>`;
         }
     }
 
@@ -243,6 +327,7 @@ function reportMapOnMouseOver(hover_element, target, properties) {
                 ${exposure_text}
             </td>
         </tr>
+        ${description}
     </table>
     <div class="other-hazards-div">
         <div>${icon_top}</div>
@@ -255,16 +340,18 @@ function reportAssetInstanceColor(instance) {
     // Colors individual asset instances by their instance data
     if (instance) {
         // Determine color by vulnerability (in future! TODO)
-        if (instance.exposure > 150) {
+        if (instance.vulnerability == "high") {
             var color = "#c94040"; // RED
-        } else if (instance.exposure > 0) {
+        } else if (instance.vulnerability == "medium") {
             var color = "#db7900"; // ORANGE
-        } else {
+        } else if (instance.vulnerability == "low") {
             var color = "#32b888"; // GREEN
+        } else {
+            var color = "#666"; // GREY - unknown vulnerability
         }
     } else {
         // There's no instance data for this instance.
-            var color = "#32b888"; // GREEN
+            var color = "#BBB"; // DARK GREY - no provided value
     }
     return color;
 }
@@ -325,10 +412,13 @@ function openAssetReport(asset_id) {
 
     
     // Edit Vulnerability Graphs
-    //var max_value = sum of all
-    //report_vulnerability_graphs[0].value = 611;
+    report_vulnerability_graphs[0].max_value = 1;
+    report_vulnerability_graphs[1].max_value = 1;
+    report_vulnerability_graphs[2].max_value = 1;
+    report_vulnerability_graphs[0].value = 0;
+    report_vulnerability_graphs[1].value = 0;
+    report_vulnerability_graphs[2].value = 0;
     report_vulnerability_graphs[0].graph();
-    //report_vulnerability_graphs[0].value = 611;
     report_vulnerability_graphs[1].graph();
     report_vulnerability_graphs[2].graph();
 
@@ -363,6 +453,43 @@ function openAssetReport(asset_id) {
         
         report_relevant_instances = instances.filter(d => d.hazard_scenario == hazard_scenario && d.hazard_type == current_hazard);
         
+        // Update the vulnerability graphs to these instances
+        var max_value = 0;
+        var low_count = 0;
+        var med_count = 0;
+        var high_count = 0;
+        var has_data = true;
+        for (var instance of report_relevant_instances) {
+            if (instance.vulnerability == 0) {
+                has_data = false;
+
+            } else if (instance.vulnerability == 'low') {
+                max_value += 1;
+                low_count += 1;
+
+            } else if (instance.vulnerability == 'medium') {
+                max_value += 1;
+                med_count += 1;
+
+            } else if (instance.vulnerability == 'high') {
+                max_value += 1;
+                high_count += 1;
+
+            }
+        }
+        if (has_data) {
+            report_vulnerability_graphs[0].max_value = max_value;
+            report_vulnerability_graphs[1].max_value = max_value;
+            report_vulnerability_graphs[2].max_value = max_value;
+            report_vulnerability_graphs[0].value = low_count;
+            report_vulnerability_graphs[1].value = med_count;
+            report_vulnerability_graphs[2].value = high_count;
+            report_vulnerability_graphs[0].graph();
+            report_vulnerability_graphs[1].graph();
+            report_vulnerability_graphs[2].graph();
+        }
+
+
         // Hide Loading in a bit
         setTimeout(hideLoading, 500);
 
@@ -373,7 +500,8 @@ function openAssetReport(asset_id) {
                 {
                     hover: true,
                     hover_style: { radius: 12, weight: 8 },
-                    onmouseover: reportMapOnMouseOver
+                    onmouseover: reportMapOnMouseOver,
+                    filter: function(feature) { console.log(feature); return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; }
                 });
 
         } else {
@@ -382,7 +510,6 @@ function openAssetReport(asset_id) {
             if (report_asset_selected.type == "polygon") { var relevant_style = {weight: 2.5};
             } else if (report_asset_selected.type == "polyline") { var relevant_style = {weight: 6}
             }
-            console.log(report_asset_selected, relevant_style);
 
             // Load Map Layer
             report_map_asset_layer = report_map.loadTopoLayer(report_asset_selected.file_name, (report_asset_selected.type == 'polygon' ? reportMapTopoPolygonStyle : reportMapTopoPolylineStyle), 
@@ -390,7 +517,8 @@ function openAssetReport(asset_id) {
                     hover: true,
                     hover_style: { opacity: 1, weight: relevant_style.weight * 1.4, fillOpacity: 0.5},
                     not_hover_style: { opacity: 0.4, weight: relevant_style.weight * 0.6, fillOpacity: 0.1},
-                    onmouseover: reportMapOnMouseOver
+                    onmouseover: reportMapOnMouseOver,
+                    filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; }
                 });
         }
         
