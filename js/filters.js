@@ -21,7 +21,7 @@ var hazard_popup = new vlPopup('Hazard Settings', `
 <tr>
     <td colspan="3">
         <div id="hazard-dropdown"></div>
-        <div style="font-style:italic;font-size: 0.8em;">This is a description for a hazard, if that is needed.</div>
+        <div id="hazard-description" style="font-style:italic;font-size: 0.8em;">This is a description for a hazard, if that is needed.</div>
     </td>
 </tr>
 <tr>
@@ -270,6 +270,13 @@ function updateSLRPointers(value) {
 function onHazardValuesChanged() {
     // Triggered by changing hazard form items, before the changes are applied
     $('#hazard-popup-apply-button').addClass('active');
+
+    // Set hazard description
+    var haz_desc = "";
+    if (getHazard() == "groundwater" && getSLR() == 2.4) {
+        haz_desc = "Note: This extent has only been completed for Sumner to Kaiapoi";
+    }
+    $('#hazard-description').text(haz_desc);
 }
 
 function updateHazard() {
