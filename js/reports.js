@@ -23,6 +23,7 @@ function initPageReports() {
 
     // Create results list
     var contents = '';
+    var last_is_group = false;
     for (var asset_id of groups_and_single_layers) {
 
         var is_group = Object.keys(asset_groups).includes(asset_id);
@@ -57,6 +58,7 @@ function initPageReports() {
             // A group to add
 
             var group_contents = ``;
+            var contents_summary = '';
             for (var inner_asset_id of asset_groups[asset_id]) {
                 var inner_asset = assets[inner_asset_id];
                 var domain = capitalize(inner_asset.domain);
@@ -81,7 +83,19 @@ function initPageReports() {
                         </td>
                     </tr>
                 </table>`;
+
+                if (contents_summary.length < 60) {
+                    if (contents_summary.length > 0) contents_summary += ', ';
+                    var name = inner_asset.display_name;
+                    if (contents_summary.length + name.length >= 60) {
+                        name = name.slice(0, 60 - contents_summary.length) + '...';
+                    }
+                    contents_summary += name;
+                } else if (!contents_summary.endsWith('...')) {
+                    contents_summary += ', ...';
+                }
             }
+            contents_summary = '&#9495;&nbsp;&nbsp;' + contents_summary;
             
 
             contents += `<tr class="result-group-tr" data-value="${asset_id}"><td style="width:100%;" class="result-group" data-value="${asset_id}">
@@ -95,6 +109,11 @@ function initPageReports() {
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                            <td class="result-group-summary">
+                                ${contents_summary}
+                            </td>
+                        </tr>
                     </table>
                     <div class="group-contents">
                         ${group_contents}
@@ -102,6 +121,8 @@ function initPageReports() {
                 </td></tr>`;
 
         }
+
+        last_is_group = is_group;
     }
     $("#report-menu-results-table").html(`${contents}`)
 

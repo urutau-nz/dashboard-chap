@@ -791,6 +791,9 @@
           <div style="height:2rem;width:100%;overflow:none;">
             <a href="https://urbanintelligence.co.nz/" target="_blank"><img src="https://projects.urbanintelligence.co.nz/uivl/lib/Solo-Mark-Small-White-32px.png"></img></a>
             <div class="attribution">© 2022 Urban Intelligence.</div>
+            <div class="contact-text">
+              If you have questions or suggestions, you can contact us <a href="mailto:ruby.clark@ccc.govt.nz?subject=Christchurch Coastal Risk Explorer Query: ...">here.</a>
+            </div>
             <div style="position: absolute; top: 0; right: 0; float:right;">
               <a href="https://www.canterbury.ac.nz/engineering/schools/cnre/research/systems/" target="_blank"><img style="width: 9rem" src="https://www.canterbury.ac.nz/style-guide/logos/logo-tabs/svg/UC_White_LAN_White.svg"></img></a>
             </div>
