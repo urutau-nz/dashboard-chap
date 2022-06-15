@@ -579,7 +579,11 @@ function mapMapOnMouseOver(hover_element, target, properties) {
     var description = '';
     if (instance) {
         // If we have instance data for this instance...
-        exposure_text = `${instance.exposure}cm of Exposure`;
+        if (getHazard() == 'erosion') {
+            exposure_text = `${instance.exposure}% Likelihood of Exposure`;
+        } else {
+            exposure_text = `${instance.exposure}cm of Exposure`;
+        }
         
         if (instance.show_inundation_icon == "True") {
             // Always top
