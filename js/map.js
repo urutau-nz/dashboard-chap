@@ -424,7 +424,7 @@ function addLayerToMap(asset_id) {
             <img draggable="false" src="icons/Drag-Handle-Grey.svg"/>
           </td>-->
           <td class="icon-td">
-            <img class="layer-icon" src="icons/${domain}-Tab-Grey.svg"/>
+            <img class="layer-icon" src="icons/${domain}-Tab-Grey.png"/>
           </td>
           <td class="name-td">
             ${asset.display_name}

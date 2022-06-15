@@ -359,7 +359,8 @@ function updateMapHazard(relevant_map) {
         relevant_map.addImageLayer(url, 
             target_hazard.ne_lat , target_hazard.ne_lon,
             target_hazard.sw_lat , target_hazard.sw_lon, {
-                layer_id: 'hazard-layer'
+                layer_id: 'hazard-layer',
+                opacity: (getHazard() == 'groundwater' ? 0.8 : 0.9)
             });
 
             /*

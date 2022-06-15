@@ -534,7 +534,7 @@ div.intro_tour .introjs-button {
   background-color: #b5c7d5;
   color: #316076;
   text-align: center;
-  font-size: 1.6em;
+  font-size: 1.4rem;
   height: 20%;
   position: relative;
   right: 1rem;
@@ -587,9 +587,8 @@ div.intro_tour .introjs-button {
   display: none;
 }
 #overview-menu-table td img {
-  height: 80px;
-  width: 80px;
-  opacity: 0.9;
+  height: auto;
+  width: 90px;
 }
 
 
@@ -605,22 +604,22 @@ div.intro_tour .introjs-button {
 
 #loading-popup {
   position: absolute;
-  bottom: 1rem;
-  right: 2rem;
+  top: 50%;
+  left: 50%;
   background-color: #333;
   padding: 8px;
   border-radius: 6rem;
   z-index: 5000000000;
-  width: 40px;
-  height: 40px;
+  width: 120px;
+  height: 120px;
   box-shadow: 0.2rem 0 0.5rem #0005;
-  transform: scaleY(1);
+  transform: scaleY(1) translate(-68px, 0px);
   transition: transform 0.1s ease-in-out;
   overflow: hidden;
 }
 #loading-popup img {
-  height: 40px;
-  width: 40px;
+  height: 120px;
+  width: 120px;
   position: absolute;
   top: 8px;
   left: 8px;
@@ -1482,14 +1481,21 @@ html .vl-popup-div h1 {
   height: 100%;
 }
 #map-layer-overlay .map-layer-item .icon-td {
-  padding-left: 16px;
+  padding-left: 8px;
   width: 38px;
   padding-top: 1px;
+  padding-right: 5px;
 }
 #map-layer-overlay .map-layer-item .layer-icon {
-  width: 25px;
+  width: 40px;
   height: auto;
-  margin: auto;
+}
+#map-layer-item-info.map-layer-item .layer-icon {
+  width: 25px;
+}
+#map-layer-item-info.map-layer-item .icon-td {
+  padding-right: 0;
+  padding-left: 16px;
 }
 #map-layer-overlay .map-layer-item .handle-td {
   padding: 6px;
@@ -1623,8 +1629,8 @@ html .vl-popup-div h1 {
 #new-layer-domain-div>div {
   border-radius: 20px;
   background-color: #BBB;
-  padding: 10px;
-  width: 60px;
+  padding: 4px;
+  width: 70px;
   box-shadow: 2px 2px 2px #07192270, -1px -1px 1px #4441, inset 2px 2px 2px #fff, inset -1px -1px 2px #335c5b44;
   cursor: pointer;
   transition: box-shadow 0.02s ease-in-out;
@@ -1635,7 +1641,7 @@ html .vl-popup-div h1 {
 #new-layer-domain-div>div>img {
   width: 100%;
   height: auto;
-  opacity: 0.8;
+  opacity: 0.9;
   transition: opacity 0.05s ease-in-out;
 }
 #new-layer-domain-div>div.active>img {
@@ -2114,12 +2120,12 @@ body .vl-map-tooltip .other-hazards-div img {
   table-layout: fixed;
 }
 .report-result .domain-td {
-  width: 35px;
-  padding: 5px;
+  width: 45px;
+  padding: 0;
 }
 .report-result .domain-td img {
   height: auto;
-  width: 30px;
+  width: 40px;
 }
 .report-result .type-td {
   width: 20px;

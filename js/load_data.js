@@ -191,7 +191,7 @@ var domain_titles = {'built': 'Built Domain',
 };
 
 var centroids = {
-  "All Regions": {lat: -43.5025469, lng: 172.6798971},
+  "All Adaptation Areas": {lat: -43.5025469, lng: 172.6798971},
   "Akaroa Wairewa": {lat: -43.76843673, lng: 172.8636687},
   "Open Coast": {lat: -43.50655657, lng: 172.7235934},
   "Styx": {lat: -43.44038741, lng: 172.676245},
@@ -201,7 +201,7 @@ var centroids = {
   "Lyttelton-Mt Herbert": {lat: -43.64895336, lng: 172.7456975}
 };
 
-var region_ids = {'All Regions': 'all',
+var region_ids = {'All Adaptation Areas': 'all',
   'Styx' : 'styx' ,
   'Avon': 'avon',
   'Open Coast': 'open_coast',

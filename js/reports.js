@@ -42,7 +42,7 @@ function initPageReports() {
                 <table class="report-result result" onclick="openAssetReport('${asset_id}')">
                     <tr>
                         <td class="domain-td">
-                            <img src="icons/${domain}-Tab-Blue.svg" />
+                            <img src="icons/${domain}-Tab.png" />
                         </td>
                         <td class="result-text">
                             ${asset.display_name}
@@ -71,7 +71,7 @@ function initPageReports() {
                 <table class="report-result result" onclick="openAssetReport('${inner_asset_id}')">
                     <tr>
                         <td class="domain-td">
-                            <img src="icons/${domain}-Tab-Blue.svg" />
+                            <img src="icons/${domain}-Tab.png" />
                         </td>
                         <td class="result-text">
                             ${inner_asset.display_name}
@@ -157,7 +157,6 @@ function initPageReports() {
     report_exposure_graph.margin_left(35);
     report_exposure_graph.margin_bottom(50);
     report_exposure_graph.font_size(13);
-    report_exposure_graph.x_suffix('cm');
     report_exposure_graph.y_suffix(" Unit");
     report_exposure_graph.colors(['#51daed']);
     report_exposure_graph.x_ticks(7);
@@ -437,6 +436,7 @@ function openAssetReport(asset_id) {
             report_exposure_graph.y_axis_label(d[0].ylabel);
             report_exposure_graph.x_axis_label(d[0].xlabel);
             report_exposure_graph.y_suffix(d[0].unit);
+            report_exposure_graph.x_suffix((getHazard() == 'erosion' ? '% Likelihood' : 'cm'));
         }
         report_exposure_graph.colors(['#61a1d6']);
         report_exposure_graph.areaGraph();
@@ -528,7 +528,7 @@ function openAssetReport(asset_id) {
 
 
     // Fill in report text
-    var report = asset_descriptions.filter(d => d.asset_tag == asset_id)[0];
+    var report = asset_descriptions.filter(d => d.asset_tag == asset_id && d.hazard_type == getHazard())[0];
 
     if (report) {
         $("#report-exposure-text1").html(report.exposure_text_1);

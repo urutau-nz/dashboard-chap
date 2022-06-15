@@ -483,35 +483,35 @@
                 <table id="overview-menu-table">
                   <tr>
                     <td id="overview-menu-overview-td" onclick="setOverviewTab('overview')" class="active">
-                      Overview
+                      Overview<br>
                       <img src="icons/Overview-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
                     <td id="overview-menu-built-td" onclick="setOverviewTab('built')" >
-                      Built<br>Domain
+                      Built<br>
                       <img src="icons/Built-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
                     <td id="overview-menu-natural-td" onclick="setOverviewTab('natural')">
-                      Natural Domain
+                      Natural<br>
                       <img src="icons/Natural-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
                     <td id="overview-menu-cultural-td" onclick="setOverviewTab('cultural')">
-                      Cultural Domain
+                      Cultural<br>
                       <img src="icons/Cultural-Tab.png">
                       <div class="shadow"></div>
                     </td>
                   </tr>
                   <tr>
                     <td id="overview-menu-human-td" onclick="setOverviewTab('human')">
-                      Social Domain
+                      Social<br>
                       <img src="icons/Human-Tab.png">
                       <div class="shadow"></div>
                     </td>
@@ -573,7 +573,7 @@
                           </tr>
                           <tr>
                             <td class="exposure-section">
-                              <table>
+                              <table style="width: 100%">
                                 <tr>
                                   <td class="exposure-graph-td">
                                     <div id="report-exposure-graph"></div>
@@ -597,7 +597,7 @@
                           </tr>
                           <tr>
                             <td class="vulnerability-section">
-                              <table>
+                              <table style="width: 100%">
                                 <tr>
                                   <td class="vulnerability-title-td" colspan="2">
                                     <h1><div>ASSET&nbsp;</div><div style="font-weight: 700;">VULNERABILITY</div></h1> 
@@ -644,7 +644,7 @@
                           </tr>
                           <tr>
                             <td class="uncertainty-section">
-                              <table>
+                              <table style="width: 100%">
                                 <tr>
                                   <td class="vulnerability-title-td">
                                     <h1><div>UNCERTAINTY&nbsp;</div><div style="font-weight: 700;">ASSESSMENT</div></h1> 
@@ -672,7 +672,7 @@
                           </tr>
                           <tr>
                             <td class="data-source-section">
-                              <table>
+                              <table style="width: 100%">
                                 <tr>
                                   <td class="vulnerability-title-td">
                                     <h1><div>DATA SOURCE&nbsp;</div><div style="font-weight: 700;">AND METHODS</div></h1> 

@@ -40,6 +40,8 @@ function setPage(page) {
 
         current_page = page;
 
+        
+        updateHazard();
     }
 }
 
@@ -84,15 +86,15 @@ var loadingIconVisibleCount = 1;
 function showLoading() {
     loadingIconVisibleCount += 1;
     $("#loading-popup").css("display", "block");
-    $("#loading-popup").css("transform", "scaleY(0)");
+    $("#loading-popup").css("transform", "scaleY(0) translate(-68px, -136px)");
     setTimeout(function () {
-        $("#loading-popup").css("transform", "scaleY(1)");
+        $("#loading-popup").css("transform", "scaleY(1) translate(-68px, 0px)");
     }, 20);
 }
 function hideLoading() {
     loadingIconVisibleCount -= 1;
     if (loadingIconVisibleCount == 0) {
-        $("#loading-popup").css("transform", "scaleY(0)");
+        $("#loading-popup").css("transform", "scaleY(0) translate(-68px, -136px)");
         loadingIconVisible = false;
         setTimeout(function () {
             if (loadingIconVisibleCount == 0) {
@@ -184,7 +186,7 @@ function initializeRegionDropdown(region_dropdown, given_map) {
     for (var region_name in region_ids) {
         region_dropdown.push(region_name);
     }
-    region_dropdown.setValue('All Regions');
+    region_dropdown.setValue('All Adaptation Areas');
 
     // Set Onchange
     region_dropdown.onChange(function (value) {
@@ -192,7 +194,7 @@ function initializeRegionDropdown(region_dropdown, given_map) {
         
         // Filter areas by current region
         given_map.applySettings("regions", {
-            filter: function(feature) { return feature.properties.Area != value && value != "All Regions"; }
+            filter: function(feature) { return feature.properties.Area != value && value != "All Adaptation Areas"; }
         });
         /*given_map.applySettings("regions_heightlight", {
             filter: function(feature) { return feature.properties.Area == value && value != "All Regions"; }
