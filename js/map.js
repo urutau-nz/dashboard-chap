@@ -9,6 +9,8 @@ var map_asset_layers = {}; // Layer ids by asset_id
 var map_info_asset = null;
 var map_info_layer = null;
 
+var map_hover_info_type = 'asset'; // asset or informative
+
 
 var map_new_layer_popup = new vlPopup('Add a New Layer', `
 <table class="parent-table">
@@ -79,8 +81,8 @@ function initPageMap() {
     
     // Create Map Map
     map_map = new vlMap('map-map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
-    map_map.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                            {"attributionControl": false, "detectRetina": false, "minZoom": 4,
+    map_map.basemap('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
+                            {"detectRetina": false, "minZoom": 4,
                             "noWrap": false, "subdomains": "abc"});
     
     map_map.createPane('labels', 650);
@@ -102,15 +104,7 @@ function initPageMap() {
     
     // Create map Legends
     addLegendsToMap(map_map);
-    map_map.addLegend("Social Deprivation Index", [
-        ["1 SDI", "#ffffff"],
-        ["|", ""],
-        ["10 SDI", "#e38ffdBB"]
-    ], {
-        legend_id: "social_deprivation",
-        visible: false,
-        linear: true
-    });
+    addInfoLegendsToMap(map_map);
 
     // Create Region dropdown
     map_region_dropdown = new vlDropDown("map-region-dropdown");
@@ -119,6 +113,9 @@ function initPageMap() {
     // Populate New Layer & Info Layer Popups
     populateNewLayerPopup("Built");
     populateInfoLayerPopup();
+
+    // Basemap init
+    initializeBasemapSwitch('page-map', map_map);
 }
 
 function openPageMap() {
@@ -348,7 +345,9 @@ function setInfoLayer(asset_id) {
         // Load Map Layer
         map_info_layer = map_map.loadTopoLayer(asset.file_name, mapMapInfoLayerStyle, 
             {
-                hover: false
+                hover: map_hover_info_type == "informative",
+                onmouseover: mapInformativeOnMouseOver,
+                filter: function (d) {return d.properties.region == getCurrentRegion() || getCurrentRegionId() == 'all'}
             });
         
         map_map.moveLayerToBack(map_info_layer);
@@ -429,6 +428,12 @@ function addLayerToMap(asset_id) {
           <td class="name-td">
             ${asset.display_name}
           </td>
+          <td class="mouse-info-td ${map_hover_info_type == 'asset' ? '' : 'hide'}">
+            <img class="layer-button" onclick="switchHoverInfo()" src="icons/Mouse-Info-Grey.svg">
+          </td>
+          <td class="no-mouse-info-td ${map_hover_info_type != 'asset' ? '' : 'hide'}">
+            <img class="layer-button" onclick="switchHoverInfo()" src="icons/No-Mouse-Info-Grey.svg">
+          </td>
           <td class="eye-td">
             <img class="layer-button" onclick="hideLayerFromMap('${asset_id}')" src="icons/Eye-Open-Grey.svg"/>
           </td>
@@ -463,7 +468,7 @@ function addLayerToMap(asset_id) {
                 // Load Map Layer
                 map_asset_layers[asset_id] = map_map.addMarkerLayer(asset.points, mapMapMarkerStyle, "lat", "lon",
                     {
-                        hover: true,
+                        hover: map_hover_info_type == "asset",
                         hover_style: { radius: 12, weight: 8 },
                         onmouseover: mapMapOnMouseOver,
                         filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; },
@@ -484,7 +489,7 @@ function addLayerToMap(asset_id) {
                 // Load Map Layer
                 map_asset_layers[asset_id] = map_map.loadTopoLayer(asset.file_name, (asset.type == 'polygon' ? mapMapTopoPolygonStyle : mapMapTopoPolylineStyle), 
                     {
-                        hover: true,
+                        hover: map_hover_info_type == "asset",
                         hover_style: { opacity: 1, weight: relevant_style.weight * 1.4, fillOpacity: 0.5},
                         //not_hover_style: { opacity: 0.4, weight: relevant_style.weight * 0.6, fillOpacity: 0.1},
                         onmouseover: mapMapOnMouseOver,
@@ -529,7 +534,6 @@ function updateMapLayer(asset_id) {
 }
 
 function mapMapInfoLayerStyle(feature) {
-    //var colors = ["#ffffff", "#fcecff", "#f8d8ff", "#f3c4ff", "#eeb0ff", "#e89cff", "#e187ff", "#da71ff", "#d259ff", "#c93cff", "#c000ff"];
     var colors = ["#ffffff", "#fdf4ff", "#fbe9ff", "#f9deff", "#f6d3ff", "#f3c8ff", "#f1bdfe", "#edb2fe", "#eaa6fe", "#e79bfd", "#e38ffd"];
     var color = colors[feature.properties.value]; // VALUE is 0-10
     if (!color) console.log(feature.properties)
@@ -677,4 +681,90 @@ function openInfoLayerPopup() {
 }
 
 
+function switchHoverInfo() {
+    // Swaps between onhover showing asset information, and informative layer information
+    if (map_hover_info_type == "asset") {
+        map_hover_info_type = "informative";
 
+        for (var asset_id in map_asset_layers) {
+            var layer_id = map_asset_layers[asset_id];
+
+            map_map.applySettings(layer_id, {hover: false});
+        }
+
+        map_map.applySettings(map_info_layer, {hover: true});
+
+    } else if (map_hover_info_type == "informative") {
+        map_hover_info_type = "asset";
+
+        for (var asset_id in map_asset_layers) {
+            var layer_id = map_asset_layers[asset_id];
+
+            map_map.applySettings(layer_id, {hover: true});
+        }
+
+        map_map.applySettings(map_info_layer, {hover: false});
+
+    }
+        
+    // Switch the mouse info icon
+    $(`.mouse-info-td`).toggleClass('hide');
+    $(`.no-mouse-info-td`).toggleClass('hide');
+}
+
+
+function mapInformativeOnMouseOver(hover_element, target, properties) {
+
+    var description = '';
+    var exposure_text = '';
+
+    exposure_text = properties.value;
+    
+    hover_element.html(`
+    <div class="vulnerability-highlight" style="background-color:#c573fd"></div>
+    <table>
+        <tr>
+            <td class="header-td">
+                <b>${map_info_asset.display_name}&nbsp;&nbsp;</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ${exposure_text}
+            </td>
+        </tr>
+        ${description}
+    </table>
+    `);
+}
+
+
+function addInfoLegendsToMap(given_map) {
+    given_map.addLegend("Social Deprivation Index (2018)", [
+        ["1 SDI", "#ffffff"],
+        ["|", ""],
+        ["10 SDI", "#e38ffdBB"]
+    ], {
+        legend_id: "social_deprivation",
+        visible: false,
+        linear: true
+    });
+    given_map.addLegend("Sites of Cultural Significance (District Plan)", [
+        ["Area", "#32b888"]
+    ], {
+        legend_id: "cultural_significance",
+        visible: false
+    });
+    given_map.addLegend("Sites of Ecological Significance (District Plan)", [
+        ["Area", "#32b888"]
+    ], {
+        legend_id: "Ecological_significance",
+        visible: false
+    });
+    given_map.addLegend("Risk of Liquefaction", [
+        ["Area", "#32b888"]
+    ], {
+        legend_id: "Ecological_significance",
+        visible: false
+    });
+}

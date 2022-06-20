@@ -1,8 +1,21 @@
 
 var current_overview_tab; // The current tab, 'overview' or a domain
 
-function initPageOverview() {
+var overview_collapsables = [];
 
+function initPageOverview() {
+    var index = 1;
+    while(true) {
+        if ($(`#overview-collapse-${index}`).length == 0) {
+            break;
+        } 
+        var collapser = new vlCollapsing('overview-collapse-' + index, 'overview-collapsing-'+index);
+        if (!$(`#overview-collapse-${index}`).hasClass('summary')) {
+            collapser.collapse();
+        }
+        overview_collapsables.push(collapser);
+        index += 1;
+    }
 }
 function openPageOverview() {
     if (!current_overview_tab) {
@@ -56,11 +69,9 @@ function setOverviewTab(tab) {
         $(".overview-report-table").removeClass('active');
         $(`#overview-${tab}-table`).addClass('active');
 
-        // Update Domain Status
-        var status = domain_status.filter(d => d.domain == tab || (d.domain == 'social' && tab == 'human'))[0];
-        if (status) {
-            $(`#overview-${tab}-table .last-updated`).html(status.updated_date);
-            $(`#overview-${tab}-table .status`).html(status.status);
+        // Reset collapsing boxes
+        for (var collapsable of overview_collapsables) {
+            collapsable.reset();
         }
     }
 }

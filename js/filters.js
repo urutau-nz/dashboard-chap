@@ -429,6 +429,13 @@ function getHazardScenarioPng() {
     return null;
 }
 
+function getCurrentRegion() {
+    if (current_page == "reports") {
+        return report_region_dropdown.value;
+    } else if (current_page == "map") {
+        return map_region_dropdown.value;
+    }
+}
 
 function getCurrentRegionId() {
     if (current_page == "reports") {

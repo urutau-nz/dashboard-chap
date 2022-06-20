@@ -131,8 +131,8 @@ function initPageReports() {
 
     // Create Report Map
     report_map = new vlMap('reports-map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
-    report_map.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                            {"attributionControl": false, "detectRetina": false, "minZoom": 4,
+    report_map.basemap('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
+                            {"detectRetina": false, "minZoom": 4,
                             "noWrap": false, "subdomains": "abc"});
     
     report_map.createPane('labels', 650);
@@ -196,6 +196,8 @@ function initPageReports() {
     report_region_dropdown = new vlDropDown("report-map-region-dropdown");
     initializeRegionDropdown(report_region_dropdown, report_map);
 
+    // Basemap init
+    initializeBasemapSwitch('page-reports', report_map);
 }
 function openPageReports() {
     report_map.invalidateSize();

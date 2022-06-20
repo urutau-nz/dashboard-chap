@@ -50,9 +50,6 @@ import_url + `/data/human_points.csv`);
 import_manager.addImport('cultural_points', 'Cultural Points CSV', 'csv', 
 import_url + `/data/cultural_points.csv`);
 
-import_manager.addImport('domain_status', 'Domain Statuses CSV', 'csv', 
-import_url + `/data/domain_status.csv`);
-
 
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
@@ -68,7 +65,6 @@ var built_points;
 var human_points;
 var natural_points;
 var cultural_points;
-var domain_status;
 var non_study_area;
 
 var groups_and_single_layers = [];
@@ -87,11 +83,14 @@ function importsComplete(imports) {
   natural_points = imports['natural_points'];
   cultural_points = imports['cultural_points'];
   asset_descriptions = imports['asset_descriptions'];
-  domain_status = imports['domain_status'];
 
   asset_info.sort((x, y) => {
-    if (x.display_name < y.display_name) {return -1;}
-    if (x.display_name > y.display_name) {return 1;}
+    if (x.domain == y.domain) {
+      if (x.display_name < y.display_name) {return -1;}
+      if (x.display_name > y.display_name) {return 1;}
+    }
+    if (x.domain < y.domain) {return -1;}
+    if (x.domain > y.domain) {return 1;}
     return 0;
   });
 
@@ -158,7 +157,10 @@ function importsComplete(imports) {
   
 
   // Collect options, both layers & groups
-  for (var asset_id in assets) {
+  for (var asset_item of asset_info) {
+    if (asset_item.domain != "informative") {
+      var asset_id = asset_item.asset_tag;
+
       var asset = assets[asset_id];
 
       if (!asset.group) {
@@ -168,14 +170,9 @@ function importsComplete(imports) {
           // Group is not yet added, so add
           groups_and_single_layers.push(asset.group);
       }
+    }
   }
-  // Arrage alphabetically
-  groups_and_single_layers.sort((x, y) => {
-      if (x.toLowerCase() < y.toLowerCase()) {return -1;}
-      if (x.toLowerCase() > y.toLowerCase()) {return 1;}
-      return 0;
-  });
-
+  
   initMap();
 }
 

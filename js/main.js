@@ -135,8 +135,8 @@ function addLegendsToMap(given_map) {
         visible: false
     });
     given_map.addLegend("Probability of Erosion", [
-        ["5 - 33% &nbsp;(Unlikely)", "#EADACE"],
-        ["33 - 65% &nbsp;(Even)", "#C1A48B"],
+        ["1 - 33% &nbsp;(Unlikely)", "#EADACE"],
+        ["33 - 65%<br>(Likely as not)", "#C1A48B"],
         ["66 - 100% &nbsp;(Likely)", "#8F7565"]
     ], {
         legend_id: "erosion",
@@ -221,4 +221,42 @@ function studyAreaOnMouseOver(hover_element, target, properties) {
         </tr>
     </table>
     `);
+}
+
+
+
+
+function initializeBasemapSwitch(tab_id, given_map) {
+    var basemap_switch = $(`#${tab_id} .basemap-switch-overlay`);
+    basemap_switch.on('click', function () {
+        var front = basemap_switch.find('.mid');
+        basemap_switch.find('.back').removeClass('back').addClass('mid');
+        basemap_switch.find('.front').removeClass('front').addClass('back');
+        front.removeClass('mid').addClass('front');
+
+        if (front.hasClass('normal')) {
+            // Switch to normal basemap
+            given_map.basemap('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
+                {"detectRetina": false, "minZoom": 4,
+                "noWrap": false, "subdomains": "abc"});
+            
+            $(`#${tab_id} .leaflet-labels-pane`).css('visibility', 'visible');
+
+        } else if (front.hasClass('satellite')) {
+            // Switch to satellite basemap
+            given_map.basemap('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community', "detectRetina": false, "minZoom": 4,
+                "noWrap": false, "subdomains": "abc"});
+            
+            $(`#${tab_id} .leaflet-labels-pane`).css('visibility', 'visible');
+            
+        } else if (front.hasClass('contours')) {
+            // Switch to contours basemap
+            given_map.basemap('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+                {attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community', "detectRetina": false, "minZoom": 4,
+                "noWrap": false, "subdomains": "abc"});
+            
+            $(`#${tab_id} .leaflet-labels-pane`).css('visibility', 'hidden');
+        }
+    });
 }
