@@ -50,6 +50,9 @@ import_url + `/data/human_points.csv`);
 import_manager.addImport('cultural_points', 'Cultural Points CSV', 'csv', 
 import_url + `/data/cultural_points.csv`);
 
+import_manager.addImport('consquence_rating', 'Consequence Rating CSV', 'csv', 
+import_url + `/data/subdomain_consequence_rating.csv`);
+
 
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
@@ -66,6 +69,7 @@ var human_points;
 var natural_points;
 var cultural_points;
 var non_study_area;
+var consquence_rating_data;
 
 var groups_and_single_layers = [];
 
@@ -83,6 +87,7 @@ function importsComplete(imports) {
   natural_points = imports['natural_points'];
   cultural_points = imports['cultural_points'];
   asset_descriptions = imports['asset_descriptions'];
+  consquence_rating_data = imports['consquence_rating'];
 
   asset_info.sort((x, y) => {
     if (x.domain == y.domain) {
@@ -188,24 +193,24 @@ var domain_titles = {'built': 'Built Domain',
 };
 
 var centroids = {
-  "All Adaptation Areas": {lat: -43.5025469, lng: 172.6798971},
+  "All Adaptation Areas": {lat: -43.5025469, lng: 172.6798971}, /*
   "Akaroa Wairewa": {lat: -43.76843673, lng: 172.8636687},
   "Open Coast": {lat: -43.50655657, lng: 172.7235934},
   "Styx": {lat: -43.44038741, lng: 172.676245},
   "Avon": {lat: -43.5025469, lng: 172.6798971},
   "Estuary to Sumner": {lat: -43.56595513, lng: 172.7347677},
-  "Heathcote": {lat: -43.55728148, lng: 172.6798259},
+  "Heathcote": {lat: -43.55728148, lng: 172.6798259},*/
   "Lyttelton-Mt Herbert": {lat: -43.64895336, lng: 172.7456975}
 };
 
-var region_ids = {'All Adaptation Areas': 'all',
+var region_ids = {'All Adaptation Areas': 'all', /*
   'Styx' : 'styx' ,
   'Avon': 'avon',
   'Open Coast': 'open_coast',
   'Heathcote': 'heathcote',
-  'Estuary to Sumner' : 'estuary_to_sumner',
-  'Lyttelton-Mt Herbert': 'lyttelton_mt_herbert',
-  'Akaroa Wairewa' : 'akaroa_wairewa'
+  'Akaroa Wairewa' : 'akaroa_wairewa',
+  'Estuary to Sumner' : 'estuary_to_sumner',*/
+  'Lyttelton-Mt Herbert': 'lyttelton_mt_herbert'
 };
 
 var domain_colors = {'built': '#ffb670',

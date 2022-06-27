@@ -186,7 +186,6 @@ function initializeRegionDropdown(region_dropdown, given_map) {
     for (var region_name in region_ids) {
         region_dropdown.push(region_name);
     }
-    region_dropdown.setValue('All Adaptation Areas');
 
     // Set Onchange
     region_dropdown.onChange(function (value) {
@@ -205,6 +204,7 @@ function initializeRegionDropdown(region_dropdown, given_map) {
             openAssetReport(report_asset_selected.id);
         }
     });
+    region_dropdown.setValue('Lyttelton-Mt Herbert');
 }
 
 

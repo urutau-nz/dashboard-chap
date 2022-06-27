@@ -179,7 +179,6 @@ function initPageReports() {
     report_exposure_graph.margin_bottom(50);
     report_exposure_graph.font_size(13);
     report_exposure_graph.y_suffix(" Unit");
-    report_exposure_graph.colors(['#51daed']);
     report_exposure_graph.x_ticks(7);
     report_exposure_graph.line_width(2);
     report_exposure_graph.y_tick_size(1);
@@ -587,4 +586,13 @@ function closeAssetReport() {
 
     // Hide legend
     report_map.hideLegend('vulnerability');
+}
+
+
+
+function openReport(asset_id) {
+    // Opens given report, regardless of website state
+    setPage('reports');
+    closeAssetReport();
+    openAssetReport(asset_id);
 }

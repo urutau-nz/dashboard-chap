@@ -264,8 +264,8 @@ body .vl-select-body td:hover {
 }
 
 #overview-summary-td .title h1 {
-  font-size: 3rem;
-  margin: 1rem 2rem 0rem 2rem;
+  font-size: 2rem;
+  margin: 1.5rem 2rem 0.5rem 2rem;
 }
 
 #overview-info-table.overview #overview-summary-td .title h1 {
@@ -278,7 +278,7 @@ body .vl-select-body td:hover {
 }
 #overview-summary-td .content>div {
   padding-right: 1rem;
-  padding-bottom: 4rem;
+  padding-bottom: 14rem;
 }
 
 
@@ -419,7 +419,7 @@ div.intro_tour .introjs-button {
 
 
 #page-overview {
-  background-color: #3f607a;
+  background-color: #adc8d9;
 }
 
 #body-table {
@@ -530,70 +530,7 @@ div.intro_tour .introjs-button {
   left: 0;
   z-index: 1;
 }
-#overview-menu-table {
-  width: 10rem;
-  height: 100%;
-}
-#overview-menu-table td {
-  background-color: #b5c7d5;
-  color: #316076;
-  text-align: center;
-  font-size: 1.4rem;
-  height: 20%;
-  position: relative;
-  right: 1rem;
-  padding-left: 1rem;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 0 0 0 0;
-  line-height: 0.8rem;
-  font-family: 'Source Sans Pro', sans-serif;
-  transition: right 0.1s ease-in-out,
-              border-radius 0.1s ease-in-out,
-              padding-left 0.1s ease-in-out;
-}
-#overview-menu-table td.active {
-  background-color: #f4f7f9;
-  color: #3e7691;
-  right: 0rem;
-  padding-left: 0;
-  border-radius: 0 1rem 1rem 0;
-}
-#overview-menu-table td.active:hover {
-  right: 0rem;
-  padding-left: 0;
-  border-radius: 0 1rem 1rem 0;
-}
-#overview-menu-table td:hover {
-  right: 0.5rem;
-  padding-left: 0.5rem;
-  border-radius: 0 0.5rem 0.5rem 0;
-}
-#overview-menu-table div {
-  height: 100%;
-  width: 100%;
-}
-#overview-menu-table .active {
-  z-index: 2;
-}
-#overview-menu-table .active .shadow {
-  box-shadow: 0.1rem 0.1rem 0.1rem #0004;
-  display: block;
-  width: 100%;
-  height: 100%;
-  position:absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  border-radius: 0 1rem 1rem 0;
-}
-#overview-menu-table .shadow {
-  display: none;
-}
-#overview-menu-table td img {
-  height: auto;
-  width: 90px;
-}
+
 
 
 
@@ -2280,4 +2217,214 @@ body .vl-map-tooltip .other-hazards-div img {
 }
 #page-overview .vl-collapsing {
   padding: 0px 8px 24px 8px;
+}
+
+#overview-menu {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+  align-items: stretch;
+  padding: 5px 10px;
+  flex-wrap: wrap-reverse;
+  background-color: #c7ddeb;
+  gap: 5px;
+  border-bottom: 1px solid #4c80a917;
+}
+#overview-menu>div {
+  width: 140px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background-color: #f0f9ff6b;
+  color: #3f607a;
+  flex-grow: 2;
+  border: 1px solid #4c80a92b;
+  line-height: 0.9rem;
+  padding: 1px 22px 0px 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: none;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#overview-menu>div:hover {
+  background-color: #f0f9ffd5;
+  border: 1px solid #003c6a1c;
+}
+#overview-menu>div.active {
+  background-color: #f4f7f9;
+  border: 1px solid #003c6a1f;
+}
+#overview-menu img {
+  width: 45px;
+  height: auto;
+  opacity: 0.9;
+}
+
+
+
+.graph-section .form-div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 23px 0 50px;
+}
+.graph-section .form-div>div {
+  flex-grow: 2;
+  font-size: 0.9rem;
+  margin: 0;
+}
+.graph-section .vl-select-head {
+  border: none;
+  background-color: #b5c7d5;
+  color: #395d78;
+  font-family: 'Source Sans Pro';
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.graph-section .vl-select-head-arrow {
+  color: #395d78;
+}
+.graph-section .graph-div {
+  width: 100%;
+  padding: 15px 45px 15px 50px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.graph-section .graph-div>div {
+  height: 200px;
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  position: relative;
+}
+.graph-section {
+  padding: 20px 0 40px 0;
+}
+#page-overview .vl-graph-axis-label, 
+#page-overview .tick text,
+#page-overview .vl-graph-title {
+  fill: #3e7691;
+}
+#page-overview .tick line,
+#page-overview .vl-axis path {
+  stroke: #3e7691;
+}
+.graph-section .vl-graph-title {
+  font-family: 'Source Sans Pro', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+
+
+.graph-section .form-div>div.ari-form {
+  width: 90px;
+  flex-grow: 0;
+  min-width: 50px;
+}
+
+#overview-display-td {
+  display: flex;
+  box-sizing: border-box;
+  padding: 60px;
+  gap: 20px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  position: relative;
+}
+#overview-display-td>div {
+  border-radius: 20px;
+}
+
+#overview-display-div {
+  height: 650px;
+  position: relative;
+  background-color:#f4f7f9;
+}
+#overview-controls-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #3f607a;
+  font-size: 0.95rem;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#overview-controls-div .slr-form {
+  padding: 5px 8px 5px 14px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  background-color:#d8e8f3;
+  border-radius: 40px;
+}
+#overview-controls-div .slr-form div:first-child {
+  padding-right: 10px;
+}
+#overview-controls-div .slr-form .button {
+  padding: 5px 8px;
+  border-radius: 20px;
+  background-color: #c7ddeb;
+  cursor: pointer;
+  border: 1px solid #bfd6e5;
+}
+#overview-controls-div .slr-form .button:hover {
+  background-color: #b8d1e0;
+  border: 1px solid #a2c7df;
+}
+#overview-controls-div .slr-form .button.active {
+  background-color: #f4f7f9;
+  border: 1px solid #b8d6e9;
+}
+
+
+
+#overview-display-graph {
+  width: 96%;
+  height: 96%;
+  position: absolute;
+  top: 2%;
+  left: 2%;
+}
+
+
+#overview-controls-region-form {
+  width: 217px;
+  margin: 0;
+}
+#overview-controls-region-form .vl-select-head {
+  height: 41px;
+  background-color: #d8e8f3;
+  border: none;
+  border-radius: 30px;
+  padding: 11px 18px;
+}
+#overview-controls-region-form .vl-select-head-arrow {
+  top: 0.75em;
+  right: 12px;
+  font-size: 1em;
+}
+#overview-controls-region-form .vl-select-body-parent {
+  border-radius: 20px;
+  overflow: hidden;
+  max-height: fit-content;
+  border: none;
+  background-color: #d8e8f3;
+  padding: 10px 0;
+  top: 105%;
 }

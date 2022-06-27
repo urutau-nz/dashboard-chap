@@ -341,6 +341,37 @@
                 <div class="shadow"></div>
                 <table id="overview-info-table">
                   <tr>
+                    <td style="height: 0;">
+                      <div id="overview-menu">
+                        <div id="overview-menu-human-td" onclick="setOverviewTab('human')">
+                          
+                          <img src="icons/Human-Tab.png">Social
+                          <div class="shadow"></div>
+                        </div>
+                        <div id="overview-menu-cultural-td" onclick="setOverviewTab('cultural')">
+                          
+                          <img src="icons/Cultural-Tab.png">Cultural
+                          <div class="shadow"></div>
+                        </div>
+                        <div id="overview-menu-natural-td" onclick="setOverviewTab('natural')">
+                          
+                          <img src="icons/Natural-Tab.png">Natural
+                          <div class="shadow"></div>
+                        </div>
+                        <div id="overview-menu-built-td" onclick="setOverviewTab('built')" >
+                          
+                          <img src="icons/Built-Tab.png">Built
+                          <div class="shadow"></div>
+                        </div>
+                        <div id="overview-menu-overview-td" onclick="setOverviewTab('overview')" class="active">
+                          
+                          <img src="icons/Overview-Tab.png">Overview
+                          <div class="shadow"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
                     <td id="overview-summary-td">
                       <table style="width: 100%;height: 100%;">
                         <tr style="height: 0;">
@@ -438,17 +469,59 @@
                               <table class="overview-report-table" id="overview-cultural-table">
                                 <tr>
                                   <td class="domain-summary-td">
-                                    <p>
-                                    Māori social, cultural, spiritual and economic wellbeing are at risk from loss and degradation of lands and waters, as well as cultural assets such as marae, due to ongoing sea-level rise and other coastal processes. Climate change and associated coastal hazards disproportionately threatens both the tangible components that contribute to Māori well-being as well as the intangible spiritual components 
-                                    <a href="http://www.maramatanga.ac.nz/sites/default/files/teArotahi_7_21-1910%20Climate%20Change_Awatere.pdf" target="_blank">(Awatere et al. 2021)</a>. Furthermore, it is possible that these tangible and intangible components may not only be threatened by the changing climate but also possible interventions to protect current infrastructure. 
-                                    
-                                    <br><br>
-                                    To ensure that current taonga (both physical and non-physical) are appropriately considered as communities begin adaptation interventions, we must understand where these taonga are and how they will be impacted under various hazard scenarios that are likely to be seen within the following 100 years.
-                                    </p>
-                                    <h2>Status</h2>
-                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
-                                    
-                                    <p class="status"></p>
+                                    <div>
+                                      <div class="collapse summary" id="overview-collapse-28"><ul><li>Summary</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-28">
+                                        <p>
+                                        Māori social, cultural, spiritual and economic wellbeing are at risk from loss and degradation of lands and waters, as well as cultural assets such as marae, due to ongoing sea-level rise and other coastal processes. Climate change and associated coastal hazards disproportionately threatens both the tangible components that contribute to Māori well-being as well as the intangible spiritual components 
+                                        <a href="http://www.maramatanga.ac.nz/sites/default/files/teArotahi_7_21-1910%20Climate%20Change_Awatere.pdf" target="_blank">(Awatere et al. 2021)</a>. Furthermore, it is possible that these tangible and intangible components may not only be threatened by the changing climate but also possible interventions to protect current infrastructure. 
+                                        
+                                        <br><br>
+                                        To ensure that current taonga (both physical and non-physical) are appropriately considered as communities begin adaptation interventions, we must understand where these taonga are and how they will be impacted under various hazard scenarios that are likely to be seen within the following 100 years.
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div><h2>Risk to the Cultural Domain</h2></div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-8"><ul><li>Risk to potable water supply</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-8">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-9"><ul><li>Risk to buildings</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-9">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-10"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-10">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-11"><ul><li>Risk to wastewater and stormwater</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-11">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-12"><ul><li>Risk to transportation</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-12">
+                                        Select hazard:
+                                        <br>
+                                        Select Vulnerability:
+                                        <br>
+                                        Select adaptation area:
+                                        <br>
+                                        Figures:
+                                        <br>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-13"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-13">
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                                 <tr>
@@ -460,21 +533,64 @@
                               <table class="overview-report-table" id="overview-natural-table">
                                 <tr>
                                   <td class="domain-summary-td">
-                                    <p>
-                                    The natural domain has information on terrestrial, freshwater and marine ecosystems that support indigenous flora and fauna – he kura taiao (living treasures). We have a number of nationally and internationally significant ecosystems and species across the Christchurch district. As kaitiaki, it is our responsibility to protect the integrity of these ecosystems and understand the impact that the loss of these taonga would have on the wider wellbeing of communities. 
-                                    <br><br>
-                                    Many species have the adaptive capacity enabling them to respond to changes in their environment, allowing them to be more resilient to coastal hazards than others. How these dynamic ecosystems and species might respond to climate change and coastal hazards has been estimated, allowing us to consider how different adaptation options might impact these significant ecosystems both now and in the future. Including the natural domain in the Explorer allows us to understand:
-                                    </p>
-                                    <ul>
-                                      <li>What significant ecosystems, flora and fauna will be exposed to coastal hazards over time?</li>
-                                      <li>How vulnerable are those ecosystems, flora and fauna to coastal hazards over time?</li>
-                                      <li>Where do potential adaptation options need to align with the natural value of an area?</li>
-                                      <li>Where can coastal hazards adaptation planning support the continued adaptation and migration of natural systems and species in response to climate change?</li>
-                                    </ul>
-                                    <h2>Status</h2>
-                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
-                                    
-                                    <p class="status"></p>
+                                    <div>
+                                      <div class="collapse summary" id="overview-collapse-14"><ul><li>Summary</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-14">
+                                        <p>
+                                          The natural domain has information on terrestrial, freshwater and marine ecosystems that support indigenous flora and fauna – he kura taiao (living treasures). We have a number of nationally and internationally significant ecosystems and species across the Christchurch district. As kaitiaki, it is our responsibility to protect the integrity of these ecosystems and understand the impact that the loss of these taonga would have on the wider wellbeing of communities. 
+                                          <br><br>
+                                          Many species have the adaptive capacity enabling them to respond to changes in their environment, allowing them to be more resilient to coastal hazards than others. How these dynamic ecosystems and species might respond to climate change and coastal hazards has been estimated, allowing us to consider how different adaptation options might impact these significant ecosystems both now and in the future. Including the natural domain in the Explorer allows us to understand:
+                                        
+                                          <ul>
+                                            <li>What significant ecosystems, flora and fauna will be exposed to coastal hazards over time?</li>
+                                            <li>How vulnerable are those ecosystems, flora and fauna to coastal hazards over time?</li>
+                                            <li>Where do potential adaptation options need to align with the natural value of an area?</li>
+                                            <li>Where can coastal hazards adaptation planning support the continued adaptation and migration of natural systems and species in response to climate change?</li>
+                                          </ul>
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div><h2>Risk to the Natural Domain</h2></div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-15"><ul><li>Risk to potable water supply</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-15">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-16"><ul><li>Risk to buildings</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-16">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-17"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-17">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-18"><ul><li>Risk to wastewater and stormwater</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-18">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-19"><ul><li>Risk to transportation</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-19">
+                                        Select hazard:
+                                        <br>
+                                        Select Vulnerability:
+                                        <br>
+                                        Select adaptation area:
+                                        <br>
+                                        Figures:
+                                        <br>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-20"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-20">
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                                 <tr>
@@ -486,27 +602,69 @@
                               <table class="overview-report-table" id="overview-human-table">
                                 <tr>
                                   <td class="domain-summary-td">
-                                    <p>
-                                    The human domain has information on indicators of social vulnerability. Social vulnerability acknowledges that some communities and people may have less capacity to prepare for, respond to, and recover from coastal hazards than others. We will be looking to support communities throughout the adaptation planning process and to do this we need to understand where there might be:
-                                    </p>
-                                    <ul>
-                                      <li>Risks to social cohesion and community wellbeing</li>
-                                      <li>Risk of exacerbating existing inequities and creating new inequities</li>
-                                      <li>Risks to physical health</li>
-                                      <li>Risks of conflict, disruption, and loss of trust in local government</li>
-                                      <li>Risks to Maori social, cultural, spiritual, and economic wellbeing</li>
-                                      <li>Risks to mental health, identity, autonomy, and sense of belonging and wellbeing</li>
-                                      <li>Risks to Maori and European cultural heritage sites</li>
-                                    </ul>
-                                    <p>
-                                    It is not possible to quantify the impacts on our communities using the same top-down approach used for built infrastructure in this Explorer. The layers of information we have mapped in this domain help to indicate where communities may be impacted by these vulnerabilities. For example, the exposure of a residential home may result in impacts on the physical and mental health of the residents. 
-                                    <br><br>
-                                    Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can either add into the Explorer or use to help ensure steps are taken to support the health and wellbeing of communities. 
-                                    </p>
-                                    <h2>Status</h2>
-                                    <span style="font-style: italic; font-size: 0.8em;">Last updated: <span class="last-updated"></span></span>
-                                    
-                                    <p class="status"></p>
+                                    <div>
+                                      <div class="collapse summary" id="overview-collapse-21"><ul><li>Summary</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-21">
+                                        <p>
+                                          The human domain has information on indicators of social vulnerability. Social vulnerability acknowledges that some communities and people may have less capacity to prepare for, respond to, and recover from coastal hazards than others. We will be looking to support communities throughout the adaptation planning process and to do this we need to understand where there might be:
+                                        </p>
+                                        <ul>
+                                          <li>Risks to social cohesion and community wellbeing</li>
+                                          <li>Risk of exacerbating existing inequities and creating new inequities</li>
+                                          <li>Risks to physical health</li>
+                                          <li>Risks of conflict, disruption, and loss of trust in local government</li>
+                                          <li>Risks to Māori social, cultural, spiritual, and economic wellbeing</li>
+                                          <li>Risks to mental health, identity, autonomy, and sense of belonging and wellbeing</li>
+                                          <li>Risks to Māori and European cultural heritage sites</li>
+                                        </ul>
+                                        <p>
+                                          It is not possible to quantify the impacts on our communities using the same top-down approach used for built infrastructure in this Explorer. The layers of information we have mapped in this domain help to indicate where communities may be impacted by these vulnerabilities. For example, the exposure of a residential home may result in impacts on the physical and mental health of the residents. 
+                                          <br><br>
+                                          Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can either add into the Explorer or use to help ensure steps are taken to support the health and wellbeing of communities. 
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div><h2>Risk to the Social Domain</h2></div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-22"><ul><li>Risk to potable water supply</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-22">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-23"><ul><li>Risk to buildings</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-23">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-24"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-24">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-25"><ul><li>Risk to wastewater and stormwater</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-25">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-26"><ul><li>Risk to transportation</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-26">
+                                        Select hazard:
+                                        <br>
+                                        Select Vulnerability:
+                                        <br>
+                                        Select adaptation area:
+                                        <br>
+                                        Figures:
+                                        <br>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-27"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-27">
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                                 <tr>
@@ -524,47 +682,22 @@
                 </table>
 
               </td>
-              <td style="width:160px;">
-                <table id="overview-menu-table">
-                  <tr>
-                    <td id="overview-menu-overview-td" onclick="setOverviewTab('overview')" class="active">
-                      
-                      <img src="icons/Overview-Tab.png"><br>Overview
-                      <div class="shadow"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td id="overview-menu-built-td" onclick="setOverviewTab('built')" >
-                      
-                      <img src="icons/Built-Tab.png"><br>Built
-                      <div class="shadow"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td id="overview-menu-natural-td" onclick="setOverviewTab('natural')">
-                      
-                      <img src="icons/Natural-Tab.png"><br>Natural
-                      <div class="shadow"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td id="overview-menu-cultural-td" onclick="setOverviewTab('cultural')">
-                      
-                      <img src="icons/Cultural-Tab.png"><br>Cultural
-                      <div class="shadow"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td id="overview-menu-human-td" onclick="setOverviewTab('human')">
-                      
-                      <img src="icons/Human-Tab.png"><br>Social
-                      <div class="shadow"></div>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-              <td style="width:50%;">
-                
+              <td id="overview-display-td">
+                <div id="overview-controls-div">
+                    <div class="slr-form">
+                      <div>SLR&nbsp;&nbsp;(cm)</div>
+                      <div class="button button-20 active" onclick="overviewBigGraphSLR(20)">20</div>
+                      <div class="button button-100" onclick="overviewBigGraphSLR(100)">100</div>
+                      <div class="button button-200" onclick="overviewBigGraphSLR(200)">200</div>
+                    </div>
+                    
+                    <div id="overview-controls-region-form" class="region-form">
+
+                    </div>
+                </div>
+                <div id="overview-display-div">
+                    <div id="overview-display-graph"></div>
+                </div>
               </td>
             </tr>
           </table>
@@ -1029,7 +1162,7 @@
         </tr>
         <tr>
           <td colspan="2">
-            <p>Some Text Here ...</P>
+            <p>Some Text Here ...</p>
           </td>
         </tr>
         <tr>
