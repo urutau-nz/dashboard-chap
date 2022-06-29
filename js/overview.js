@@ -1,19 +1,19 @@
 
 var current_overview_tab; // The current tab, 'overview' or a domain
 
-var overview_collapsables = [];
+var overview_collapsables = {};
 var overview_collapsable_graphs = {};
 var overview_big_graph;
 var overview_region_dropdown;
 var overview_slr_value = 20;
 
 var overview_graph_sections = { 
-    'built-potable-water': {id: 'overview-collapsing-2', file: '', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-buildings':  {id: 'overview-collapsing-3', file: '', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-landfills':  {id: 'overview-collapsing-4', file: '', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-wastewater':  {id: 'overview-collapsing-5', file: '', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-transportation':  {id: 'overview-collapsing-6', file: 'built_transportation.csv', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-electricity':  {id: 'overview-collapsing-7', file: '', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null}
+    'built-potable-water': {id: 'overview-collapsing-2', file: '', title: "Risk to potable water supply", data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-buildings':  {id: 'overview-collapsing-3', file: '', title: 'Risk to buildings', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-landfills':  {id: 'overview-collapsing-4', file: '', title: 'Risk to landfills and contaminated sites', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-wastewater':  {id: 'overview-collapsing-5', file: '', title: 'Risk to wastewater and stormwater', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-transportation':  {id: 'overview-collapsing-6', file: 'built_transportation.csv', title: 'Risk to transportation', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-electricity':  {id: 'overview-collapsing-7', file: '', title: 'Risk to electricity, energy, and communications', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null}
 };
 var overview_graph_section_html = `
 <div class="graph-section">
@@ -35,7 +35,7 @@ function initPageOverview() {
         if (!$(`#overview-collapse-${index}`).hasClass('summary')) {
             collapser.collapse();
         }
-        overview_collapsables.push(collapser);
+        overview_collapsables['overview-collapsing-'+index] = collapser;
         index += 1;
     }
 
@@ -48,8 +48,8 @@ function initPageOverview() {
         var form_html = '';
         form_html += `<div id="${section_id}-hazard-form"></div>`;
         form_html += `<div class="ari-form" id="${section_id}-ari-form"></div>`;
-        form_html += `<div id="${section_id}-vulnerability-form"></div>`;
         form_html += `<div id="${section_id}-area-form"></div>`;
+        form_html += `<div class="vulnerability-form" id="${section_id}-vulnerability-form"></div>`;
 
         section.find('.form-div').html(form_html);
 
@@ -75,9 +75,9 @@ function initPageOverview() {
         overview_graph_sections[section_name].ariMenu = ariMenu;
 
 
-        var vulnerabilityMenu = new vlDropDown(`${section_id}-vulnerability-form`);
-        vulnerabilityMenu.populate(['Exposed', 'Low', 'Medium', 'High']);
-        vulnerabilityMenu.setValue("Exposed");
+        var vulnerabilityMenu = new vlMultiDropDown(`${section_id}-vulnerability-form`);
+        vulnerabilityMenu.populate([['exposed', 'Exposed'], ['low', 'Low'], ['medium', 'Medium'], ['high', 'High']]);
+        vulnerabilityMenu.addValue("exposed");
         
         var vulnerability_onchange = function (value) {
             updateSubdomainGraphs();
@@ -121,7 +121,8 @@ function openPageOverview() {
         setOverviewTab('overview');
     }
 
-    overview_big_graph.barGraph();
+    updateBigGraph();
+    
 }
 function closePageOverview() {
     
@@ -142,9 +143,9 @@ function overviewBigGraphSLR(slr) {
 
 function updateBigGraph() {
     var filtered_data = consquence_rating_data.filter(d => {
-        return d.region.toLowerCase() == overview_region_dropdown.value && d.assessor == '1';
+        return d.region.toLowerCase() == overview_region_dropdown.value && d.SLR == overview_slr_value;
     });
-    console.log(consquence_rating_data, filtered_data);
+    filtered_data.sort((a,b) => b.consequence_mean - a.consequence_mean);
 
     // Separate out column names
     var final_data = [];
@@ -161,11 +162,10 @@ function updateBigGraph() {
         final_data.push(dict);
     }
     for (var i in column_strings) {
-        console.log(column_strings);
         var name = column_strings[i].slice(8);
         if (name[0] == ' ') name = name.slice(1);
         column_strings[i] = capitalize(name);
-        /*
+        /* 
         var get_next = false;
         for (var letter of name) {
             if (get_next) column_strings[i] += letter.toUpperCase();
@@ -175,18 +175,18 @@ function updateBigGraph() {
 
     $('#overview-display-graph').html('');
 
-    overview_big_graph = new vlGraph(`overview-display-graph`, final_data, 'subdomain', 'consequence');
+    overview_big_graph = new vlGraph(`overview-display-graph`, final_data, 'subdomain', 'consequence_mean');
     overview_big_graph.x_axis_adjust(3);
     overview_big_graph.y_axis_label("Consequence");
     overview_big_graph.y_axis_adjust(2);
     overview_big_graph.margin_top(40);
     overview_big_graph.margin_right(25);
     overview_big_graph.margin_left(35);
-    overview_big_graph.margin_bottom(380);
+    overview_big_graph.margin_bottom(320);
     overview_big_graph.font_size(13);
     overview_big_graph.x_categories(column_strings);
     overview_big_graph.opacity_column('evidence');
-    overview_big_graph.opacity_function(function (n) {return (n-0.6)/3.4;});
+    overview_big_graph.opacity_function(function (n) {return (n)/4;});
     overview_big_graph.color_column('domain');
     overview_big_graph.x_value_in_hover(false);
     overview_big_graph.colors({'Built': '#db7900', 'Natural': '#32b888', 'Cultural': '#c94040', 'Social': '#3e7691'});
@@ -196,6 +196,8 @@ function updateBigGraph() {
     overview_big_graph.x_tick_size(3);
     overview_big_graph.y_outer_tick_size(0);
     overview_big_graph.x_outer_tick_size(0);
+    overview_big_graph.upper_uncertainty_column('consequence_low');
+    overview_big_graph.lower_uncertainty_column('consequence_high');
     overview_big_graph.min_x(0);
     overview_big_graph.max_x('strict');
     overview_big_graph.max_y(10);
@@ -209,6 +211,17 @@ function updateBigGraph() {
     .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");*/
+
+
+    // Add links to the graph
+    $(`#overview-display-graph .vl-x-axis text`).each(function(index) {
+        $(this).addClass('overview-big-graph-x-axis-label');
+        $(this).on('click', function () {
+            var result = filtered_data.filter(d => d.subdomain.toLowerCase().endsWith($(this).text().toLowerCase()));
+            result.sort((a,b) => a.subdomain.length - b.subdomain.length);
+            openSubdomainSection(result[0]);
+        })
+    })
 }
 
 function importSubdomainGraph(section_name, section_id, section_file) {
@@ -232,6 +245,19 @@ function importSubdomainGraph(section_name, section_id, section_file) {
 
 }
 
+
+function openSubdomainSection(consequence_row) {
+    var domain = consequence_row.domain.toLowerCase();
+    if (domain == 'social') domain = 'human';
+    setOverviewTab(domain);
+
+    var result = Object.values(overview_graph_sections).filter(d => d.title == consequence_row.subdomain);
+    overview_collapsables[result[0].id].open();
+    setTimeout(function () {
+        $(`#${result[0].id}`).siblings()[0].scrollIntoView();
+    }, 100);
+}
+
 function updateSubdomainGraphs() {
     for (var section_name in overview_graph_sections) {
         updateSubdomainGraph(section_name);
@@ -240,11 +266,9 @@ function updateSubdomainGraphs() {
 function updateSubdomainGraph(section_name) {
     var section = overview_graph_sections[section_name];
 
-    console.log(`UPDATESUBDOMAINGRAPH`, section_name);
-
     // FILTER DATA
     var ari_value = section.ariMenu.value;
-    var vulnerability_value = section.vulnerabilityMenu.value.toLowerCase();
+    var vulnerability_values = section.vulnerabilityMenu.values;
     var area_value = section.areaMenu.value;
     var hazard_value = section.hazardMenu.value.toLowerCase();
     if (hazard_value == 'inundation') {
@@ -260,13 +284,11 @@ function updateSubdomainGraph(section_name) {
     $(`#${section.id} .graph-div`).html("");
 
     for (var element in section.data) {
-        console.log("ELEMENT ", element)
         var element_data = section.data[element];
 
         var filtered_data = element_data.filter(d => {
-            return d.hazard == hazard_value && d.region == area_value && d.vulnerability == vulnerability_value;
+            return d.hazard == hazard_value && d.region == area_value && vulnerability_values.includes(d.vulnerability);
         });
-        console.log(filtered_data, element_data, hazard_value, area_value, vulnerability_value);
 
 
         // Create parent div
@@ -282,7 +304,7 @@ function updateSubdomainGraph(section_name) {
         }
 
 
-        var linegraph = new vlGraph(`${section.id}-${element}-graph-div`, filtered_data, 'slr', 'percentage');
+        var linegraph = new vlGraph(`${section.id}-${element}-graph-div`, filtered_data, 'slr', 'percentage', {datasets_column: 'vulnerability'});
         linegraph.x_axis_label("SLR");
         linegraph.x_axis_adjust(3);
         linegraph.y_axis_label("Percentage");
@@ -301,6 +323,13 @@ function updateSubdomainGraph(section_name) {
         linegraph.x_tick_size(3);
         linegraph.y_outer_tick_size(0);
         linegraph.x_outer_tick_size(0);
+        linegraph.hover_text_function(function (row) {
+            if (row.vulnerability == 'exposed') {
+                return row.label + '&nbsp;&nbsp;Exposed';
+            } else {
+                return row.label + '&nbsp;&nbsp;' + capitalize(row.vulnerability) + ' Vulnerability'
+            }
+        });
         linegraph.min_x(0);
         linegraph.max_x('strict');
         linegraph.dots(false);
@@ -359,8 +388,8 @@ function setOverviewTab(tab) {
         $(`#overview-${tab}-table`).addClass('active');
 
         // Reset collapsing boxes
-        for (var collapsable of overview_collapsables) {
-            collapsable.reset();
+        for (var i in overview_collapsables) {
+            overview_collapsables[i].reset();
         }
         // Reset collapsing graphs
         for (var graph_name in overview_collapsable_graphs) {

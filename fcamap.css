@@ -4,11 +4,13 @@ https://coolors.co/5affcb-ffb157-8cff69-a4a4ff-ff88b6
 
 
 body {
-  user-select: none;
+  /* user-select: none; */
   overflow: auto;
-  font-family: 'Rubik', Arial, Helvetica, sans-serif;
+  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
   line-height: 1.2;
   min-width: 1200px;
+  color: #414042;
+  background: #FFFFFF;
 }
 td {
   padding: 0;
@@ -25,6 +27,7 @@ table {
   color: inherit;
   font-size: inherit;
   font-weight: inherit;
+  /* background: #FFFFFF; */
 }
 
 
@@ -105,15 +108,15 @@ body .vl-select-body-parent::-webkit-scrollbar-track {
 /* Handle */
 body .vl-select-body-parent::-webkit-scrollbar-thumb {
   border-radius: 0.3rem;
-  background: #18426F50; 
+  background: #bcbcbc; 
 }
 /* Handle on hover */
 body .vl-select-body-parent::-webkit-scrollbar-thumb:hover {
-  background: #18426F90; 
+  background: #bcbcbc; 
 }
 
 body .vl-select-body td:hover {
-  background: #18426FA0; 
+  background: #bcbcbc; 
 }
 
 
@@ -266,6 +269,7 @@ body .vl-select-body td:hover {
 #overview-summary-td .title h1 {
   font-size: 2rem;
   margin: 1.5rem 2rem 0.5rem 2rem;
+  color: #098484;
 }
 
 #overview-info-table.overview #overview-summary-td .title h1 {
@@ -541,6 +545,7 @@ div.intro_tour .introjs-button {
   width: 100%;
   height: 100%;
   color: #3e7691;
+  background: #FFFFFF;
 }
 
 #loading-popup {
@@ -697,11 +702,12 @@ div.intro_tour .introjs-button {
 .overview-report-table p {
   font-size: 1.1rem;
   text-align: justify;
-  color: #316076;
+  color: #414042;
   margin: 0;
 }
 .overview-report-table li {
   font-size: 1.1rem;
+  color: #414042;
   
 }
 .overview-report-table h2 {
@@ -765,14 +771,15 @@ html body .vl-select-head {
   font-weight: 500;
   padding: 5px;
   padding-left: 15px;
-  color: #4465af;
+  padding-right: 15px;
+  color: #414042;
   background-color: #ebfaff;
-  border: 1px solid #4465af;
+  border: 1px solid #b1b3b6;
   box-sizing: border-box;
   font-size: 1em;
 }
 body .vl-select-head-arrow {
-  color: #4465af;
+  color: #b1b3b6;
   top: 0.55em;
   font-size: 0.9em;
   right: 0.5em;
@@ -1022,7 +1029,7 @@ html body .vl-select-body-parent {
 
 #reports-report-table .exposure-graph-td {
   width: 60%;
-  padding: 2rem 1rem 1rem 24px;
+  padding: 0rem 1rem 1rem 24px;
 }
 
 #reports-report-table .exposure-text-td {
@@ -1070,18 +1077,35 @@ html body .vl-select-body-parent {
 }
 
 
-#reports-report-table .vulnerability-graph-td {
-  width: 30%;
-  height: 240px;
+#reports-report-table .vulnerability-icon-td {
+  width: 15%;
+  height: 90px;
   padding: 0.6rem 0rem 0.6rem 2rem;
   position: relative;
 }
-#reports-report-table .vulnerability-graph-text-td {
-  padding: 2rem;
-  padding-right: 6rem;
+
+#reports-report-table .vulnerability-icon-td>div{
+  height: 95%;
+  width: 45px;
+  float: right;
 }
+
+#reports-report-table .vulnerability-bullet-text-td {
+  padding: 1rem;
+}
+
 #reports-report-table .vulnerability-title-td {
   padding: 2rem;
+}
+
+#reports-report-table .vulnerability-pie-td {
+  width: 30%;
+  position: relative;
+}
+
+#reports-report-table .vulnerability-pie-td>div{
+  width: 100%;
+  height: 180;
 }
 
 #reports-report-table .data-source-text-td {
@@ -1092,15 +1116,16 @@ html body .vl-select-body-parent {
 #reports-report-table .data-source-section {
   padding-bottom: 2rem;
 }
+
+
+#reports-report-table .results-graph-title-td{
+  padding: 1rem 1rem 0rem 1rem;
+  float: center;
+}
+
 #reports-report-table .grey-section {
   height: 4rem;
   background-color: #e8e8e8;
-}
-
-#reports-report-table .vulnerability-graph-td>div{
-    height: 95%;
-    width: 180px;
-    float: right;
 }
 
 #report-exposure-graph {
@@ -1544,7 +1569,7 @@ html .vl-popup-div h1 {
   order: 0;
 }
 #map-layer-overlay .map-layer-item#map-layer-item-info .color-td {
-  background-color: #c573fd;
+  background-color: #607078;
 }
 
 #map-layer-add-div {
@@ -1896,7 +1921,7 @@ body .vl-map-tooltip .other-hazards-div img {
 
 #page-home a {
   cursor: pointer;
-  color: #007c78;
+  color: #098484;
   text-decoration: underline;
 }
 #page-home .wave-svg-div {
@@ -1976,7 +2001,7 @@ body .vl-map-tooltip .other-hazards-div img {
   width: 100%;
 }
 #home-tablets-highlight {
-  background-color: #edf1f0;
+  background-color: #DDF0EC;
   padding-top: 100px;
   display: flex;
   justify-content: space-evenly;
@@ -2025,9 +2050,10 @@ body .vl-map-tooltip .other-hazards-div img {
 
 #page-home .introduction-div h2 {
   margin-bottom: 0;
-  color: #007c78;
+  color: #098484;
   font-size: 1.7rem;
-  font-family: 'Rubik', sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: bold;
   text-align: left;
 }
 
@@ -2044,7 +2070,7 @@ body .vl-map-tooltip .other-hazards-div img {
   align-items: stretch;
 }
 #home-collapsables-td .vl-collapsing-control {
-  background-color: #edf1f0;
+  background-color: #DDF0EC;
   border-radius: 0px;
   padding: 10px 20px;
   color: #007c78;
@@ -2070,7 +2096,7 @@ body .vl-map-tooltip .other-hazards-div img {
   padding-left: 30px;
 }
 #home-collapsables-td .vl-collapsing {
-  background-color: #edf1f0;
+  background-color: #DDF0EC;
   border-radius: 0px;
   padding: 10px 60px 60px 60px;
   font-family: 'Source Sans Pro';
@@ -2092,7 +2118,7 @@ body .vl-map-tooltip .other-hazards-div img {
 }
 
 #home-collapsables-td .collapsables-header {
-  background-color: #edf1f0;
+  background-color: #DDF0EC;
   padding: 20px;
 }
 #home-collapsables-td .collapsables-header h2 {
@@ -2186,6 +2212,12 @@ body .vl-map-tooltip .other-hazards-div img {
   align-items: stretch;
 }
 
+#page-overview a {
+  cursor: pointer;
+  color: #098484;
+  text-decoration: underline;
+}
+
 #page-overview .vl-collapsing-control ul li:before {
   content: '\25BD';
   font-size: 12px;
@@ -2226,7 +2258,8 @@ body .vl-map-tooltip .other-hazards-div img {
   align-items: stretch;
   padding: 5px 10px;
   flex-wrap: wrap-reverse;
-  background-color: #c7ddeb;
+  background: #ffffff;
+  /* background-color: #c7ddeb; */
   gap: 5px;
   border-bottom: 1px solid #4c80a917;
 }
@@ -2237,8 +2270,8 @@ body .vl-map-tooltip .other-hazards-div img {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  background-color: #f0f9ff6b;
-  color: #3f607a;
+  background: #e6e7e8;
+  color: #414042;
   flex-grow: 2;
   border: 1px solid #4c80a92b;
   line-height: 0.9rem;
@@ -2251,11 +2284,11 @@ body .vl-map-tooltip .other-hazards-div img {
   font-family: 'Source Sans Pro', sans-serif;
 }
 #overview-menu>div:hover {
-  background-color: #f0f9ffd5;
+  background-color: #bcbcbc;
   border: 1px solid #003c6a1c;
 }
 #overview-menu>div.active {
-  background-color: #f4f7f9;
+  background-color: #FFFFFF;
   border: 1px solid #003c6a1f;
 }
 #overview-menu img {
@@ -2265,6 +2298,15 @@ body .vl-map-tooltip .other-hazards-div img {
 }
 
 
+
+
+html .vl-multiselect .vl-select-head-item {
+  background-color: #e1e9ee;
+  border: 1px solid #89959f;
+  margin: 1px;
+  padding: 4px 6px;
+
+}
 
 .graph-section .form-div {
   display: flex;
@@ -2277,6 +2319,9 @@ body .vl-map-tooltip .other-hazards-div img {
   flex-grow: 2;
   font-size: 0.9rem;
   margin: 0;
+}
+.graph-section .form-div>div.vulnerability-form {
+  width:90%;
 }
 .graph-section .vl-select-head {
   border: none;
@@ -2345,21 +2390,24 @@ body .vl-map-tooltip .other-hazards-div img {
   align-items: stretch;
   height: 100%;
   position: relative;
+  background: #b1b3b6;
 }
 #overview-display-td>div {
   border-radius: 20px;
+  /* background: #e6e7e8; */
 }
 
 #overview-display-div {
   height: 650px;
   position: relative;
-  background-color:#f4f7f9;
+  background-color:#FFFFFF;
 }
 #overview-controls-div {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   color: #3f607a;
+  /* background: #e6e7e8; */
   font-size: 0.95rem;
   font-family: 'Source Sans Pro', sans-serif;
 }
@@ -2370,7 +2418,7 @@ body .vl-map-tooltip .other-hazards-div img {
   justify-content: space-between;
   align-items: center;
   gap: 5px;
-  background-color:#d8e8f3;
+  background-color:#e6e7e8;
   border-radius: 40px;
 }
 #overview-controls-div .slr-form div:first-child {
@@ -2379,17 +2427,18 @@ body .vl-map-tooltip .other-hazards-div img {
 #overview-controls-div .slr-form .button {
   padding: 5px 8px;
   border-radius: 20px;
-  background-color: #c7ddeb;
+  background-color: #e6e7e8;
   cursor: pointer;
-  border: 1px solid #bfd6e5;
+  border: 1px solid #b1b3b6;
+  ;
 }
 #overview-controls-div .slr-form .button:hover {
-  background-color: #b8d1e0;
-  border: 1px solid #a2c7df;
+  background-color: #bcbcbc;
+  border: 1px solid #b1b3b6;
 }
 #overview-controls-div .slr-form .button.active {
-  background-color: #f4f7f9;
-  border: 1px solid #b8d6e9;
+  background-color: #ffffff;
+  border: 1px solid #b1b3b6;
 }
 
 
@@ -2409,7 +2458,7 @@ body .vl-map-tooltip .other-hazards-div img {
 }
 #overview-controls-region-form .vl-select-head {
   height: 41px;
-  background-color: #d8e8f3;
+  background-color: #e6e7e8;
   border: none;
   border-radius: 30px;
   padding: 11px 18px;
@@ -2424,7 +2473,15 @@ body .vl-map-tooltip .other-hazards-div img {
   overflow: hidden;
   max-height: fit-content;
   border: none;
-  background-color: #d8e8f3;
+  background-color: #e6e7e8;
   padding: 10px 0;
   top: 105%;
+}
+
+
+#overview-display-div #overview-display-graph .overview-big-graph-x-axis-label {
+  cursor: pointer;
+}
+#overview-display-div #overview-display-graph .overview-big-graph-x-axis-label:hover {
+  text-decoration: underline;
 }

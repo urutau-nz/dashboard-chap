@@ -329,6 +329,7 @@ function setInfoLayer(asset_id) {
 
     if (map_info_layer != null) {
         map_map.removeLayer(map_info_layer);
+        map_map.hideLegend(map_info_asset.id);
         map_info_layer = null;
         map_info_asset = null;
     }
@@ -341,9 +342,32 @@ function setInfoLayer(asset_id) {
         var asset = informative_assets[asset_id];
         map_info_asset = asset;
 
+        // Determine Style & Color
+        var layer_style = null;
+        var layer_color = '';
+        if (asset_id == 'social_deprivation') {
+            layer_style = mapSDIInfoLayerStyle;
+            layer_color = '#c573fd';
+
+        } else if (asset_id == "liquefaction_risk") {
+            layer_style = mapRiskInfoLayerStyle;
+            layer_color = '#32b888';
+
+        } else if (["river_flood_extent_1_in_500", "tsunami_extent"].includes(asset_id)) {
+            layer_style = {radius: 4, fillColor: "#222", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.4};
+            layer_color = '#222';
+
+        } else {
+            layer_style = {radius: 4, fillColor: "#32b888", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.4};
+            layer_color = '#32b888';
+        }
+
+        // Set layer color
+        $(`#map-layer-overlay .map-layer-item#map-layer-item-info .color-td`).css('background-color', layer_color);
+        $(`#map-map-div-tooltip .vulnerability-highlight`).css('background-color', layer_color);
         
         // Load Map Layer
-        map_info_layer = map_map.loadTopoLayer(asset.file_name, mapMapInfoLayerStyle, 
+        map_info_layer = map_map.loadTopoLayer(asset.file_name, layer_style, 
             {
                 hover: map_hover_info_type == "informative",
                 onmouseover: mapInformativeOnMouseOver,
@@ -356,7 +380,8 @@ function setInfoLayer(asset_id) {
         $(`#map-layer-item-info`).removeClass('no-layer');
 
         // Show Legend
-        map_map.showLegend('social_deprivation');
+        console.log("NOW NOW THING", asset);
+        map_map.showLegend(asset.id);
 
         // Hide Loading in a bit
         setTimeout(hideLoading, 500);
@@ -364,9 +389,8 @@ function setInfoLayer(asset_id) {
     } else {
         $(`#map-layer-item-info .name-td`).html("No Information Layer");
         $(`#map-layer-item-info`).addClass('no-layer');
-
-        // Hide Legend
-        map_map.hideLegend('social_deprivation');
+        $(`#map-layer-overlay .map-layer-item#map-layer-item-info .color-td`).css('background-color', '');
+        $(`#map-map-div-tooltip .vulnerability-highlight`).css('background-color', '');
     }
 }
 
@@ -484,7 +508,6 @@ function addLayerToMap(asset_id) {
                 if (asset.type == "polygon") { var relevant_style = {weight: 2.5};
                 } else if (asset.type == "polyline") { var relevant_style = {weight: 6}
                 }
-                console.log(asset, relevant_style);
     
                 // Load Map Layer
                 map_asset_layers[asset_id] = map_map.loadTopoLayer(asset.file_name, (asset.type == 'polygon' ? mapMapTopoPolygonStyle : mapMapTopoPolylineStyle), 
@@ -533,11 +556,17 @@ function updateMapLayer(asset_id) {
     });
 }
 
-function mapMapInfoLayerStyle(feature) {
+function mapSDIInfoLayerStyle(feature) {
     var colors = ["#ffffff", "#fdf4ff", "#fbe9ff", "#f9deff", "#f6d3ff", "#f3c8ff", "#f1bdfe", "#edb2fe", "#eaa6fe", "#e79bfd", "#e38ffd"];
     var color = colors[feature.properties.value]; // VALUE is 0-10
-    if (!color) console.log(feature.properties)
-    return {opacity: 0.02, fillColor: color, fillOpacity: 0.5, weight: 1, color: color}
+    //if (!color) console.log(feature.properties)
+    return {opacity: 1, fillColor: color, fillOpacity: 0.5, weight: 1, color: '#000'}
+}
+function mapRiskInfoLayerStyle(feature) {
+    var colors = {'high': '#c94040', 'med': '#db7900', 'low': '#32b888'};
+    var color = colors[feature.properties.value]; // VALUE is 0-10
+    //if (!color) console.log(feature.properties)
+    return {opacity: 1, fillColor: color, fillOpacity: 0.5, weight: 1, color: '#000'}
 }
 
 function mapMapTopoPolygonStyle(feature) { return mapMapTopoStyle(feature, "polygon");
@@ -719,9 +748,12 @@ function mapInformativeOnMouseOver(hover_element, target, properties) {
     var exposure_text = '';
 
     exposure_text = properties.value;
+    if (!exposure_text) exposure_text = '';
+
+    var highlight_color = target.options.fillColor;
     
     hover_element.html(`
-    <div class="vulnerability-highlight" style="background-color:#c573fd"></div>
+    <div class="vulnerability-highlight" style="background-color:${highlight_color}"></div>
     <table>
         <tr>
             <td class="header-td">
@@ -762,9 +794,29 @@ function addInfoLegendsToMap(given_map) {
         visible: false
     });
     given_map.addLegend("Risk of Liquefaction", [
-        ["Area", "#32b888"]
+        ["High", "#c94040"],
+        ["Medium", "#db7900"],
+        ["Low", "#32b888"]
     ], {
-        legend_id: "Ecological_significance",
+        legend_id: "liquefaction_risk",
+        visible: false
+    });
+    given_map.addLegend("River Flooding Extent (1 in 500 year event)", [
+        ["Flood extent", "#222"]
+    ], {
+        legend_id: "river_flood_extent_1_in_500",
+        visible: false
+    });
+    given_map.addLegend("Tsunami Extent (District Plan)", [
+        ["Tsunami extent", "#222"]
+    ], {
+        legend_id: "tsunami_extent",
+        visible: false
+    });
+    given_map.addLegend("Soil Type", [
+        ["Soil Description", "#32b888"]
+    ], {
+        legend_id: "soil_type",
         visible: false
     });
 }

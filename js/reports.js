@@ -211,10 +211,24 @@ function toggleAssetReportGroup(group_name) {
     $(`#report-menu-results-table .result-group[data-value="${group_name}"]`).toggleClass('active');
 }
 
+
+function matchesSearchTerm(search_term, item_text) { return search_term.length == 0 || item_text.toLowerCase().includes(search_term.toLowerCase()) }
+function highlightMatchingText(search_term, item_text) {
+    if (search_term.length > 0) {
+        var term_index = item_text.toLowerCase().indexOf(search_term);
+        var result_text = item_text.slice(0, term_index);
+        result_text += '<span style="background-color:#00f8ff45;">';
+        result_text += item_text.slice(term_index, term_index + search_term.length);
+        result_text += '</span>';
+        result_text += item_text.slice(term_index + search_term.length);
+        return result_text;
+    } else {
+        return item_text;
+    }
+}
 function filterReportResults() {
     var search_term = $("#report-searchbar").val().toLowerCase();
     var domain = report_domain_dropdown.value.toLowerCase();
-    console.log(domain, search_term);
 
     
     for (var asset_id of groups_and_single_layers) {
@@ -235,24 +249,16 @@ function filterReportResults() {
 
         // Hide if not matching criteria
         list_item.css("display", "none");
-        if (search_term.length == 0 || matching_value.toLowerCase().includes(search_term)) {
+        if (matchesSearchTerm(search_term, matching_value)) {
             if (domain == 'any' || asset.domain.toLowerCase() == domain) {
+
+
                 // Matches Criteria! Show it
                 list_item.css("display", "");
                 
                 // If there's a search term, highlight matching text
-                var result_text = "";
-                var dn = matching_value;
-                if (search_term.length > 0) {
-                    var term_index = dn.toLowerCase().indexOf(search_term);
-                    result_text += dn.slice(0, term_index);
-                    result_text += '<span style="background-color:#ffdecbdd;">';
-                    result_text += dn.slice(term_index, term_index + search_term.length);
-                    result_text += '</span>';
-                    result_text += dn.slice(term_index + search_term.length);
-                } else {
-                    result_text = matching_value;
-                }
+                var result_text = highlightMatchingText(search_term, matching_value);
+
                 text_item.html(result_text);
             }
         }

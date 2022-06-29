@@ -318,7 +318,7 @@
                       , as well as many other technical reports on coastal hazards.
                     </div>
                   </div>
-                  <div style="background-color: #edf1f0; height:20px;">
+                  <div style="background-color: #DDF0EC; height:20px;">
 
                   </div>
                 </td>
@@ -345,27 +345,27 @@
                       <div id="overview-menu">
                         <div id="overview-menu-human-td" onclick="setOverviewTab('human')">
                           
-                          <img src="icons/Human-Tab.png">Social
+                          <img src="icons/Human-Tab-Colour.png"><div style="color: #4763B0">Social</div>
                           <div class="shadow"></div>
                         </div>
                         <div id="overview-menu-cultural-td" onclick="setOverviewTab('cultural')">
                           
-                          <img src="icons/Cultural-Tab.png">Cultural
+                          <img src="icons/Cultural-Tab-Colour.png"><div style="color: #751240">Cultural</div>
                           <div class="shadow"></div>
                         </div>
                         <div id="overview-menu-natural-td" onclick="setOverviewTab('natural')">
                           
-                          <img src="icons/Natural-Tab.png">Natural
+                          <img src="icons/Natural-Tab-Colour.png"><div style="color: #477D45">Natural</div>
                           <div class="shadow"></div>
                         </div>
                         <div id="overview-menu-built-td" onclick="setOverviewTab('built')" >
                           
-                          <img src="icons/Built-Tab.png">Built
+                          <img src="icons/Built-Tab-Colour.png"><div style="color: #F58C1F">Built</div>
                           <div class="shadow"></div>
                         </div>
                         <div id="overview-menu-overview-td" onclick="setOverviewTab('overview')" class="active">
                           
-                          <img src="icons/Overview-Tab.png">Overview
+                          <img src="icons/Overview-Tab-Colour.png"><div style="color: #12A3A3">Overview</div>
                           <div class="shadow"></div>
                         </div>
                       </div>
@@ -473,11 +473,6 @@
                                       <div class="collapse summary" id="overview-collapse-28"><ul><li>Summary</li></ul></div>
                                       <div class="collapsing" id="overview-collapsing-28">
                                         <p>
-                                        Māori social, cultural, spiritual and economic wellbeing are at risk from loss and degradation of lands and waters, as well as cultural assets such as marae, due to ongoing sea-level rise and other coastal processes. Climate change and associated coastal hazards disproportionately threatens both the tangible components that contribute to Māori well-being as well as the intangible spiritual components 
-                                        <a href="http://www.maramatanga.ac.nz/sites/default/files/teArotahi_7_21-1910%20Climate%20Change_Awatere.pdf" target="_blank">(Awatere et al. 2021)</a>. Furthermore, it is possible that these tangible and intangible components may not only be threatened by the changing climate but also possible interventions to protect current infrastructure. 
-                                        
-                                        <br><br>
-                                        To ensure that current taonga (both physical and non-physical) are appropriately considered as communities begin adaptation interventions, we must understand where these taonga are and how they will be impacted under various hazard scenarios that are likely to be seen within the following 100 years.
                                         </p>
                                       </div>
                                     </div>
@@ -751,94 +746,63 @@
                           </tr>
                           <tr>
                             <td class="exposure-section">
-                              <table style="width: 100%">
-                                <tr>
-                                  <td class="exposure-graph-td">
-                                    <div id="report-exposure-graph"></div>
-                                  </td>
-                                  <td id="report-exposure-text1" class="exposure-text-td">
-                                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td id="report-exposure-text2" class="exposure-text2-td" colspan="2">
-                                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="separator-td" colspan="2">
-                                    <div></div>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="vulnerability-section">
-                              <table style="width: 100%">
+                              <table style="width: 100%;">
                                 <tr>
                                   <td class="vulnerability-title-td" colspan="2">
-                                    <h1><div>ASSET&nbsp;</div><div style="font-weight: 700;">VULNERABILITY</div></h1> 
+                                    <h1><div>ASSET&nbsp;</div><div style="font-weight: 700;">SUMMARY</div></h1> 
                                   </td>
                                 </tr>
                                 <tr>
                                   <td class="blue-text-box-td" colspan="2">
-                                    <div id="report-vulnerability-text1">
-                                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+                                    <div id="report-exposure-text2">
+                                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td class="vulnerability-graph-td">
-                                    <div id="report-vulnerability-graph1"></div>
+                                  <td>
+                                    <table style="width: 100%">
+                                      <tr>
+                                        <td class="vulnerability-icon-td">
+                                          <img src="icons/Built-Tab-Colour.png" width="100%">
+                                          <!-- use js to replace with relevant icon -->
+                                        </td>
+                                        <td id="report-exposure-text3" class="vulnerability-bullet-text-td">
+                                          {Exposure text 3}
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="vulnerability-icon-td">
+                                          <img src="icons/Risk-Green.svg" width="100%">
+                                          <!-- <div id="report-vulnerability-graph1"></div> -->
+                                        </td>
+                                        <td id="report-vulnerability-text2" class="vulnerability-bullet-text-td">
+                                          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="vulnerability-icon-td">
+                                          <img src="icons/Risk-Orange.svg" width="100%">
+                                          <!-- <div id="report-vulnerability-graph2"></div> -->
+                                        </td>
+                                        <td id="report-vulnerability-text3" class="vulnerability-bullet-text-td">
+                                          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="vulnerability-icon-td">
+                                          <img src="icons/Risk-Red.svg" width="100%">
+                                          <!-- <div id="report-vulnerability-graph3"></div> -->
+                                        </td>
+                                        <td id="report-vulnerability-text4" class="vulnerability-bullet-text-td">
+                                          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
+                                        </td>
+                                      </tr>
+                                    </table>
                                   </td>
-                                  <td id="report-vulnerability-text2" class="vulnerability-graph-text-td">
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="vulnerability-graph-td">
-                                    <div id="report-vulnerability-graph2"></div>
-                                  </td>
-                                  <td id="report-vulnerability-text3" class="vulnerability-graph-text-td">
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="vulnerability-graph-td">
-                                    <div id="report-vulnerability-graph3"></div>
-                                  </td>
-                                  <td id="report-vulnerability-text4" class="vulnerability-graph-text-td">
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="separator-td" colspan="2">
-                                    <div></div>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="uncertainty-section">
-                              <table style="width: 100%">
-                                <tr>
-                                  <td class="vulnerability-title-td">
-                                    <h1><div>UNCERTAINTY&nbsp;</div><div style="font-weight: 700;">ASSESSMENT</div></h1> 
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="blue-text-box-td">
-                                    <div id="report-uncertainty-text1">
-                                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td  id="report-uncertainty-text2" class="data-source-text-td">
-                                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-                                  </td>
+                                  <td class="vulnerability-pie-td">
+                                    <div class="vulnerability-pie" id="report-vulnerability-graph1"></div>
+                                  <td>
                                 </tr>
                                 <tr>
                                   <td class="separator-td" colspan="2">
@@ -852,20 +816,57 @@
                             <td class="data-source-section">
                               <table style="width: 100%">
                                 <tr>
-                                  <td class="vulnerability-title-td">
+                                  <td class="vulnerability-title-td" colspan="2">
                                     <h1><div>DATA SOURCE&nbsp;</div><div style="font-weight: 700;">AND METHODS</div></h1> 
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td class="blue-text-box-td">
+                                  <td class="blue-text-box-td" colspan="2">
                                     <div id="report-data-source-text1">
                                       Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td  id="report-data-source-text2" class="data-source-text-td">
+                                  <td id="report-data-source-text2" class="data-source-text-td" colspan="2">
                                   Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="blue-text-box-td" colspan="2">
+                                    <div id="report-uncertainty-text1">
+                                      Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td id="report-uncertainty-text2" class="data-source-text-td" colspan="2">
+                                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrudLorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="separator-td" colspan="2">
+                                    <div></div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="vulnerability-title-td" colspan="2">
+                                    <h1><div>ASSET&nbsp;</div><div style="font-weight: 700;">RESULTS</div></h1> 
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="results-graph-title-td">
+                                    <div style="font-weight: 700; text-align: center;">
+                                      GRAPH TITLE
+                                    </div>
+                                  </td>
+                                </td>
+                                <tr>
+                                  <td class="exposure-graph-td">
+                                    <div id="report-exposure-graph"></div>
+                                  </td>
+                                  <td id="report-exposure-text1" class="exposure-text-td">
+                                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.
                                   </td>
                                 </tr>
                               </table>

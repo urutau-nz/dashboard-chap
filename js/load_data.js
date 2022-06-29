@@ -135,7 +135,11 @@ function importsComplete(imports) {
         
       } else {
         // NOT INFORMATIVE ASSET, NORMAL ASSET
-        assets[d.asset_tag] = {
+        var tag = d.asset_tag;
+        while (assets[tag]) {
+          tag += '_';
+        }
+        assets[tag] = {
           display_name: d.display_name,
           name: d.display_name,
           file_name: import_url + '/data/' + d.domain + '_assets/' + d.asset_tag + '.topojson',
@@ -162,18 +166,16 @@ function importsComplete(imports) {
   
 
   // Collect options, both layers & groups
-  for (var asset_item of asset_info) {
+  for (var asset_id in assets) {
+    var asset_item = assets[asset_id];
+
     if (asset_item.domain != "informative") {
-      var asset_id = asset_item.asset_tag;
-
-      var asset = assets[asset_id];
-
-      if (!asset.group) {
+      if (!asset_item.group) {
           // Not in a group, so add
           groups_and_single_layers.push(asset_id);
-      } else if (!groups_and_single_layers.includes(asset.group)) {
+      } else if (!groups_and_single_layers.includes(asset_item.group)) {
           // Group is not yet added, so add
-          groups_and_single_layers.push(asset.group);
+          groups_and_single_layers.push(asset_item.group);
       }
     }
   }
