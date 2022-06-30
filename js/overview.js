@@ -8,71 +8,71 @@ var overview_region_dropdown;
 var overview_slr_value = 20;
 
 var overview_graph_sections = { 
-    'built-potable-water': {id: 'overview-collapsing-2', file: '', title: "Risk to potable water supply", data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-buildings':  {id: 'overview-collapsing-3', file: '', title: 'Risk to buildings', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-landfills':  {id: 'overview-collapsing-4', file: '', title: 'Risk to landfills and contaminated sites', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-wastewater':  {id: 'overview-collapsing-5', file: '', title: 'Risk to wastewater and stormwater', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-transportation':  {id: 'overview-collapsing-6', file: 'built_transportation.csv', title: 'Risk to transportation', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-electricity':  {id: 'overview-collapsing-7', file: '', title: 'Risk to electricity, energy, and communications', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'natural-terrestial':  {id: 'overview-collapsing-8', file: null, 
+    'built-potable-water': {id: 'overview-collapsing-2', file: 'built_Risk_to_potable_water_supply.csv', title: "Risk to potable water supply", data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-buildings':  {id: 'overview-collapsing-3', file: 'built_Risk_to_buildings_(residential,_commercial,_industrial,_miscellaneous_structures).csv', title: 'Risk to buildings', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-landfills':  {id: 'overview-collapsing-4', file: 'built_Risk_to_landfills_and_contaminated_sites.csv', title: 'Risk to landfills and contaminated sites', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-wastewater':  {id: 'overview-collapsing-5', file: 'built_Risk_to_wastewater_and_stormwater.csv', title: 'Risk to wastewater and stormwater', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-transportation':  {id: 'overview-collapsing-6', file: 'built_Risk_to_transportation.csv', title: 'Risk to transportation', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'built-electricity':  {id: 'overview-collapsing-7', file: 'built_Risk_to_electricity,_energy,_and_communications.csv', title: 'Risk to electricity, energy, and communications', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'natural-terrestial':  {id: 'overview-collapsing-8', file: 'natural_Risks_to_indigenous_terrestrial_ecosystems_and_organisms.csv', 
         title: 'Risks to indigenous terrestrial coastal ecosystems and organisms', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'natural-marine':  {id: 'overview-collapsing-9', file: null, 
+    'natural-marine':  {id: 'overview-collapsing-9', file: 'natural_Risks_to_indigenous_marine_ecosystems_and_organisms.csv', 
         title: 'Risks to indigenous marine coastal ecosystems and organisms', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'natural-freshwater':  {id: 'overview-collapsing-10', file: null, 
+    'natural-freshwater':  {id: 'overview-collapsing-10', file: 'natural_Risks_to_indigenous_freshwater_ecosystems_and_organisms.csv', 
         title: 'Risks to indigenous freshwater coastal ecosystems and organisms', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'natural-exotic':  {id: 'overview-collapsing-11', file: null, 
+    'natural-exotic':  {id: 'overview-collapsing-11', file: 'natural_Risks_to_exotic_ecosystems_and_species?_(incl_biosecurity).csv', 
         title: 'Risks to exotic coastal ecosystems and species', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'natural-parks':  {id: 'overview-collapsing-12', file: null, 
+    'natural-parks':  {id: 'overview-collapsing-12', file: 'natural_Risks_to_parks_and_blue_green_infrastructure.csv', 
         title: 'Risks to parks and blue-green infrastructure', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'natural-endangered':  {id: 'overview-collapsing-13', file: null, 
+    'natural-endangered':  {id: 'overview-collapsing-13', file: '', 
         title: 'Risks to endangered species', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'natural-structures':  {id: 'overview-collapsing-29', file: null, 
+    'natural-structures':  {id: 'overview-collapsing-29', file: '', 
         title: 'Risks to natural structures, formations, and/or regimes', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-socialcohesion':  {id: 'overview-collapsing-15', file: null, 
+    'social-socialcohesion':  {id: 'overview-collapsing-15', file: 'human_Risk_to_social_cohesion_&_community_wellbeing_(incl._Mental_health).csv', 
         title: 'Risk to social cohesion & community wellbeing', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-physicalhealth':  {id: 'overview-collapsing-16', file: null, 
+    'social-physicalhealth':  {id: 'overview-collapsing-16', file: 'human_Risk_to_physical_health_from_exposure_to_hazards.csv', 
         title: 'Risk to physical health from exposure to hazards', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-inequalities':  {id: 'overview-collapsing-17', file: null, 
+    'social-inequalities':  {id: 'overview-collapsing-17', file: 'human_Risk_to_exacerbate_and_create_inequalities.csv', 
         title: 'Risk to exacerbate and create inequalities', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-education':  {id: 'overview-collapsing-18', file: null, 
+    'social-education':  {id: 'overview-collapsing-18', file: '', 
         title: 'Risk to accessing education', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-medicalcare':  {id: 'overview-collapsing-19', file: null, 
+    'social-medicalcare':  {id: 'overview-collapsing-19', file: '', 
         title: 'Risk to accessing medical care', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-emergency':  {id: 'overview-collapsing-20', file: null, 
+    'social-emergency':  {id: 'overview-collapsing-20', file: '', 
         title: 'Risk to accessing emergency services', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-communityservices':  {id: 'overview-collapsing-30', file: null, 
+    'social-communityservices':  {id: 'overview-collapsing-30', file: 'human_Risk_to_accessing_to_community_services.csv', 
         title: 'Risk to accessing to community services', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'social-resources':  {id: 'overview-collapsing-31', file: null, 
+    'social-resources':  {id: 'overview-collapsing-31', file: '', 
         title: 'Risk to accessing food/resources', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'cultural-maorisocial':  {id: 'overview-collapsing-22', file: null, 
+    'cultural-maorisocial':  {id: 'overview-collapsing-22', file: 'cultural_Risks_to_M?ori_social_and_cultural_wellbeing.csv', 
         title: 'Risks to Māori social and cultural wellbeing', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'cultural-waiorawellbeing':  {id: 'overview-collapsing-23', file: null, 
+    'cultural-waiorawellbeing':  {id: 'overview-collapsing-23', file: 'cultural_Risks_to_waiora___wellbeing_health.csv', 
         title: 'Risks to waiora - wellbeing/health', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'cultural-maoricultural':  {id: 'overview-collapsing-24', file: null, 
+    'cultural-maoricultural':  {id: 'overview-collapsing-24', file: 'cultural_Risks_to_M?ori_cultural_heritage_sites_pa_marae_w?hi_taonga.csv', 
         title: 'Risks to Māori cultural heritage sites/pa/marae/wāhi taonga', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'cultural-mahingakai':  {id: 'overview-collapsing-25', file: null, 
+    'cultural-mahingakai':  {id: 'overview-collapsing-25', file: 'cultural_Risks_to_mahinga_kai_species_mahinga_kai_collection.csv', 
         title: 'Risks to mahinga kai species/mahinga kai collection', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'cultural-tangatawhenua':  {id: 'overview-collapsing-26', file: null, 
+    'cultural-tangatawhenua':  {id: 'overview-collapsing-26', file: '', 
         title: 'Risks to tangata whenua’s locality', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'cultural-mauriwairua':  {id: 'overview-collapsing-27', file: null, 
+    'cultural-mauriwairua':  {id: 'overview-collapsing-27', file: '', 
         title: 'Risks to mauri, wairua and adaptive capacity', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
-    'cultural-maoriautonomy':  {id: 'overview-collapsing-32', file: null, 
+    'cultural-maoriautonomy':  {id: 'overview-collapsing-32', file: '', 
         title: 'Risks to Māori/tangata whenua’s autonomy/te tiriti rights', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
     },
 };
