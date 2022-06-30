@@ -815,6 +815,9 @@ html body .vl-select-body-parent {
 #report-menu-results-table .result-group {
   padding: 4px 0;
 }
+#report-menu-results-table .result-group-tr + .result-group-tr .result-group {
+  padding-top: 0;
+}
 #report-menu-results-table .report-result-group {
   background-color: #ffffff6b;
   border-radius: 5px;
@@ -1711,9 +1714,10 @@ html .vl-popup-div h1 {
 #new-layer-popup .asset-col .asset-group .header {
   padding: 10px 10px 10px 15px;
   font-weight: 600;
+  background-color: #d6dce5;
 }
 #new-layer-popup .asset-col .asset-group .header span {
-  font-weight: 200;
+  font-weight: 400;
   font-size: 0.9rem;
 }
 #new-layer-popup .asset-col .asset-group .asset-group-contents {
@@ -2510,4 +2514,22 @@ html .vl-multiselect .vl-select-head-item {
   align-items: center;
   flex-direction: row;
   margin: 0;
+}
+
+
+#report-menu-results-table .domain-header-tr td {
+  font-weight: 900;
+  color: #3e646b;
+}
+#report-menu-results-table .domain-header-tr:not(.hide) td {
+  padding-top: 1.2rem;
+}
+#report-menu-results-table .domain-header-tr:not(.hide) ~ .domain-header-tr td {
+  padding-top: 2rem;
+}
+#report-menu-results-table .domain-header-tr td>div {
+  position: relative;
+  top: 2px;
+  left: 0;
+  width: 100%;
 }

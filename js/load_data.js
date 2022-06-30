@@ -89,10 +89,19 @@ function importsComplete(imports) {
   asset_descriptions = imports['asset_descriptions'];
   consquence_rating_data = imports['consquence_rating'];
 
+  // Sorts into domains, then sorts by display_name/groupname, then sorts in-group assets by display name
   asset_info.sort((x, y) => {
     if (x.domain == y.domain) {
-      if (x.display_name < y.display_name) {return -1;}
-      if (x.display_name > y.display_name) {return 1;}
+      var x_val = x.display_name;
+      var y_val = y.display_name;
+      if (x.asset_group) x_val = x.asset_group;
+      if (y.asset_group) y_val = y.asset_group;
+      if (x_val < y_val) {return -1;}
+      if (x_val > y_val) {return 1;}
+      if (x_val == y_val) {
+        if (x.display_name < y.display_name) {return -1;}
+        if (x.display_name > y.display_name) {return 1;}
+      }
     }
     if (x.domain < y.domain) {return -1;}
     if (x.domain > y.domain) {return 1;}

@@ -708,7 +708,7 @@
                   </tr>
                   <tr>
                     <td class="menu-contents">
-                      <div class="nice-scroll" style="margin-right: 5px;">
+                      <div class="nice-scroll" style="margin-right: 5px; padding-bottom: 3rem;">
                         <table id="report-menu-results-table">
                         </table>
                       </div>

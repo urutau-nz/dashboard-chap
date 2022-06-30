@@ -24,6 +24,7 @@ function initPageReports() {
     // Create results list
     var contents = '';
     var last_is_group = false;
+    var last_domain = '';
     for (var asset_id of groups_and_single_layers) {
 
         var is_group = Object.keys(asset_groups).includes(asset_id);
@@ -37,6 +38,14 @@ function initPageReports() {
             if (asset.type == 'point') { shape = 'Pointer';
             } else if (asset.type == 'polygon') { shape = 'Shape';
             } else if (asset.type == 'polyline') { shape = 'Line';
+            }
+
+            if (last_domain != domain) {
+                contents += `<tr class="domain-header-tr" data-value="${domain}"><td style="width:100%;">
+                    <div>${domain} Domain</div>
+                </td></tr>`;
+
+                last_domain = domain;
             }
     
             contents += `<tr id="asset-result-${asset_id}"><td style="width:100%;">
@@ -56,6 +65,15 @@ function initPageReports() {
             </td></tr>`;
         } else {
             // A group to add
+
+            var inner_domain = capitalize(assets[asset_groups[asset_id][0]].domain);
+            if (last_domain != inner_domain) {
+                contents += `<tr class="domain-header-tr" data-value="${inner_domain}"><td style="width:100%;">
+                    <div>${inner_domain} Domain</div>
+                </td></tr>`;
+                
+                last_domain = inner_domain;
+            }
 
             var group_contents = ``;
             var contents_summary = '';
@@ -121,6 +139,7 @@ function initPageReports() {
                 </td></tr>`;
 
         }
+
 
         last_is_group = is_group;
     }
@@ -236,6 +255,8 @@ function filterReportResults() {
     var search_term = $("#report-searchbar").val().toLowerCase();
     var domain = report_domain_dropdown.value.toLowerCase();
 
+    // Hide all domain headers
+    $(`#report-menu-results-table .domain-header-tr`).addClass('hide');
     
     for (var asset_id of groups_and_single_layers) {
         var is_group = Object.keys(asset_groups).includes(asset_id);
@@ -259,6 +280,7 @@ function filterReportResults() {
             if (domain == 'any' || asset.domain.toLowerCase() == domain) {
                 // Matches Criteria! Show it
                 list_item.removeClass("hide");
+                $(`#report-menu-results-table .domain-header-tr[data-value="${capitalize(asset.domain)}"]`).removeClass('hide');
                 
                 // If there's a search term, highlight matching text
                 var result_text = highlightMatchingText(search_term, matching_value);
@@ -293,6 +315,7 @@ function filterReportResults() {
                         // Matches Criteria! Show it AND group
                         list_item.removeClass("hide");
                         inner_list_item.removeClass("hide");
+                        $(`#report-menu-results-table .domain-header-tr[data-value="${capitalize(asset.domain)}"]`).removeClass('hide');
 
                         // Open the group to show contents, clear highlights from group title
                         openAssetReportGroup(asset_id);
