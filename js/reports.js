@@ -70,7 +70,7 @@ function initPageReports() {
                 }
 
                 group_contents += `
-                <table class="report-result result" onclick="openAssetReport('${inner_asset_id}')">
+                <table id="asset-result-${inner_asset_id}" class="report-result result" onclick="openAssetReport('${inner_asset_id}')">
                     <tr>
                         <td class="domain-td">
                             <img src="icons/${domain}-Tab.png" />
@@ -154,7 +154,7 @@ function initPageReports() {
 
     
     // Create Report Vulnerability Graphs
-    var low_graph = new vlCircleBar("report-vulnerability-graph1", "Low<br>Vulnerability",
+    var low_graph = new vlCircleBar("report-vulnerability-graph1", "Pie Chart<br>Pending",
                 611, 1000, "#32b888", "ASSETS");
     report_vulnerability_graphs.push(low_graph)
 
@@ -210,6 +210,12 @@ function closePageReports() {
 function toggleAssetReportGroup(group_name) {
     $(`#report-menu-results-table .result-group[data-value="${group_name}"]`).toggleClass('active');
 }
+function openAssetReportGroup(group_name) {
+    $(`#report-menu-results-table .result-group[data-value="${group_name}"]`).addClass('active');
+}
+function closeAssetReportGroup(group_name) {
+    $(`#report-menu-results-table .result-group[data-value="${group_name}"]`).removeClass('active');
+}
 
 
 function matchesSearchTerm(search_term, item_text) { return search_term.length == 0 || item_text.toLowerCase().includes(search_term.toLowerCase()) }
@@ -217,7 +223,7 @@ function highlightMatchingText(search_term, item_text) {
     if (search_term.length > 0) {
         var term_index = item_text.toLowerCase().indexOf(search_term);
         var result_text = item_text.slice(0, term_index);
-        result_text += '<span style="background-color:#00f8ff45;">';
+        result_text += '<span style="background-color:#3e76913b;">';
         result_text += item_text.slice(term_index, term_index + search_term.length);
         result_text += '</span>';
         result_text += item_text.slice(term_index + search_term.length);
@@ -248,18 +254,55 @@ function filterReportResults() {
         }
 
         // Hide if not matching criteria
-        list_item.css("display", "none");
+        list_item.addClass("hide");
         if (matchesSearchTerm(search_term, matching_value)) {
             if (domain == 'any' || asset.domain.toLowerCase() == domain) {
-
-
                 // Matches Criteria! Show it
-                list_item.css("display", "");
+                list_item.removeClass("hide");
                 
                 // If there's a search term, highlight matching text
                 var result_text = highlightMatchingText(search_term, matching_value);
 
                 text_item.html(result_text);
+
+                //Show all contents, if a group
+                if (is_group) {
+                    list_item.find('table').removeClass("hide");
+
+                    closeAssetReportGroup(asset_id);
+
+                    //Remove highlights from contents too
+                    for (var inner_asset_id of asset_groups[asset_id]) {
+                        var inner_text_item = $("#asset-result-" + inner_asset_id + " .result-text");
+                        inner_text_item.html(assets[inner_asset_id].display_name);
+                    }
+                }
+            }
+        } else if (is_group) {
+            // Group's title doesn't match, so check contents
+
+            for (var inner_asset_id of asset_groups[asset_id]) {
+                var inner_asset = assets[inner_asset_id];
+                var inner_matching_value = inner_asset.display_name;
+                var inner_list_item = $("#asset-result-" + inner_asset_id);
+                var inner_text_item = inner_list_item.find(".result-text");
+
+                inner_list_item.addClass("hide");
+                if (matchesSearchTerm(search_term, inner_matching_value)) {
+                    if (domain == 'any' || inner_asset.domain.toLowerCase() == domain) {
+                        // Matches Criteria! Show it AND group
+                        list_item.removeClass("hide");
+                        inner_list_item.removeClass("hide");
+
+                        // Open the group to show contents, clear highlights from group title
+                        openAssetReportGroup(asset_id);
+                        text_item.html(matching_value);
+
+                        var result_text = highlightMatchingText(search_term, inner_matching_value);
+        
+                        inner_text_item.html(result_text);
+                    }
+                }
             }
         }
 
@@ -553,6 +596,9 @@ function openAssetReport(asset_id) {
                     filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; }
                 });
         }
+
+        //Change icons
+        $('reports-report-table .vulnerability-asset-type-icon').attr('src', 'icons/Risk-Red.svg')
         
     });
 
@@ -565,6 +611,7 @@ function openAssetReport(asset_id) {
     if (report) {
         $("#report-exposure-text1").html(report.exposure_text_1);
         $("#report-exposure-text2").html(report.exposure_text_2);
+        $("#report-exposure-text3").html(report.exposure_text_3);
         $("#report-vulnerability-text1").html(report.vulnerability_text_1);
         $("#report-vulnerability-text2").html(report.vulnerability_text_low);
         $("#report-vulnerability-text3").html(report.vulnerability_text_medium);
@@ -573,6 +620,9 @@ function openAssetReport(asset_id) {
         $("#report-uncertainty-text2").html(report.uncertainty_text_2);
         $("#report-data-source-text1").html(report.data_source_text_1);
         $("#report-data-source-text2").html(report.data_source_text_2);
+        $("#report-vulnerability-result1").html(report.vulnerability_result_low);
+        $("#report-vulnerability-result2").html(report.vulnerability_result_medium);
+        $("#report-vulnerability-result3").html(report.vulnerability_result_high);
     }
 
 }

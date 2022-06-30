@@ -1099,13 +1099,13 @@ html body .vl-select-body-parent {
 }
 
 #reports-report-table .vulnerability-pie-td {
-  width: 30%;
+  width: 40%;
   position: relative;
 }
 
 #reports-report-table .vulnerability-pie-td>div{
   width: 100%;
-  height: 180;
+  height: 250;
 }
 
 #reports-report-table .data-source-text-td {
@@ -2398,7 +2398,7 @@ html .vl-multiselect .vl-select-head-item {
 }
 
 #overview-display-div {
-  height: 650px;
+  height: 600px;
   position: relative;
   background-color:#FFFFFF;
 }
@@ -2484,4 +2484,30 @@ html .vl-multiselect .vl-select-head-item {
 }
 #overview-display-div #overview-display-graph .overview-big-graph-x-axis-label:hover {
   text-decoration: underline;
+}
+
+
+#reports-report-table .vulnerability-icon-td>div.color-box {
+  height: 45px;
+  width: 45px;
+  float: right;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+.low-vulnerability {
+  background-color: #32b888;
+}
+.medium-vulnerability {
+  background-color: #db7900;
+}
+.high-vulnerability {
+  background-color: #c94040;
+}
+
+#reports-report-table .vulnerability-icon-td>div.vulnerability-asset-type-icon {
+  width: 55px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin: 0;
 }

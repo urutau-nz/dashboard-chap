@@ -13,7 +13,68 @@ var overview_graph_sections = {
     'built-landfills':  {id: 'overview-collapsing-4', file: '', title: 'Risk to landfills and contaminated sites', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
     'built-wastewater':  {id: 'overview-collapsing-5', file: '', title: 'Risk to wastewater and stormwater', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
     'built-transportation':  {id: 'overview-collapsing-6', file: 'built_transportation.csv', title: 'Risk to transportation', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
-    'built-electricity':  {id: 'overview-collapsing-7', file: '', title: 'Risk to electricity, energy, and communications', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null}
+    'built-electricity':  {id: 'overview-collapsing-7', file: '', title: 'Risk to electricity, energy, and communications', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'natural-terrestial':  {id: 'overview-collapsing-8', file: null, 
+        title: 'Risks to indigenous terrestrial coastal ecosystems and organisms', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'natural-marine':  {id: 'overview-collapsing-9', file: null, 
+        title: 'Risks to indigenous marine coastal ecosystems and organisms', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'natural-freshwater':  {id: 'overview-collapsing-10', file: null, 
+        title: 'Risks to indigenous freshwater coastal ecosystems and organisms', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'natural-exotic':  {id: 'overview-collapsing-11', file: null, 
+        title: 'Risks to exotic coastal ecosystems and species', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'natural-parks':  {id: 'overview-collapsing-12', file: null, 
+        title: 'Risks to parks and blue-green infrastructure', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
+    'natural-endangered':  {id: 'overview-collapsing-13', file: null, 
+        title: 'Risks to endangered species', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'natural-structures':  {id: 'overview-collapsing-29', file: null, 
+        title: 'Risks to natural structures, formations, and/or regimes', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-socialcohesion':  {id: 'overview-collapsing-15', file: null, 
+        title: 'Risk to social cohesion & community wellbeing', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-physicalhealth':  {id: 'overview-collapsing-16', file: null, 
+        title: 'Risk to physical health from exposure to hazards', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-inequalities':  {id: 'overview-collapsing-17', file: null, 
+        title: 'Risk to exacerbate and create inequalities', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-education':  {id: 'overview-collapsing-18', file: null, 
+        title: 'Risk to accessing education', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-medicalcare':  {id: 'overview-collapsing-19', file: null, 
+        title: 'Risk to accessing medical care', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-emergency':  {id: 'overview-collapsing-20', file: null, 
+        title: 'Risk to accessing emergency services', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-communityservices':  {id: 'overview-collapsing-30', file: null, 
+        title: 'Risk to accessing to community services', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'social-resources':  {id: 'overview-collapsing-31', file: null, 
+        title: 'Risk to accessing food/resources', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'cultural-maorisocial':  {id: 'overview-collapsing-22', file: null, 
+        title: 'Risks to Māori social and cultural wellbeing', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'cultural-waiorawellbeing':  {id: 'overview-collapsing-23', file: null, 
+        title: 'Risks to waiora - wellbeing/health', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'cultural-maoricultural':  {id: 'overview-collapsing-24', file: null, 
+        title: 'Risks to Māori cultural heritage sites/pa/marae/wāhi taonga', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'cultural-mahingakai':  {id: 'overview-collapsing-25', file: null, 
+        title: 'Risks to mahinga kai species/mahinga kai collection', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'cultural-tangatawhenua':  {id: 'overview-collapsing-26', file: null, 
+        title: 'Risks to tangata whenua’s locality', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'cultural-mauriwairua':  {id: 'overview-collapsing-27', file: null, 
+        title: 'Risks to mauri, wairua and adaptive capacity', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
+    'cultural-maoriautonomy':  {id: 'overview-collapsing-32', file: null, 
+        title: 'Risks to Māori/tangata whenua’s autonomy/te tiriti rights', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
+    },
 };
 var overview_graph_section_html = `
 <div class="graph-section">
@@ -44,6 +105,9 @@ function initPageOverview() {
         var section_id = overview_graph_sections[section_name].id;
         var section = $(`#${section_id}`);
         section.html(overview_graph_section_html);
+
+        // Update title
+        $(`#${section_id}`).siblings().html(`<ul><li>${overview_graph_sections[section_name].title}</li></ul>`)
 
         var form_html = '';
         form_html += `<div id="${section_id}-hazard-form"></div>`;
@@ -145,6 +209,7 @@ function updateBigGraph() {
     var filtered_data = consquence_rating_data.filter(d => {
         return d.region.toLowerCase() == overview_region_dropdown.value && d.SLR == overview_slr_value;
     });
+    filtered_data.sort((a,b) => a.subdomain.length - b.subdomain.length);
     filtered_data.sort((a,b) => b.consequence_mean - a.consequence_mean);
 
     // Separate out column names
@@ -187,6 +252,9 @@ function updateBigGraph() {
     overview_big_graph.x_categories(column_strings);
     overview_big_graph.opacity_column('evidence');
     overview_big_graph.opacity_function(function (n) {return (n)/4;});
+    overview_big_graph.hover_text_function(function (row) {
+        return "Consequence " + row.consequence_mean + "<br>Evidence " + row.evidence
+    });
     overview_big_graph.color_column('domain');
     overview_big_graph.x_value_in_hover(false);
     overview_big_graph.colors({'Built': '#db7900', 'Natural': '#32b888', 'Cultural': '#c94040', 'Social': '#3e7691'});
@@ -225,23 +293,25 @@ function updateBigGraph() {
 }
 
 function importSubdomainGraph(section_name, section_id, section_file) {
-    vlQuickImport('data/overview_subdomain_graphs/' + section_file, 'csv', function (d) {
-        // Find all separate elements, collect their data
-        var d_by_element = {};
-
-        for (var row of d) {
-            var element = row.element;
-
-            if (!Object.keys(d_by_element).includes(element)) {
-                d_by_element[element] = [];
+    if (section_file && section_file.length > 1) {
+        vlQuickImport('data/overview_subdomain_graphs/' + section_file, 'csv', function (d) {
+            // Find all separate elements, collect their data
+            var d_by_element = {};
+    
+            for (var row of d) {
+                var element = row.element;
+    
+                if (!Object.keys(d_by_element).includes(element)) {
+                    d_by_element[element] = [];
+                }
+                d_by_element[element].push(row);
             }
-            d_by_element[element].push(row);
-        }
-
-        overview_graph_sections[section_name].data = d_by_element;
-
-        updateSubdomainGraph(section_name);
-    });
+    
+            overview_graph_sections[section_name].data = d_by_element;
+    
+            updateSubdomainGraph(section_name);
+        });
+    }
 
 }
 

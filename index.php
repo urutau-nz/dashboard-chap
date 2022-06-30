@@ -126,15 +126,15 @@
                   </div>
                   <div class="introduction-div">
                     <h2>Welcome to the Coastal Risk & Vulnerability Explorer for Christchurch.</h2>
-                      <br>This website highlights the vulnerability of assets, and places of environmental, cultural and social value that will be exposed to <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards" target="_blank">coastal hazards</a> across the Christchurch District. <br>
-                      <br>The assessment of vulnerability has been completed by the <a href="https://www.canterbury.ac.nz/engineering/schools/cnre/research/systems/"  target="_blank">University of Canterbury</a> and uses hazard information from the <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards/how-we-assess-coastal-hazards/" target="_blank">2021 Coastal Hazard Assessment</a>. This explorer has been developed by Urban Intelligence Ltd as a tool to support the <a href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/" target="_blank">Christchurch City Council’s coastal hazards adaptation planning programme</a>.
+                      <br>This website presents the risk assessment of <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards" target="_blank">coastal hazards</a> to Ōtautahi Christchurch and identifies the vulnerability of elements (assets, people, and places of environmental, cultural and social value) that may be threatened by coastal hazards across the district.  <br>
+                      <br>The risk assessment is based on a vulnerability assessment and subsequent engagement with technical specialists. The assessment was completed by the <a href="https://www.canterbury.ac.nz/engineering/schools/cnre/research/systems/"  target="_blank">University of Canterbury</a> and uses hazard information from the <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards/how-we-assess-coastal-hazards/" target="_blank">2021 Coastal Hazard Assessment</a>. This explorer has been developed by Urban Intelligence Ltd as a tool to support the <a href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/" target="_blank">Christchurch City Council’s coastal hazards adaptation planning programme</a>.
                       <br><br>You can browse the explorer by clicking the three other tabs across the top of the page:
                       <ul>
                         <li>
                           <span>Home:</span> An introduction to the Coastal Risk Explorer, the methodology that sits behind it, and the answers to some frequently asked questions.
                         </li>
                         <li>
-                        <a onclick="setPage('overview')">Overview:</a> A summary of each domain considered in the Explorer.
+                        <a onclick="setPage('overview')">Overview:</a> A summary of the risks to key value domains.
                         </li>
                         <li>
                         <a onclick="setPage('reports')">Reports:</a> Individual asset information and risk assessment results.
@@ -386,15 +386,9 @@
                                 <tr>
                                   <td>
                                     <p>
-                                      Welcome to the Coastal Risk & Vulnerability Explorer for Christchurch. This tool explores the effects that coastal hazards may have on communities across the Christchurch District over time. You can explore this risk through four 'value domains’ – the built, natural, social and cultural environments. These domains reflect the NZ Treasury’s wellbeing framework and underpin the wellbeing of our communities and environment. 
-                                      <br><br>
-                                      To use the tool:
+                                    The risk assessment gives an indication of how Ōtautahi Christchurch may be affected by climate change-related coastal hazards. Risks are categorised into four value domains, which you can explore in the tabs above. The significance of these risks is presented on the right and you can see how there is uncertainty associated with this estimate, inherent with any risk assessment - this highlights the gaps in information and data needed for future assessment and action. The assessment of risk to a subdomain is based on our understanding of how the hazards may affect related elements (e.g., assets, infrastructure, places, or people). You can explore the threats to each of these elements in the map and reports tabs.
+
                                     </p>
-                                      <ul>
-                                        <li>Select the domain you would like to explore</li>
-                                        <li>Select a hazard scenario you would like to explore</li>
-                                        <li>View the corresponding report or map using the tabs at the top of the page.</li>
-                                      </ul>
                                   </td>
                                 </tr>
                               </table>
@@ -405,14 +399,7 @@
                                       <div class="collapse summary" id="overview-collapse-1"><ul><li>Summary</li></ul></div>
                                       <div class="collapsing" id="overview-collapsing-1">
                                         <p>
-                                          The built domain is the set and configuration of physical infrastructure, transport and buildings. It encompasses built infrastructure across sectors including housing, public amenity, water, wastewater, stormwater, energy, transport, communications, waste and coastal defences. These elements play an important role in day to day life, such as providing shelter, drinking water, electricity to heat and cook with, or the ability to travel around the district. The built domain is therefore an important consideration in coastal hazards adaptation planning. The Explorer helps us to understand:
-                                          <br><br>
-                                          <ul>
-                                            <li>What elements are exposed to coastal hazards?</li>
-                                            <li>How vulnerable each elements is and the service it provides to coastal hazards?</li>
-                                            <li>What would be the consequence of losing that infrastructure, asset or service for communities and for the Council?</li>
-                                            <li>Would the loss of that infrastructure, asset, or service have a domino effect, impacting other built, natural, cultural, or social sectors, assets, and taonga (elements)?</li>
-                                          </ul>
+                                          The built domain is the set and configuration of physical infrastructure, transport and buildings. It encompasses built infrastructure across sectors including housing, public amenity, water, wastewater, stormwater, energy, transport, communications, waste and coastal defences. These elements play an important role in day to day life, such as providing shelter, drinking water, electricity to heat and cook with, or the ability to travel around the district.
                                           
                                         </p>
                                       </div>
@@ -480,6 +467,74 @@
                                       <div><h2>Risk to the Cultural Domain</h2></div>
                                     </div>
                                     <div>
+                                      <div class="collapse" id="overview-collapse-22"><ul><li>Risk to potable water supply</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-22">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-23"><ul><li>Risk to buildings</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-23">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-24"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-24">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-25"><ul><li>Risk to wastewater and stormwater</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-25">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-26"><ul><li>Risk to transportation</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-26">
+                                        Select hazard:
+                                        <br>
+                                        Select Vulnerability:
+                                        <br>
+                                        Select adaptation area:
+                                        <br>
+                                        Figures:
+                                        <br>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-27"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-27">
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-32"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-32">
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="asset-reports-td">
+
+                                  </td>
+                                </tr>
+                              </table>
+                              <table class="overview-report-table" id="overview-natural-table">
+                                <tr>
+                                  <td class="domain-summary-td">
+                                    <div>
+                                      <div class="collapse summary" id="overview-collapse-14"><ul><li>Summary</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-14">
+                                        <p>
+                                          The natural domain includes all aspects of the natural environment that support the full range of our indigenous species, he kura taiao – living treasures, and the ecosystems which they form in terrestrial, freshwater and marine environments. We have a number of nationally and internationally significant ecosystems and species across the district. 
+                                          <br><br>
+                                          Many species have the adaptive capacity enabling them to respond to changes in their environment, allowing them to be more resilient to coastal hazards than others. How these dynamic ecosystems and species might respond to climate change and coastal hazards has been estimated, allowing us to consider how different adaptation options might impact these significant ecosystems both now and in the future. 
+                                          
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div><h2>Risk to the Natural Domain</h2></div>
+                                    </div>
+                                    <div>
                                       <div class="collapse" id="overview-collapse-8"><ul><li>Risk to potable water supply</li></ul></div>
                                       <div class="collapsing" id="overview-collapsing-8">
                                       </div>
@@ -517,6 +572,11 @@
                                       <div class="collapsing" id="overview-collapsing-13">
                                       </div>
                                     </div>
+                                    <div>
+                                      <div class="collapse" id="overview-collapse-29"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-29">
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                                 <tr>
@@ -525,28 +585,21 @@
                                   </td>
                                 </tr>
                               </table>
-                              <table class="overview-report-table" id="overview-natural-table">
+                              <table class="overview-report-table" id="overview-human-table">
                                 <tr>
                                   <td class="domain-summary-td">
                                     <div>
-                                      <div class="collapse summary" id="overview-collapse-14"><ul><li>Summary</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-14">
+                                      <div class="collapse summary" id="overview-collapse-21"><ul><li>Summary</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-21">
                                         <p>
-                                          The natural domain has information on terrestrial, freshwater and marine ecosystems that support indigenous flora and fauna – he kura taiao (living treasures). We have a number of nationally and internationally significant ecosystems and species across the Christchurch district. As kaitiaki, it is our responsibility to protect the integrity of these ecosystems and understand the impact that the loss of these taonga would have on the wider wellbeing of communities. 
-                                          <br><br>
-                                          Many species have the adaptive capacity enabling them to respond to changes in their environment, allowing them to be more resilient to coastal hazards than others. How these dynamic ecosystems and species might respond to climate change and coastal hazards has been estimated, allowing us to consider how different adaptation options might impact these significant ecosystems both now and in the future. Including the natural domain in the Explorer allows us to understand:
-                                        
-                                          <ul>
-                                            <li>What significant ecosystems, flora and fauna will be exposed to coastal hazards over time?</li>
-                                            <li>How vulnerable are those ecosystems, flora and fauna to coastal hazards over time?</li>
-                                            <li>Where do potential adaptation options need to align with the natural value of an area?</li>
-                                            <li>Where can coastal hazards adaptation planning support the continued adaptation and migration of natural systems and species in response to climate change?</li>
-                                          </ul>
+                                        The social domain reflects how people are at risk from these changes. This includes social cohesion and wellbeing, as well as threats to communities’ ability to access important services. Exisiting social disparities and deprivation play an important role in social risk as it affects the ability of people to adapt.  
+                                        <br><br>
+                                          Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can either update into the Explorer or use to help ensure steps are taken to support the communities. 
                                         </p>
                                       </div>
                                     </div>
                                     <div>
-                                      <div><h2>Risk to the Natural Domain</h2></div>
+                                      <div><h2>Risk to the Social Domain</h2></div>
                                     </div>
                                     <div>
                                       <div class="collapse" id="overview-collapse-15"><ul><li>Risk to potable water supply</li></ul></div>
@@ -586,78 +639,14 @@
                                       <div class="collapsing" id="overview-collapsing-20">
                                       </div>
                                     </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="asset-reports-td">
-
-                                  </td>
-                                </tr>
-                              </table>
-                              <table class="overview-report-table" id="overview-human-table">
-                                <tr>
-                                  <td class="domain-summary-td">
                                     <div>
-                                      <div class="collapse summary" id="overview-collapse-21"><ul><li>Summary</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-21">
-                                        <p>
-                                          The human domain has information on indicators of social vulnerability. Social vulnerability acknowledges that some communities and people may have less capacity to prepare for, respond to, and recover from coastal hazards than others. We will be looking to support communities throughout the adaptation planning process and to do this we need to understand where there might be:
-                                        </p>
-                                        <ul>
-                                          <li>Risks to social cohesion and community wellbeing</li>
-                                          <li>Risk of exacerbating existing inequities and creating new inequities</li>
-                                          <li>Risks to physical health</li>
-                                          <li>Risks of conflict, disruption, and loss of trust in local government</li>
-                                          <li>Risks to Māori social, cultural, spiritual, and economic wellbeing</li>
-                                          <li>Risks to mental health, identity, autonomy, and sense of belonging and wellbeing</li>
-                                          <li>Risks to Māori and European cultural heritage sites</li>
-                                        </ul>
-                                        <p>
-                                          It is not possible to quantify the impacts on our communities using the same top-down approach used for built infrastructure in this Explorer. The layers of information we have mapped in this domain help to indicate where communities may be impacted by these vulnerabilities. For example, the exposure of a residential home may result in impacts on the physical and mental health of the residents. 
-                                          <br><br>
-                                          Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can either add into the Explorer or use to help ensure steps are taken to support the health and wellbeing of communities. 
-                                        </p>
+                                      <div class="collapse" id="overview-collapse-30"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-30">
                                       </div>
                                     </div>
                                     <div>
-                                      <div><h2>Risk to the Social Domain</h2></div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-22"><ul><li>Risk to potable water supply</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-22">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-23"><ul><li>Risk to buildings</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-23">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-24"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-24">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-25"><ul><li>Risk to wastewater and stormwater</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-25">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-26"><ul><li>Risk to transportation</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-26">
-                                        Select hazard:
-                                        <br>
-                                        Select Vulnerability:
-                                        <br>
-                                        Select adaptation area:
-                                        <br>
-                                        Figures:
-                                        <br>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-27"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-27">
+                                      <div class="collapse" id="overview-collapse-31"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
+                                      <div class="collapsing" id="overview-collapsing-31">
                                       </div>
                                     </div>
                                   </td>
@@ -764,7 +753,9 @@
                                     <table style="width: 100%">
                                       <tr>
                                         <td class="vulnerability-icon-td">
-                                          <img src="icons/Built-Tab-Colour.png" width="100%">
+                                          <div class="vulnerability-asset-type-icon">
+                                            <img class="vulnerability-asset-type-icon" src="icons/Built-Tab-Colour.png" width="100%">
+                                          </div>
                                           <!-- use js to replace with relevant icon -->
                                         </td>
                                         <td id="report-exposure-text3" class="vulnerability-bullet-text-td">
@@ -773,28 +764,31 @@
                                       </tr>
                                       <tr>
                                         <td class="vulnerability-icon-td">
-                                          <img src="icons/Risk-Green.svg" width="100%">
-                                          <!-- <div id="report-vulnerability-graph1"></div> -->
+                                          <div class="color-box low-vulnerability"></div>
+                                          <!-- <img src="icons/Risk-Green.svg" width="100%">
+                                          <div id="report-vulnerability-graph1"></div> -->
                                         </td>
-                                        <td id="report-vulnerability-text2" class="vulnerability-bullet-text-td">
+                                        <td id="report-vulnerability-result1" class="vulnerability-bullet-text-td">
                                           Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
                                         </td>
                                       </tr>
                                       <tr>
                                         <td class="vulnerability-icon-td">
-                                          <img src="icons/Risk-Orange.svg" width="100%">
-                                          <!-- <div id="report-vulnerability-graph2"></div> -->
+                                          <div class="color-box medium-vulnerability"></div>
+                                          <!-- <img src="icons/Risk-Orange.svg" width="100%">
+                                          <div id="report-vulnerability-graph2"></div> -->
                                         </td>
-                                        <td id="report-vulnerability-text3" class="vulnerability-bullet-text-td">
+                                        <td id="report-vulnerability-result2" class="vulnerability-bullet-text-td">
                                           Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
                                         </td>
                                       </tr>
                                       <tr>
                                         <td class="vulnerability-icon-td">
-                                          <img src="icons/Risk-Red.svg" width="100%">
-                                          <!-- <div id="report-vulnerability-graph3"></div> -->
+                                          <div class="color-box high-vulnerability"></div>
+                                          <!-- <img src="icons/Risk-Red.svg" width="100%">
+                                          <div id="report-vulnerability-graph3"></div> -->
                                         </td>
-                                        <td id="report-vulnerability-text4" class="vulnerability-bullet-text-td">
+                                        <td id="report-vulnerability-result3" class="vulnerability-bullet-text-td">
                                           Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
                                         </td>
                                       </tr>
