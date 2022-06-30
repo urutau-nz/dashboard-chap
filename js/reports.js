@@ -41,8 +41,9 @@ function initPageReports() {
             }
 
             if (last_domain != domain) {
+                var display_domain = (domain == 'Human' ? 'Social': domain);
                 contents += `<tr class="domain-header-tr" data-value="${domain}"><td style="width:100%;">
-                    <div>${domain} Domain</div>
+                    <div>${display_domain} Domain</div>
                 </td></tr>`;
 
                 last_domain = domain;
@@ -68,8 +69,9 @@ function initPageReports() {
 
             var inner_domain = capitalize(assets[asset_groups[asset_id][0]].domain);
             if (last_domain != inner_domain) {
+                var display_domain = (inner_domain == 'Human' ? 'Social': inner_domain);
                 contents += `<tr class="domain-header-tr" data-value="${inner_domain}"><td style="width:100%;">
-                    <div>${inner_domain} Domain</div>
+                    <div>${display_domain} Domain</div>
                 </td></tr>`;
                 
                 last_domain = inner_domain;
