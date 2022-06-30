@@ -24,6 +24,7 @@ function initPageReports() {
     // Create results list
     var contents = '';
     var last_is_group = false;
+    
     for (var asset_id of groups_and_single_layers) {
 
         var is_group = Object.keys(asset_groups).includes(asset_id);
@@ -484,6 +485,10 @@ function openAssetReport(asset_id) {
     
     $("#reports-report-table .asset-display-name").html(title);
 
+    //Change icons
+    //Cultural-Tab-Colour
+    var icon_url = "icons/" + capitalize(report_asset_selected.domain) + "-Tab-Colour.png";
+    $('#reports-report-table .vulnerability-asset-type-icon').attr('src', icon_url);
     
     // Edit Vulnerability Graphs
     report_vulnerability_graphs[0].max_value = 1;
@@ -517,7 +522,6 @@ function openAssetReport(asset_id) {
         report_exposure_graph.areaGraph();
     });
 
-
     // Load Asset Instance Data (per-asset-id data)    and then make map
     var current_hazard = getHazard();
     vlQuickImport(report_asset_selected.instances_file_name, 'csv', function (instances) {
@@ -529,36 +533,38 @@ function openAssetReport(asset_id) {
         report_relevant_instances = instances.filter(d => d.hazard_scenario == hazard_scenario && d.hazard_type == current_hazard);
         
         // Update the vulnerability graphs to these instances
-        var max_value = 0;
-        var low_count = 0;
-        var med_count = 0;
-        var high_count = 0;
+        var any_vulnerability_count = 0;
+        var low_vulnerability_count = 0;
+        var med_vulnerability_count = 0;
+        var high_vulnerability_count = 0;
+        var unspecified_vulnerability_count = 0;
+        var num_instances = report_relevant_instances.length;
         var has_data = true;
         for (var instance of report_relevant_instances) {
             if (instance.vulnerability == 0) {
                 has_data = false;
-
+                unspecified_vulnerability_count += 1;
             } else if (instance.vulnerability == 'low') {
-                max_value += 1;
-                low_count += 1;
+                any_vulnerability_count += 1;
+                low_vulnerability_count += 1;
 
             } else if (instance.vulnerability == 'medium') {
-                max_value += 1;
-                med_count += 1;
+                any_vulnerability_count += 1;
+                med_vulnerability_count += 1;
 
             } else if (instance.vulnerability == 'high') {
-                max_value += 1;
-                high_count += 1;
+                any_vulnerability_count += 1;
+                high_vulnerability_count += 1;
 
             }
         }
         if (has_data) {
-            report_vulnerability_graphs[0].max_value = max_value;
-            report_vulnerability_graphs[1].max_value = max_value;
-            report_vulnerability_graphs[2].max_value = max_value;
-            report_vulnerability_graphs[0].value = low_count;
-            report_vulnerability_graphs[1].value = med_count;
-            report_vulnerability_graphs[2].value = high_count;
+            report_vulnerability_graphs[0].max_value = any_vulnerability_count;
+            report_vulnerability_graphs[1].max_value = any_vulnerability_count;
+            report_vulnerability_graphs[2].max_value = any_vulnerability_count;
+            report_vulnerability_graphs[0].value = low_vulnerability_count;
+            report_vulnerability_graphs[1].value = med_vulnerability_count;
+            report_vulnerability_graphs[2].value = high_vulnerability_count;
             report_vulnerability_graphs[0].graph();
             report_vulnerability_graphs[1].graph();
             report_vulnerability_graphs[2].graph();
@@ -597,9 +603,21 @@ function openAssetReport(asset_id) {
                 });
         }
 
-        //Change icons
-        $('reports-report-table .vulnerability-asset-type-icon').attr('src', 'icons/Risk-Red.svg')
-        
+        var exposure_text_3 = `${report_asset_selected.name}: <b>${any_vulnerability_count}</b> assets out of <b>${num_instances}</b> are exposed.`;
+        $("#report-exposure-text3").html(exposure_text_3);
+
+        var low_text = `<b>${low_vulnerability_count}</b> assets are classed as <b>low</b> vulnerability.`
+        $("#report-vulnerability-result1").html(low_text);
+
+        var med_text = `<b>${med_vulnerability_count}</b> assets are classed as <b>medium</b> vulnerability.`
+        $("#report-vulnerability-result2").html(med_text);
+
+        var high_text = `<b>${high_vulnerability_count}</b> assets are classed as <b>high</b> vulnerability.`
+        $("#report-vulnerability-result3").html(high_text);
+
+        var unspecified_text = `<b>${unspecified_vulnerability_count}</b> assets are classed as <b>unspecified</b> vulnerability.`
+        $("#report-vulnerability-result4").html(unspecified_text);
+
     });
 
 
@@ -611,7 +629,6 @@ function openAssetReport(asset_id) {
     if (report) {
         $("#report-exposure-text1").html(report.exposure_text_1);
         $("#report-exposure-text2").html(report.exposure_text_2);
-        $("#report-exposure-text3").html(report.exposure_text_3);
         $("#report-vulnerability-text1").html(report.vulnerability_text_1);
         $("#report-vulnerability-text2").html(report.vulnerability_text_low);
         $("#report-vulnerability-text3").html(report.vulnerability_text_medium);
