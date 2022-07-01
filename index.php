@@ -87,14 +87,14 @@
             <td value="home" class="active" onclick="setPage('home')">
               Home
             </td>
-            <td value="overview" onclick="setPage('overview')">
-              Overview
-            </td>
-            <td value="reports" onclick="setPage('reports')">
-              Reports
-            </td>
             <td value="map" onclick="setPage('map')">
               Map
+            </td>
+            <td value="overview" onclick="setPage('overview')">
+              Risk Summary
+            </td>
+            <td value="reports" onclick="setPage('reports')">
+              Asset Risk
             </td>
           </tr>
         </table>
@@ -134,13 +134,13 @@
                           <span>Home:</span> An introduction to the Coastal Risk Explorer, the methodology that sits behind it, and the answers to some frequently asked questions.
                         </li>
                         <li>
-                        <a onclick="setPage('overview')">Overview:</a> A summary of the risks to key value domains.
-                        </li>
-                        <li>
-                        <a onclick="setPage('reports')">Reports:</a> Individual asset information and risk assessment results.
-                        </li>
-                        <li>
                         <a onclick="setPage('map')">Map:</a> Maps that allow you to visualise the exposure and understand the vulnerability of different assets and places of value to coastal hazards. 
+                        </li>
+                        <li>
+                        <a onclick="setPage('overview')">Risk Summary:</a> A summary of the risks to key value domains.
+                        </li>
+                        <li>
+                        <a onclick="setPage('reports')">Asset Risk:</a> Individual asset information and risk assessment results.
                         </li>
                       </ul>
                       <div class="contact">Note: This work is currently draft and will be ongoing</div>
@@ -727,15 +727,15 @@
                   <tr>
                     <td class="report-contents">
                       <div class="nice-scroll">
-                        <table>
+                        <table style="width: 100%">
                           <tr>
                             <td class="warning-section">
                               Note: Figures in this report assume the hazard specified, <span class="hazard-summary"></span>, and will change with it.
                             </td>
                           </tr>
                           <tr>
-                            <td class="separator-td" colspan="2">
-                              <div></div>
+                            <td class="separator-td" colspan="2" style="padding-top: 0.8rem !important;">
+                              <div style="background-color: #61a1d6; height: 1px;"></div>
                             </td>
                           </tr>
                           <tr>
@@ -842,14 +842,15 @@
                                 </tr>
                                 <tr>
                                   <td class="results-graph-title-td" colspan="2">
-                                    <div style="font-weight: 700; text-align: center;">
+                                    <!-- <div style="font-weight: 700; text-align: center;">
                                       ASSET EXPOSURE
-                                    </div>
+                                    </div> -->
+                                    <div id="report-graph-dropdown"></div>
                                   </td>
-                                </td>
+                                </tr>
                                 <tr>
                                   <td class="report-exposure-graph" colspan="2">
-                                    <div id="report-exposure-graph">First graph here</div>
+                                    <div id="report-exposure-graph"></div>
                                     <div id="report-exposure-graph2" class="hide">Second graph here</div>
                                     <div id="report-exposure-graph3" class="hide">Thrid graph here</div>
                                   </td>
@@ -858,9 +859,7 @@
                             </td>
                           </tr>
                           <tr> <!-- Grey at bottom of report -->
-                            <td class="grey-section">
-                              
-                            </td>
+                            <td class="grey-section"></td>
                           </tr>
                         </table>
                       </div>

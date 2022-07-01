@@ -467,13 +467,13 @@ div.intro_tour .introjs-button {
   font-weight: 600;
 }
 #menu-table td {
-  padding: 0.5rem 1rem 1rem 1rem;
+  padding: 0.5rem 2rem 1rem 2rem;
   cursor: pointer;
   border-radius: 0.5rem 0.5rem 0 0;
-  min-width: 5rem;
   text-align: center;
   transition: background-color 0.1s ease-in-out;
   color: white;
+  white-space: nowrap;
 }
 #menu-table td:hover {
   background-color: #50add440;
@@ -1002,24 +1002,23 @@ html body .vl-select-body-parent {
   background-color: #4465af;
 }
 #reports-report-table .return-icon {
-  height: 30px;
-  width: 30px;
+  height: 26px;
+  width: 26px;
   position: absolute;
-  right: 87px;
+  right: 69px;
   top: 50%;
-  transform: translate(0px, -17px);
+  transform: translate(0px, -15px);
   pointer-events: none;
 }
 
 #reports-report-table .report-header h1 {
   color: white;
   margin-left: 2rem;
-  margin-top: 5px;
   padding-right: 210px;
 }
 
 #reports-report-table h1 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   line-height: 1.9rem;
   font-weight: 400;
   margin: 0;
@@ -1068,10 +1067,10 @@ html body .vl-select-body-parent {
 }
 
 #reports-report-table .warning-section {
-  padding: 0.5rem 0.5rem 0 1rem;
-    font-style: italic;
-    color: #61a1d6;
-    font-size: 1rem;
+  padding: 0.8rem 2rem 0 2rem;
+  font-style: italic;
+  color: #61a1d6;
+  font-size: 1rem;
 }
 
 
@@ -1097,7 +1096,7 @@ html body .vl-select-body-parent {
 }
 
 #reports-report-table .vulnerability-pie-td {
-  width: 40%;
+  width: 300px;
   position: relative;
 }
 
@@ -1116,9 +1115,8 @@ html body .vl-select-body-parent {
 }
 
 
-#reports-report-table .results-graph-title-td{
-  padding: 1rem 1rem 0rem 1rem;
-  float: center;
+#reports-report-table .results-graph-title-td {
+  padding: 0rem 4rem 0rem 4rem;
 }
 
 #reports-report-table .grey-section {
@@ -2262,8 +2260,7 @@ body .vl-map-tooltip .other-hazards-div img {
   align-items: stretch;
   padding: 5px 10px;
   flex-wrap: wrap-reverse;
-  background: #ffffff;
-  /* background-color: #c7ddeb; */
+  background: #f0f0f0;
   gap: 5px;
   border-bottom: 1px solid #4c80a917;
 }
@@ -2274,10 +2271,10 @@ body .vl-map-tooltip .other-hazards-div img {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  background: #e6e7e8;
+  background: #fafafa;
   color: #414042;
   flex-grow: 2;
-  border: 1px solid #4c80a92b;
+  border: 1px solid #dddddd;
   line-height: 0.9rem;
   padding: 1px 22px 0px 10px;
   cursor: pointer;
@@ -2288,12 +2285,13 @@ body .vl-map-tooltip .other-hazards-div img {
   font-family: 'Source Sans Pro', sans-serif;
 }
 #overview-menu>div:hover {
-  background-color: #bcbcbc;
-  border: 1px solid #003c6a1c;
+  background-color: #fff;
+  border: 1px solid #c3c3c3;
 }
 #overview-menu>div.active {
-  background-color: #FFFFFF;
-  border: 1px solid #003c6a1f;
+  background-color: #fff;
+  border: 1px solid #c3c3c3;
+  box-shadow: 0 0px 3px #d2d4d7;
 }
 #overview-menu img {
   width: 45px;
@@ -2481,6 +2479,9 @@ html .vl-multiselect .vl-select-head-item {
   padding: 10px 0;
   top: 105%;
 }
+#overview-controls-region-form .vl-select-body td:hover {
+  background: #86898f;
+}
 
 
 #overview-display-div #overview-display-graph .overview-big-graph-x-axis-label {
@@ -2536,4 +2537,22 @@ html .vl-multiselect .vl-select-head-item {
   top: 2px;
   left: 0;
   width: 100%;
+}
+
+
+#report-graph-dropdown .vl-select-head {
+  background-color: #61a1d6;
+  border: 2px solid #61a1d6;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+}
+#report-graph-dropdown .vl-select-head-arrow {
+  color: #ffffff;
+  font-size: 0.95rem;
+  top: 0.5em;
+  right: 0.8em;
+}
+#report-graph-dropdown .vl-select-body td:hover {
+  background: #61a1d6;
 }

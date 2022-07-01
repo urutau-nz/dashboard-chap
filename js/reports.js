@@ -4,6 +4,8 @@ var report_asset_selected = null;
 var report_map;
 var report_map_asset_layer;
 var report_domain_dropdown;
+var report_graphs;
+var report_graph_dropdown;
 var report_region_dropdown;
 
 var report_vulnerability_graphs = [];
@@ -19,7 +21,17 @@ function initPageReports() {
     report_domain_dropdown.populate([["any", "All Domains"], ["built", "Built Domain"], ["human", "Social Domain"], ["cultural", "Cultural Domain"], ["natural", "Natural Domain"]]);
     report_domain_dropdown.setOnChange(filterReportResults);
     
-
+    // Graph Dropdown
+    report_graphs = [["report-exposure-graph", "Asset Exposure"], ["report-exposure-graph2", "Graph Two"], ["report-exposure-graph3", "Graph Three"]];
+    report_graph_dropdown = new vlDropDown("report-graph-dropdown");
+    report_graph_dropdown.populate(report_graphs);
+    report_graph_dropdown.setOnChange(function(value_code) {
+        for (var report_graph of report_graphs) {
+            var report_graph_code = report_graph[0];
+            $("#" + report_graph_code).addClass('hide');
+        }
+        $("#" + value_code).removeClass('hide');
+    });
 
     // Create results list
     var contents = '';
@@ -194,7 +206,7 @@ function initPageReports() {
     report_exposure_graph.x_axis_adjust(3);
     report_exposure_graph.y_axis_label("Y Axis Placeholder");
     report_exposure_graph.y_axis_adjust(2);
-    report_exposure_graph.margin_top(20);
+    report_exposure_graph.margin_top(50);
     report_exposure_graph.margin_right(25);
     report_exposure_graph.margin_left(35);
     report_exposure_graph.margin_bottom(50);
@@ -207,6 +219,7 @@ function initPageReports() {
     report_exposure_graph.y_outer_tick_size(0);
     report_exposure_graph.x_outer_tick_size(0);
     report_exposure_graph.dots(false);
+    report_exposure_graph.title('Title Placeholder')
 
 
     // Create map Legends
@@ -513,6 +526,14 @@ function openAssetReport(asset_id) {
     //Cultural-Tab-Colour
     var icon_url = "icons/" + capitalize(report_asset_selected.domain) + "-Tab-Colour.png";
     $('#reports-report-table .vulnerability-asset-type-icon').attr('src', icon_url);
+
+    //Title the graph, capitalising each word
+    var words = report_asset_selected.name.split(" ");
+    for (let i = 0; i < words.length; i++) {
+        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+    }
+    var graph_title = words.join(" ") + " Exposure to " + capitalize(getHazard());
+    report_exposure_graph.title(graph_title);
     
     // Edit Vulnerability Graphs
     report_vulnerability_graphs[0].max_value = 1;
@@ -535,6 +556,16 @@ function openAssetReport(asset_id) {
     var current_region = getCurrentRegionId();
     var exposure_filename = `${import_url}/data/report_data/${asset_id}/${asset_id}-${hazard_scenario}-${current_region}.csv`;
     vlQuickImport(exposure_filename, 'csv', function (d) {
+        report_exposure_graph.setData(d, 'exposure', 'cumsum');
+        if (d[0]) {
+            report_exposure_graph.y_axis_label(d[0].ylabel);
+            report_exposure_graph.x_axis_label(d[0].xlabel);
+            report_exposure_graph.y_suffix(d[0].unit);
+            report_exposure_graph.x_suffix((getHazard() == 'erosion' ? '% Likelihood' : 'cm'));
+        }
+        report_exposure_graph.colors(['#61a1d6']);
+        report_exposure_graph.areaGraph();
+    }, function (d) {
         report_exposure_graph.setData(d, 'exposure', 'cumsum');
         if (d[0]) {
             report_exposure_graph.y_axis_label(d[0].ylabel);
@@ -627,6 +658,9 @@ function openAssetReport(asset_id) {
                 });
         }
 
+
+        // Change risk level texts
+        // (that's the stuff that says: 0 assets are classed as low vulnerability.)
         var exposure_text_3 = `${report_asset_selected.name}: <b>${any_vulnerability_count}</b> assets out of <b>${num_instances}</b> are exposed.`;
         $("#report-exposure-text3").html(exposure_text_3);
 

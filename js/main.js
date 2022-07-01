@@ -160,11 +160,11 @@ function initializeRegionDropdown(region_dropdown, given_map) {
     // Initializes the region dropdowns for both the report & map tabs
 
     // Create Non-Study Layer for given map
-    given_map.addTopoLayer(non_study_area, {weight: 1, color: "#d4dadc", fillColor: "#d4dadc", opacity: 1, fillOpacity: 0.7}, {
+    given_map.addTopoLayer(non_study_area, {weight: 1, color: "#d4dadc", fillColor: "#C0C8CC", opacity: 1, fillOpacity: 0.7}, {
         layer_id: "non_study_area",
         pane: "marker",
         hover: true,
-        hover_style: {},
+        hover_style: {fillColor: "#B0B8BC"},
         onmouseover: studyAreaOnMouseOver
     });
 
