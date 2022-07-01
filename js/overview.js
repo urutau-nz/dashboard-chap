@@ -256,6 +256,7 @@ function updateBigGraph() {
         return "Consequence " + row.consequence_mean + "<br>Evidence " + row.evidence
     });
     overview_big_graph.color_column('domain');
+    overview_big_graph.watermark('Draft data');
     overview_big_graph.x_value_in_hover(false);
     overview_big_graph.colors({'Built': '#db7900', 'Natural': '#32b888', 'Cultural': '#c94040', 'Social': '#3e7691'});
     overview_big_graph.x_ticks(7);

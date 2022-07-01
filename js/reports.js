@@ -561,19 +561,16 @@ function openAssetReport(asset_id) {
             report_exposure_graph.y_axis_label(d[0].ylabel);
             report_exposure_graph.x_axis_label(d[0].xlabel);
             report_exposure_graph.y_suffix(d[0].unit);
+            report_exposure_graph.watermark('');
             report_exposure_graph.x_suffix((getHazard() == 'erosion' ? '% Likelihood' : 'cm'));
+        } else {
+            report_exposure_graph.watermark(`No Assets Exposed`);
         }
         report_exposure_graph.colors(['#61a1d6']);
         report_exposure_graph.areaGraph();
     }, function (d) {
-        report_exposure_graph.setData(d, 'exposure', 'cumsum');
-        if (d[0]) {
-            report_exposure_graph.y_axis_label(d[0].ylabel);
-            report_exposure_graph.x_axis_label(d[0].xlabel);
-            report_exposure_graph.y_suffix(d[0].unit);
-            report_exposure_graph.x_suffix((getHazard() == 'erosion' ? '% Likelihood' : 'cm'));
-        }
-        report_exposure_graph.colors(['#61a1d6']);
+        report_exposure_graph.setData([], 'exposure', 'cumsum');
+        report_exposure_graph.watermark('No Data');
         report_exposure_graph.areaGraph();
     });
 

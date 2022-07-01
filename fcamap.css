@@ -234,14 +234,14 @@ body .vl-select-body td:hover {
   height: 2rem;
   position: absolute;
   top: 0.8rem;
-  right: 5.1rem;
+  right: 22.3rem;
   transform: rotate(45deg);
 }
 
 #try-map-popup {
   position: absolute;
   top: 1rem;
-  right: 1.9rem;
+  right: 19rem;
   background-color: #21a3a3;
   padding: 0.8rem 1.2rem;
   font-size: 1.2rem;
@@ -964,7 +964,7 @@ html body .vl-select-body-parent {
   background-color: #61a1d6;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 10px #0003;
+  box-shadow: 0 0 10px #00000069;
 }
 #reports-report-table .report-contents {
   width: 100%;
@@ -972,7 +972,7 @@ html body .vl-select-body-parent {
   font-weight: 400;
   color: #3f3f40;
   font-family: 'Source Sans Pro';
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 #reports-report-table .mini-grey-slash {
   position: absolute;
@@ -1043,11 +1043,11 @@ html body .vl-select-body-parent {
   padding-top: 1.5rem;
 }
 #reports-report-table .separator-td {
-  padding: 2rem 2rem 0 2rem !important;
+  padding: 2.5rem 2rem 0 2rem !important;
 }
 #reports-report-table .separator-td>div {
   width: 100%;
-  height: 4px;
+  height: 3px;
   background-color: #696969;
   border-radius: 5px;
 }
@@ -1061,38 +1061,38 @@ html body .vl-select-body-parent {
   width: 100%;
   background-color: #61a1d6;
   color: white;
-  padding: 1.5rem;
+  padding: 1rem 1.4rem;
   border-radius: 6px;
   box-sizing: border-box;
 }
 
 #reports-report-table .warning-section {
-  padding: 0.8rem 2rem 0 2rem;
+  padding: 0.5rem 2rem 0 2rem;
   font-style: italic;
   color: #61a1d6;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 
 #reports-report-table .vulnerability-icon-td {
-  width: 15%;
-  height: 90px;
-  padding: 0.6rem 0rem 0.6rem 2rem;
+  width: 75px;
+  height: 45px;
+  padding: 0;
   position: relative;
 }
 
 #reports-report-table .vulnerability-icon-td>div{
   height: 95%;
-  width: 45px;
+  width: 40px;
   float: right;
 }
 
 #reports-report-table .vulnerability-bullet-text-td {
-  padding: 1rem;
+  padding: 0rem 1.3rem;
 }
 
 #reports-report-table .vulnerability-title-td {
-  padding: 2rem;
+  padding: 1rem 2rem 1.3rem 2.1rem;
 }
 
 #reports-report-table .vulnerability-pie-td {
@@ -1102,12 +1102,16 @@ html body .vl-select-body-parent {
 
 #reports-report-table .vulnerability-pie-td>div{
   width: 100%;
-  height: 250;
+  height: 180;
 }
 
 #reports-report-table .data-source-text-td {
   width: 100%;
-  padding: 2rem 3.5rem;
+  padding: 1rem 3.5rem;
+}
+
+#report-uncertainty-text1 {
+  margin-top: 1.5rem;
 }
 
 #reports-report-table .data-source-section {
@@ -1132,7 +1136,13 @@ html body .vl-select-body-parent {
 #reports-report-table .report-exposure-graph {
   width: 100%;
   height: 280px;
+  padding: 0 3rem 0 4rem;
   display: inline-block;
+  box-sizing: border-box;
+}
+#reports-report-table .report-exposure-graph>div {
+  width: 100%;
+  height: 100%;
 }
 
 #reports-report-table .report-exposure-graph .vl-axis .tick line {
@@ -2493,10 +2503,10 @@ html .vl-multiselect .vl-select-head-item {
 
 
 #reports-report-table .vulnerability-icon-td>div.color-box {
-  height: 45px;
-  width: 45px;
+  height: 30px;
+  width: 30px;
   float: right;
-  margin-right: 5px;
+  margin-right: 0px;
   border-radius: 3px;
 }
 .low-vulnerability {
@@ -2513,8 +2523,8 @@ html .vl-multiselect .vl-select-head-item {
 }
 
 #reports-report-table .vulnerability-asset-type-icon {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   flex-direction: row;

@@ -734,7 +734,7 @@
                             </td>
                           </tr>
                           <tr>
-                            <td class="separator-td" colspan="2" style="padding-top: 0.8rem !important;">
+                            <td class="separator-td" colspan="2" style="padding-top: 0.5rem !important;">
                               <div style="background-color: #61a1d6; height: 1px;"></div>
                             </td>
                           </tr>
@@ -752,10 +752,10 @@
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td colspan="2">
+                                  <td colspan="2" style="padding-top: 10px">
                                     <table style="width: 100%">
                                       <tr>
-                                        <td class="vulnerability-icon-td" style="width: 9%">
+                                        <td class="vulnerability-icon-td" style="width: 75px;">
                                         <div class="vulnerability-asset-type-icon">
                                             <img class="vulnerability-asset-type-icon" src="icons/Risk-Red.svg" width="100%">
                                           </div>
@@ -766,7 +766,7 @@
                                   </td>
                                 </tr>
                                 <tr>
-                                  <td>
+                                  <td style="vertical-align: top">
                                     <table style="width: 100%">
                                       <tr>
                                         <td class="vulnerability-icon-td">
@@ -850,10 +850,12 @@
                                 </tr>
                                 <tr>
                                   <td class="report-exposure-graph" colspan="2">
-                                    <div id="report-exposure-graph"></div>
-                                    <div id="report-exposure-graph2" class="hide">Second graph here</div>
-                                    <div id="report-exposure-graph3" class="hide">Thrid graph here</div>
-                                  </td>
+                                      <div>  
+                                        <div id="report-exposure-graph"></div>
+                                        <div id="report-exposure-graph2" class="hide">Second graph here</div>
+                                        <div id="report-exposure-graph3" class="hide">Thrid graph here</div>
+                                      </div>
+                                    </td>
                                 </tr>
                               </table>
                             </td>
