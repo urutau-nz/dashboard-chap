@@ -211,15 +211,9 @@ function initializeRegionDropdown(region_dropdown, given_map) {
 
 function studyAreaOnMouseOver(hover_element, target, properties) {
     hover_element.html(`
-    <div class="vulnerability-highlight" style="background-color:#F00">
+    <div class="study-mouse-over">
+        Out of Study Area
     </div>
-    <table>
-        <tr>
-            <td class="header-td">
-                Out of Study Area
-            </td>
-        </tr>
-    </table>
     `);
 }
 

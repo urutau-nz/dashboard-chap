@@ -1871,12 +1871,14 @@ html .vl-popup-div h1 {
 
 
 
-body .vl-map-tooltip {
-  padding-left: 20px;
+body #map-map-div-tooltip table, #reports-map-div-tooltip table {
+  padding: 5px 40px 5px 24px;
+}
+body #map-map-div-tooltip, #reports-map-div-tooltip {
+  padding: 0;
   font-family: 'Source Sans Pro', sans-serif;
   color: #607078;
   overflow: hidden;
-  padding: 5px 40px 5px 24px;
 }
 body .vl-map-tooltip .asset-id {
   font-family: 'Roboto Mono', monospace;
@@ -2565,4 +2567,12 @@ html .vl-multiselect .vl-select-head-item {
 }
 #report-graph-dropdown .vl-select-body td:hover {
   background: #61a1d6;
+}
+
+
+
+#map-map-div-tooltip .study-mouse-over {
+  padding: 5px 10px;
+  background-color: #c94040;
+  color: white;
 }

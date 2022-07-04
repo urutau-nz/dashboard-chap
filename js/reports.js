@@ -532,7 +532,10 @@ function openAssetReport(asset_id) {
     for (let i = 0; i < words.length; i++) {
         words[i] = words[i][0].toUpperCase() + words[i].substr(1);
     }
-    var graph_title = words.join(" ") + " Exposure to " + capitalize(getHazard());
+    var asset_title = words.join(" ");
+    //If the asset name ends with Exposure, don't use the word twice.
+    if(!asset_title.endsWith("Exposure")) asset_title += " Exposure";
+    var graph_title = asset_title + " to " + capitalize(getHazard());
     report_exposure_graph.title(graph_title);
     
     // Edit Vulnerability Graphs
@@ -634,7 +637,7 @@ function openAssetReport(asset_id) {
                     hover: true,
                     hover_style: { radius: 12, weight: 8 },
                     onmouseover: reportMapOnMouseOver,
-                    filter: function(feature) { console.log(feature); return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; }
+                    filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; }
                 });
 
         } else {
