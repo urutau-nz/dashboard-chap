@@ -1,19 +1,19 @@
 <?php 
     switch (basename(dirname(__FILE__, 2))) {
         case "web-dev": {
-            $GLOBALS["source_url"] = "https://test.urbanintelligence.co.nz/";
+            $GLOBALS["source_url"] = "https://test.urbanintelligence.co.nz";
         }; break;
         case "website": {
-            $GLOBALS["source_url"] = "https://projects.urbanintelligence.co.nz/";
+            $GLOBALS["source_url"] = "https://projects.urbanintelligence.co.nz";
         }; break;
         case "home-ui": {
-            $GLOBALS["source_url"] = "http://localhost/home-ui/";
+            $GLOBALS["source_url"] = "http://localhost/home-ui";
         }; break;
     }
 
 ?>
 <script>
-  var domain = "<?=$GLOBALS["source_url"]?>";
+  var source_url = "<?=$GLOBALS["source_url"]?>";
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +78,7 @@
           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKYAAAAoCAMAAABD7HHtAAADAFBMVEX///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/LkhhAAAA/3RSTlMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4/QEFCQ0RFRkdISUpLTE1O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">
         </a>
         <div>
-          <?php echo ; ?>
+        Ōtautahi Christchurch Coastal Risk Explorer
         </div>
       </td>
       <td id="menu-td">

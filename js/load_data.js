@@ -10,12 +10,7 @@ import_manager.addImport('isolation_county', 'Isolated County Pops', 'csv',
     (d) => ({geoid: d.geoid_county, year: +d.year, rise: +d.rise, pop: +d.count}));
 */
 
-var import_url = '';
-if (domain == 'test') {
-  import_url = `https://test.urbanintelligence.co.nz/chap`;
-} else {
-  import_url = `https://projects.urbanintelligence.co.nz/chap`;
-}
+var import_url = source_url + '/chap';
 
 import_manager.addImport('priority_areas', 'Adaptation Priority Areas', 'json', 
 import_url + `/data/adaptation_priority_areas.topojson`);
