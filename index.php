@@ -128,59 +128,28 @@
                     </svg>
                   </div>
                   <div class="introduction-div">
-                    <h2>Welcome to the Coastal Risk & Vulnerability Explorer for Christchurch.</h2>
-                      <br>This website presents the risk assessment of <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards" target="_blank">coastal hazards</a> to Ōtautahi Christchurch and identifies the vulnerability of elements (assets, people, and places of environmental, cultural and social value) that may be threatened by coastal hazards across the district.  <br>
-                      <br>The risk assessment is based on a vulnerability assessment and subsequent engagement with technical specialists. The assessment was completed by the <a href="https://www.canterbury.ac.nz/engineering/schools/cnre/research/systems/"  target="_blank">University of Canterbury</a> and uses hazard information from the <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards/how-we-assess-coastal-hazards/" target="_blank">2021 Coastal Hazard Assessment</a>. This explorer has been developed by Urban Intelligence Ltd as a tool to support the <a href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/" target="_blank">Christchurch City Council’s coastal hazards adaptation planning programme</a>.
-                      <br><br>You can browse the explorer by clicking the three other tabs across the top of the page:
-                      <ul>
-                        <li>
-                          <span>Home:</span> An introduction to the Coastal Risk Explorer, the methodology that sits behind it, and the answers to some frequently asked questions.
-                        </li>
-                        <li>
-                        <a onclick="setPage('map')">Map:</a> Maps that allow you to visualise the exposure and understand the vulnerability of different assets and places of value to coastal hazards. 
-                        </li>
-                        <li>
-                        <a onclick="setPage('overview')">Risk Summary:</a> A summary of the risks to key value domains.
-                        </li>
-                        <li>
-                        <a onclick="setPage('reports')">Asset Risk:</a> Individual asset information and risk assessment results.
-                        </li>
-                      </ul>
-                      <div class="contact">Note: This work is currently draft and will be ongoing</div>
+                    <h2>Welcome to the Ōtautahi Christchurch Coastal Risk Explorer.</h2>
+                      <br>This explorer shows which assets located along the coastlines, rivers and estuaries of Ōtautahi Christchurch will be impacted by <a href="">sea level rise</a> through coastal flooding, erosion and rising groundwater.  It helps us understand what assets are most exposed and vulnerable to <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards">coastal hazards</a> so that Council, communities and rūnanga can work together through the <a href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/">coastal hazards adaptation planning programme</a>.
+                      to develop plans for the future.  We will work with communities to make sure we haven’t missed assets that people value most. 
                   </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="width:100%;">
-                  <div id="home-tablets-div">
-                    <div class="header">How will your community be affected by:</div>
-                    <div id="home-tablets-highlight">
-                      <div class="home-tablet">
-                        <div>
-                          <img src="src/Coastal Erosion.jpg">
-                        </div>
-                        <div>
-                          Coastal Erosion
-                        </div>
-                      </div>
-                      <div class="home-tablet">
-                        <div>
-                          <img src="src/Storm Surge.jpg">
-                        </div>
-                        <div>
-                          Coastal Flooding
-                        </div>
-                      </div>
-                      <div class="home-tablet">
-                        <div>
-                          <img src="src/Sunny Flood.jpg">
-                        </div>
-                        <div>
-                          Rising Groundwater
-                        </div>
-                      </div>
-                    </div>
+                  <div id="home-demo-graphic-div">
+
                   </div>
+                  <div class="introduction-div">
+                    <br><br>Click through the tabs across the top of the page, or follow the links below: 
+                    <ul>
+                      <li>
+                      <a onclick="setPage('map')">Map:</a> Explore the impacts of coastal hazards on different assets, from roads, parks and pipes to walkways, community halls and everything in between. See what is most vulnerable and where these assets are located. 
+                      </li>
+                      <li>
+                      <a onclick="setPage('overview')">Risk Summary:</a> Find a summary of the risk posed by coastal hazards across each of the four domains (built, natural, cultural, social). Explore how this risk changes across the district as sea levels rise.
+                      </li>
+                      <li>
+                      <a onclick="setPage('reports')">Asset Risk:</a> Find a summary of the risk posed by coastal hazards to each ‘asset’. 
+                      </li>
+                    </ul>
+                    <div class="contact">Note: This work is currently draft and will be ongoing</div>
+                </div>
                 </td>
               </tr>
               <tr>
@@ -192,120 +161,79 @@
                   </div>
                   <div>
                     <div id="home-collapse-1" class="vl-collapsing-control">
-                      <ul><li>Risk & Vulnerability Assessment</li></ul>
+                      <ul><li>What is a Risk & Vulnerability Assessment?</li></ul>
                     </div>
                     <div id="home-collapsing-1" class="vl-collapsing">
-                      To effectively prepare and adapt our communities to coastal hazards we must 
-                      understand who, what, and where assets, taonga and places of value will be 
-                      impacted. A Risk Assessment takes what we know about coastal hazards and 
-                      identifies <b>who and what</b> will be exposed to these hazards as sea levels rise. 
-                      Where possible, we have looked at the sensitivity and adaptive capacity 
-                      (vulnerability) of these sectors, assets, and taonga (elements) to understand 
-                      potential consequences from sea level rise, helping us understand the risk posed
-                      by coastal hazards across the district. <br><br>
-                      This interactive map and dashboard help us to visualise this risk and how it is 
-                      distributed across the district. It also helps us understand how the risk is spread 
-                      across the built, natural, cultural, and social domains within any given area; 
-                      information that will help to guide adaptation planning.
+                      We need to understand where people, places and things of value will be exposed to coastal hazards, and just how vulnerable they will be. This will help Council, communities and rūnanga plan for sea level rise and adapt to coastal hazards more effectively. 
+                      <br><br>
+                      This risk and vulnerability assessment has been completed through a collaboration between the Christchurch City Council, <a target="_blank"  href="https://www.canterbury.ac.nz/engineering/schools/cnre/research/systems/">University of Canterbury</a>, and Urban Intelligence.
+                      Together we have identified assets in the built, natural, cultural, and social environments exposed to coastal hazards and with input from many specialists we have assessed how vulnerable these assets are based upon their sensitivity to coastal hazards and their adaptive capacity. 
+                      <br><br>
+                      The results of this assessment can be seen in the <a onclick="setPage('map')">Map</a>, <a onclick="setPage('overview')">Risk summary</a>, and <a onclick="setPage('reports')">Risk by Asset</a> pages of this explorer. More information on the methodology that sits behind this assessment can be found <a  target="_blank" href="">here.</a>
                     </div>
                   </div>
                   <div>
                     <div id="home-collapse-2" class="vl-collapsing-control">
-                      <ul><li>Why is an understanding of risk and vulnerability important?</li></ul>
+                      <ul><li>How do we determine risk and vulnerability?</li></ul>
                     </div>
                     <div id="home-collapsing-2" class="vl-collapsing">
-                      Christchurch City Council and our communities are beginning to adapt to climate
-                      change. As part of this work we have updated our <a href="https://ccc.govt.nz/assets/Documents/Environment/Coast/CHA/Coastal-Hazards-Assessment-2021-Summary-Report.pdf" target="_blank">Coastal Hazard Assessment</a> 
-                      which provides information on which locations will be impacted by coastal hazards. Coastal hazards become a risk when we have
-                      elements that are exposed and vulnerable to these hazards. Understanding what and where is at
-                      risk helps us to understand where we need to work with affected rūnanga and 
-                      communities and develop adaptation plans. <br><br>
-                      The Risk and Vulnerability Assessment takes our understanding of which 
-                      locations will be exposed to coastal hazards as sea-levels rise and adds in what 
-                      we know about the elements in these locations, estimating how vulnerable these
-                      things are. Understanding how vulnerable these things are helps us to 
-                      understand the management priorities within a location and guide the 
-                      development of adaptation plans to address the particular risk in each location.
+                      Hazards only pose a risk when things we care about are in the way of the hazard. To determine the level of risk we need to know what the consequence would be if something of importance was impacted by coastal hazards. To work out the consequence, we need to know how vulnerable something is to the hazard, we do this by looking at the sensitivity and adaptive capacity of an exposed asset (person, place or thing of value). 
+                      <ul>
+                        <li><b>Sensitivity</b> – The degree to which an asset is affected by coastal hazards.</li>
+                        <li><b>Adaptive capacity</b> – The ability an asset has to respond to coastal hazards.</li>
+                      </ul>
+                      We can predict some consequences with more certainty than others. We are more confident in the level of risk where we have more certainty. How certain or uncertain we are is therefore another important part of understanding risk. Throughout this explorer we have noted how certain we are in the information being provided. 
+                      <br><br>
+                      Read more in the methodology report <a target="_blank"  href="">here.</a>
                     </div>
                   </div>
                   <div>
                     <div id="home-collapse-3" class="vl-collapsing-control">
-                      <ul><li>How do we determine the risk to an element?</li></ul>
+                      <ul><li>What hazards are looked at in this explorer?</li></ul>
                     </div>
                     <div id="home-collapsing-3" class="vl-collapsing">
-                      Risk is a combination of consequences and associated uncertainty. The 
-                      uncertainty is based on the strength of evidence underlying the assessment and 
-                      our understanding of the relevant processes. To understand the consequences, 
-                      we need to estimate the:
-                      <ul>
-                        <li><b>Exposure</b>&nbsp;&#8211; What assets and places of value will be affected by coastal 
-                          hazards?</li>
-                        <li><b>Vulnerability</b>&nbsp;&#8211; What is the impact of some level of exposure on the 
-                          element? This is based on the element’s sensitivity and adaptive capacity.</li>
-                        <li><b>Sensitivity</b>&nbsp;&#8211; The degree to which the element is affected by coastal 
-                          hazards.</li>
-                        <li><b>Adaptive capacity</b>&nbsp;&#8211; What ability does the element have to respond to 
-                          the consequence of coastal hazard exposure or take advantage of any 
-                          opportunities?</li>
+                      <ul style="margin-top: 0;">
+                        <li><b>Coastal flooding</b> happens when normally dry, low-lying coastal areas are temporarily flooded by the sea. It is usually caused by a severe storm, but rising sea levels could also cause ‘sunny day flooding’ (where high tides cause flooding even without a storm).
+                        </li>
+                        <li><b>Coastal erosion</b> occurs when land is eaten away by the sea. Some coastal areas experience short periods of erosion, but then recover (build up again) while others continuously erode and do not recover.
+                        </li>
+                        <li><b>Rising groundwater</b> brings the water table (under the ground) closer to the surface. Wetter ground can can damage buildings and infrastructure thereby impacting on people’s health. In some cases, groundwater could rise above ground level and cause temporary or permanent ponding of water.
+                        </li>
                       </ul>
+                      The information on coastal hazards in this explorer comes from the <a target="_blank"  href="https://ccc.govt.nz/assets/Documents/Environment/Coast/CHA/Coastal-Hazards-Assessment-2021-Summary-Report.pdf">2021 Coastal Hazard Assessment Report.</a>
+                      You can find out more information about these hazards <a  target="_blank" href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards">here.</a>
                     </div>
                   </div>
                   <div>
                     <div id="home-collapse-4" class="vl-collapsing-control">
-                      <ul><li>Where have we sourced information on assets and places of value?</li></ul>
+                      <ul><li>How could climate change affect coastal hazards?</li></ul>
                     </div>
                     <div id="home-collapsing-4" class="vl-collapsing">
-                      Information on the presence & location of assets, taonga and places of value has 
-                      been collated from a range of sources including the District Plan, Christchurch 
-                      City Council, Statistics New Zealand, open data portals, and through consultation
-                      with rūnanga. The coastal hazard adaptation planning process will involve further
-                      consultation with exposed communities and rūnanga on what they value in their 
-                      area, information that can then be added and shown in the Explorer. <br><br>
-                      This is an iterative process. Our district, what is in it, and the hazards we face, 
-                      are changing. It is expected that the Risk Explorer will be updated on a regular 
-                      basis to ensure the information being used is up-to-date. This may result in 
-                      periods of time where the latest information on a particular asset type is not 
-                      shown in the Explorer. We welcome feedback and suggestions to ensure the 
-                      information is as complete as possible.
+                      Climate change is raising the level of the sea. Water expands with heat, so warmer temperatures are causing our oceans to expand. At the same time, these higher temperatures are melting icesheets and glaciers, adding more water to the oceans. The result is a rise in sea level that will not only affect the open coast, but means the impacts of high tides and storms will reach further inland, causing more frequent and severe flooding and erosion. This means that more land may be affected by coastal flooding, erosion and rising groundwater in the future, and the severity of the impacts will increase as well.
                     </div>
                   </div>
                   <div>
                     <div id="home-collapse-5" class="vl-collapsing-control">
-                      <ul><li>What hazards are included?</li></ul>
+                      <ul><li>Where has the explorer and our information come from?</li></ul>
                     </div>
                     <div id="home-collapsing-5" class="vl-collapsing">
-                      This 2021 Coastal Hazard Assessment considers:
-                      <ul>
-                        <li><b>Coastal flooding</b> happens when normally dry, low-lying coastal areas are
-                          temporarily flooded by the sea. It is usually caused by a severe storm, but 
-                          rising sea levels could also cause ‘sunny day flooding’ (where high tides 
-                          cause flooding even without a storm).</li>
-                        <li><b>Coastal erosion</b> is a natural process that occurs when land is removed by
-                          the sea. Some coastal areas experience short periods of erosion, but then 
-                          recover (build up again) while others continuously erode and do not 
-                          recover.</li>
-                        <li><b>Rising groundwater</b> can bring the water table (under the ground) close 
-                          to the ground surface. This wet ground can impact people’s health, 
-                          buildings, infrastructure and how the land can be used. In some cases, 
-                          groundwater could rise above ground level and cause temporary or 
-                          permanent ponding of water.</li>
-                      </ul>
+                      The risk explorer has been developed by Urban Intelligence Ltd and is based upon a vulnerability assessment completed by the <a  target="_blank" href="https://www.canterbury.ac.nz/engineering/schools/cnre/research/systems/">University of Canterbury</a>
+                      and supported by the knowledge of technical experts.
+                      <br><br>
+                      Information on the presence and location of assets has come from a wide range of places, including: Christchurch City Council, Statistics New Zealand, open data sources and through ongoing consultation with communities, rūnanga and other stakeholders as part of the 
+                      <a  target="_blank" href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/">coastal hazards adaptation planning programme.</a>
+                      This consultation is important to understand what is valued in the Whakaraupō/Lyttelton area and to make sure we haven't missed anything important.
+                      <br><br>
+                      Our district, and what is in it, is constantly changing. We will be updating the explorer regularly to help ensure the information being shown is up-to-date. In between these updates there will be times where the latest information on a particular asset, place or thing of value is not shown. If you think we are missing any information then please 
+                      <a target="_blank" href="">get in touch</a>, we welcome feedback and suggestions.
                     </div>
                   </div>
+                  <!-- EXTRA DROPDOWNS IF NEEDED
                   <div>
                     <div id="home-collapse-6" class="vl-collapsing-control">
                       <ul><li>How could climate change affect coastal hazards?</li></ul>
                     </div>
                     <div id="home-collapsing-6" class="vl-collapsing">
-                      Climate change is slowly raising the level of the sea. Water expands with heat, 
-                      so warmer temperatures are causing our oceans to expand. At the same time, 
-                      these higher temperatures are melting icesheets and glaciers which adds more 
-                      water to the oceans. The result is a rise in sea level that will not only affect the 
-                      open coast, but also allow high tides and the effects of storms to reach further 
-                      inland and cause more frequent and severe flooding and erosion. This means 
-                      that more land may be affected by coastal flooding, erosion and rising 
-                      groundwater in the future, and the severity of those impacts would likely be 
-                      greater.
                     </div>
                   </div>
                   <div>
@@ -313,14 +241,8 @@
                       <ul><li>Where can I find out more about coastal hazards?</li></ul>
                     </div>
                     <div id="home-collapsing-7" class="vl-collapsing" style="padding-bottom: 40px;">
-                      For more information about coastal hazards and adapting to sea level rise, visit 
-                      the (Adapting to Coastal Hazards 
-                      Page)[https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards] on the 
-                      Council website. The ‘Coastal hazards’ section of the website includes the 
-                      <a href="https://ccc.govt.nz/assets/Documents/Environment/Coast/CHA/Coastal-Hazards-Assessment-2021-Summary-Report.pdf" target="_blank">2021 Coastal Hazard Assessment Report</a>
-                      , as well as many other technical reports on coastal hazards.
                     </div>
-                  </div>
+                  </div>-->
                   <div style="background-color: #DDF0EC; height:20px;">
 
                   </div>
@@ -328,6 +250,9 @@
               </tr>
               <tr>
                 <td style="width:100%;text-align:center;color: #0004; font-size: 1rem;padding: 5rem 0;">
+                  <span style="color: #00000061">
+                    This explorer has been developed by Urban Intelligence Ltd as a tool to support the <a target="_blank" style="color: #89bfb3;" href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/">Christchurch City Council’s coastal hazards adaptation planning programme.</a>
+                  </span><br><br>
                   <span style="font-size: 1.6rem;">&#10070;</span><br><br>
                   Urban Intelligence & Christchurch City Council © 2022
                 </td>
@@ -389,8 +314,13 @@
                                 <tr>
                                   <td>
                                     <p>
-                                    The risk assessment gives an indication of how Ōtautahi Christchurch may be affected by climate change-related coastal hazards. Risks are categorised into four value domains, which you can explore in the tabs above. The significance of these risks is presented on the right and you can see how there is uncertainty associated with this estimate, inherent with any risk assessment - this highlights the gaps in information and data needed for future assessment and action. The assessment of risk to a subdomain is based on our understanding of how the hazards may affect related elements (e.g., assets, infrastructure, places, or people). You can explore the threats to each of these elements in the map and reports tabs.
-
+                                      This risk explorer shows us how Ōtautahi Christchurch may be impacted across the built, natural, cultural, social  domains by coastal hazards as sea levels rise. 
+                                      <br><br>
+                                      You can explore the risk in each domain by clicking through the domain tabs above or by clicking on the ‘sub-domains’ shown in the graph to the right. These sub-domains break down the risks in each of the Built (orange), Natural (green), Kaupapa Māori (red) and Social (blue) domains. You will notice some bars are more transparent than others, this represents how certain we are in the information being shown. The more transparent the bar, the less certain we are. You can read more about how we calculate the risk on the home page 
+                                      <a onclick="setPage('home')">here</a>.
+                                      <br><br>
+                                      For those of you looking for even more detail, you can find a complete breakdown of risk by the different assets (people, places or things of value) that make up a sub-domain in the Risk by Asset tab,
+                                      <a onclick="setPage('reports')">here</a>.
                                     </p>
                                   </td>
                                 </tr>
@@ -402,8 +332,7 @@
                                       <div class="collapse summary" id="overview-collapse-1"><ul><li>Summary</li></ul></div>
                                       <div class="collapsing" id="overview-collapsing-1">
                                         <p>
-                                          The built domain is the set and configuration of physical infrastructure, transport and buildings. It encompasses built infrastructure across sectors including housing, public amenity, water, wastewater, stormwater, energy, transport, communications, waste and coastal defences. These elements play an important role in day to day life, such as providing shelter, drinking water, electricity to heat and cook with, or the ability to travel around the district.
-                                          
+                                          The built domain has information on physical infrastructure and assets such as housing, transport, drinking water, waste and stormwater, utilities such as energy and communications, waste and coastal defences. Built assets exist to support communities and are therefore intrinsily connected to the human domain as they provide shelter, drinking water, electricity to heat and cook with, and the ability to travel around the district. 
                                         </p>
                                       </div>
                                     </div>
@@ -463,6 +392,7 @@
                                       <div class="collapse summary" id="overview-collapse-28"><ul><li>Summary</li></ul></div>
                                       <div class="collapsing" id="overview-collapsing-28">
                                         <p>
+                                          Māori social, cultural, spiritual and economic wellbeing are disproportionately threatened by rising sea levels through the loss and degradation of land, water and cultural assets such as marae to coastal hazards. The interconnectedness of these taonga (both physical and non-physical), the perspectives of Tangata Whenua, and Te Ao Māori (a Māori world view), will  be considered throughout the adaptation planning process to ensure the outcomes align with and enhance these values.
                                         </p>
                                       </div>
                                     </div>
@@ -527,10 +457,7 @@
                                       <div class="collapse summary" id="overview-collapse-14"><ul><li>Summary</li></ul></div>
                                       <div class="collapsing" id="overview-collapsing-14">
                                         <p>
-                                          The natural domain includes all aspects of the natural environment that support the full range of our indigenous species, he kura taiao – living treasures, and the ecosystems which they form in terrestrial, freshwater and marine environments. We have a number of nationally and internationally significant ecosystems and species across the district. 
-                                          <br><br>
-                                          Many species have the adaptive capacity enabling them to respond to changes in their environment, allowing them to be more resilient to coastal hazards than others. How these dynamic ecosystems and species might respond to climate change and coastal hazards has been estimated, allowing us to consider how different adaptation options might impact these significant ecosystems both now and in the future. 
-                                          
+                                          The natural domain has information on the presence of native flora, fauna and ecosystems on land and in freshwater and marine environments. These he kura taiao (living treasures) are what remains of the indigenous land cover and habitat that once covered our district. They hold great ecological, cultural, and social significance and as kaitiaki it is our responsibility to protect the integrity of these species and ecosystems, many of which are recognised nationally and internationally for their significance. 
                                         </p>
                                       </div>
                                     </div>
@@ -595,9 +522,7 @@
                                       <div class="collapse summary" id="overview-collapse-21"><ul><li>Summary</li></ul></div>
                                       <div class="collapsing" id="overview-collapsing-21">
                                         <p>
-                                        The social domain reflects how people are at risk from these changes. This includes social cohesion and wellbeing, as well as threats to communities’ ability to access important services. Exisiting social disparities and deprivation play an important role in social risk as it affects the ability of people to adapt.  
-                                        <br><br>
-                                          Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can either update into the Explorer or use to help ensure steps are taken to support the communities. 
+                                          The social domain has information on indicators of social vulnerability. These acknowledge that some communities and people may have less ability to prepare for, respond to, and recover from coastal hazards than others. Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can use to increase our understanding of social vulnerability and ensure communities are supported. 
                                         </p>
                                       </div>
                                     </div>
@@ -855,8 +780,8 @@
                                   <td class="report-exposure-graph" colspan="2">
                                       <div>  
                                         <div id="report-exposure-graph"></div>
-                                        <div id="report-exposure-graph2" class="hide">Second graph here</div>
-                                        <div id="report-exposure-graph3" class="hide">Thrid graph here</div>
+                                        <div id="report-exposure-graph2" class="hide">Second graph to be placed here.</div>
+                                        <div id="report-exposure-graph3" class="hide">Third graph to be placed here.</div>
                                       </div>
                                     </td>
                                 </tr>
