@@ -321,12 +321,15 @@ function openSubdomainSection(consequence_row) {
     var domain = consequence_row.domain.toLowerCase();
     if (domain == 'social') domain = 'human';
     setOverviewTab(domain);
-
+    
+    console.log(consequence_row, overview_graph_sections);
     var result = Object.values(overview_graph_sections).filter(d => d.title == consequence_row.subdomain);
-    overview_collapsables[result[0].id].open();
-    setTimeout(function () {
-        $(`#${result[0].id}`).siblings()[0].scrollIntoView();
-    }, 100);
+    if (result.length > 0) {
+        overview_collapsables[result[0].id].open();
+        setTimeout(function () {
+            $(`#${result[0].id}`).siblings()[0].scrollIntoView();
+        }, 100);
+    }
 }
 
 function updateSubdomainGraphs() {
