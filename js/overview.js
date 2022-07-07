@@ -209,7 +209,7 @@ function updateBigGraph() {
     var filtered_data = consquence_rating_data.filter(d => {
         return d.region.toLowerCase() == overview_region_dropdown.value && d.SLR == overview_slr_value;
     });
-    filtered_data.sort((a,b) => a.subdomain.length - b.subdomain.length);
+    filtered_data.sort((a,b) => b.consequence_high - a.consequence_high);
     filtered_data.sort((a,b) => b.consequence_mean - a.consequence_mean);
 
     // Separate out column names
@@ -241,24 +241,78 @@ function updateBigGraph() {
     $('#overview-display-graph').html('');
 
     overview_big_graph = new vlGraph(`overview-display-graph`, final_data, 'subdomain', 'consequence_mean');
-    overview_big_graph.x_axis_adjust(3);
+    overview_big_graph.x_axis_adjust(0);
     overview_big_graph.y_axis_label("Consequence");
-    overview_big_graph.y_axis_adjust(2);
-    overview_big_graph.margin_top(40);
-    overview_big_graph.margin_right(25);
-    overview_big_graph.margin_left(35);
-    overview_big_graph.margin_bottom(320);
+    overview_big_graph.y_axis_adjust(0);
+    overview_big_graph.margin_top(35);
+    overview_big_graph.margin_right(80);
+    overview_big_graph.margin_left(5);
+    overview_big_graph.margin_bottom(5);
     overview_big_graph.font_size(13);
     overview_big_graph.x_categories(column_strings);
-    overview_big_graph.opacity_column('evidence');
-    overview_big_graph.opacity_function(function (n) {return (n)/4;});
+    //overview_big_graph.opacity_column('evidence');
+    //overview_big_graph.opacity_function(function (n) {return (n)/4;});
     overview_big_graph.hover_text_function(function (row) {
-        return "Consequence " + row.consequence_mean + "<br>Evidence " + row.evidence
+        return "Consequence: " + row.consequence_mean + "<br>Evidence: " + row.evidence + 
+                "<br>Expert Range: " + row.consequence_low + '-' + row.consequence_high
+    });
+    overview_big_graph.extra_render_function(function (info) {
+        
+        console.log("INFO", info);
+        var dataset = info.datasets.undefined_0;
+        var bar_width = info.x.bandwidth();
+
+        // Extend highlight line
+        info.highlight_line.attr('x2', info.width + 80);
+
+        // Header
+        info.svg.append("text")
+        .attr("y", 0 - info.config.font_size - info.config.y_axis_adjust - 20)
+        .attr("x",  (info.width + 40))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("font-size", (info.config.font_size) + 'px')
+        .text('Evidence') 
+        .attr('class','vl-graph-axis-label');  
+
+
+        // Top Lines
+        info.svg.append('line')
+                .style("stroke", "#3e7691")
+                .style("stroke-width", 1)
+                .attr("x1", info.width + 15)
+                .attr("y1", 0.5)
+                .attr("x2", info.width + 65)
+                .attr("y2", 0.5); 
+        info.svg.append('line')
+                .style("stroke", "#3e7691")
+                .style("stroke-width", 1)
+                .attr("x1", info.width + 39.5)
+                .attr("y1", -2)
+                .attr("x2", info.width + 39.5)
+                .attr("y2", 0.5); 
+
+
+        for (var data of dataset) {
+
+            for (var i = 0; i < data.evidence; i ++) {
+                info.svg.append('rect')
+                .attr("x", info.width + 15 + i * 13)
+                .attr("y", info.x(data.subdomain))
+                .attr("width", 11)
+                .attr("height", bar_width)
+                .attr("rx", 1)
+                .attr("ry", 1)
+                .style("fill", "#3e7691")
+                .attr("opacity", data.evidence / 5 + 0.2)
+                .attr("stroke", "none");
+            }
+        }
     });
     overview_big_graph.color_column('domain');
     overview_big_graph.watermark('Draft data');
     overview_big_graph.x_value_in_hover(false);
-    overview_big_graph.colors({'Built': '#db7900', 'Natural': '#32b888', 'Cultural': '#c94040', 'Social': '#3e7691'});
+    overview_big_graph.colors({'Built': '#f9a53e', 'Natural': '#3ed98d', 'Cultural': '#ff6363', 'Social': '#61aacf'});
     overview_big_graph.x_ticks(7);
     overview_big_graph.line_width(2);
     overview_big_graph.y_tick_size(1);
@@ -271,8 +325,7 @@ function updateBigGraph() {
     overview_big_graph.max_x('strict');
     overview_big_graph.max_y(10);
     overview_big_graph.dots(false);
-    overview_big_graph.rotate_x_values(true);
-    overview_big_graph.barGraph();
+    overview_big_graph.horizontalBarGraph();
 
     /*overview_big_graph.svg.append("g")
     .attr("transform", "translate(0," + height + ")")

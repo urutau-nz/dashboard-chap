@@ -269,7 +269,7 @@ body .vl-select-body td:hover {
 #overview-summary-td .title h1 {
   font-size: 2rem;
   margin: 1.5rem 2rem 0.5rem 2rem;
-  color: #098484;
+  color: #3e7691;
 }
 
 #overview-info-table.overview #overview-summary-td .title h1 {
@@ -349,7 +349,7 @@ body .vl-select-body td:hover {
   font-style: italic;
   text-align: center;
   width: 100%;
-  padding-top: 60px;
+  padding-top: 30px;
 }
 
 #help-popup a {
@@ -476,7 +476,7 @@ div.intro_tour .introjs-button {
   white-space: nowrap;
 }
 #menu-table td:hover {
-  background-color: #50add440;
+  background-color: #1489845e;
 }
 #menu-table td.active {
   background-color: #148984;
@@ -1957,7 +1957,7 @@ body .vl-map-tooltip .other-hazards-div img {
   display:inline-block; 
   text-align: justify;
   background-color: white;
-  padding: 1rem 7rem 60px 6rem;
+  padding: 1rem 7rem 60px 7rem;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 1.2rem;
 }
@@ -2076,7 +2076,7 @@ body .vl-map-tooltip .other-hazards-div img {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 60px 7%;
+  padding: 0px 7% 60px 7%;
 }
 #home-collapsables-td>div {
   display: flex;
@@ -2116,9 +2116,6 @@ body .vl-map-tooltip .other-hazards-div img {
   font-family: 'Source Sans Pro';
   font-size: 1.1rem;
   color: #007c78;
-}
-#home-collapsables-td .vl-collapsing ul {
-  margin-bottom: 0;
 }
 #home-collapsables-td>div:first-child{
   border-top-left-radius: 12px;
@@ -2272,7 +2269,7 @@ body .vl-map-tooltip .other-hazards-div img {
   align-items: stretch;
   padding: 5px 10px;
   flex-wrap: wrap-reverse;
-  background: #f0f0f0;
+  background: #c6d6df;
   gap: 5px;
   border-bottom: 1px solid #4c80a917;
 }
@@ -2283,10 +2280,10 @@ body .vl-map-tooltip .other-hazards-div img {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  background: #fafafa;
+  background: #f4f9fb;
   color: #414042;
   flex-grow: 2;
-  border: 1px solid #dddddd;
+  border: 1px solid #99b7c6;
   line-height: 0.9rem;
   padding: 1px 22px 0px 10px;
   cursor: pointer;
@@ -2298,12 +2295,12 @@ body .vl-map-tooltip .other-hazards-div img {
 }
 #overview-menu>div:hover {
   background-color: #fff;
-  border: 1px solid #c3c3c3;
+  border: 1px solid #99b7c5;
 }
 #overview-menu>div.active {
   background-color: #fff;
-  border: 1px solid #c3c3c3;
-  box-shadow: 0 0px 3px #d2d4d7;
+  border: 1px solid #99b7c5;
+  box-shadow: 0 0px 2px #afb7c3;
 }
 #overview-menu img {
   width: 45px;
@@ -2339,7 +2336,7 @@ html .vl-multiselect .vl-select-head-item {
 }
 .graph-section .vl-select-head {
   border: none;
-  background-color: #b5c7d5;
+  background-color: #c6d6df;
   color: #395d78;
   font-family: 'Source Sans Pro';
   font-weight: 600;
@@ -2376,6 +2373,9 @@ html .vl-multiselect .vl-select-head-item {
 #page-overview .vl-axis path {
   stroke: #3e7691;
 }
+#page-overview .vl-bar-uncertainty {
+  stroke: #153342;
+}
 .graph-section .vl-graph-title {
   font-family: 'Source Sans Pro', sans-serif !important;
   font-weight: 700 !important;
@@ -2404,7 +2404,7 @@ html .vl-multiselect .vl-select-head-item {
   align-items: stretch;
   height: 100%;
   position: relative;
-  background: #b1b3b6;
+  background: #6591a7;
 }
 #overview-display-td>div {
   border-radius: 20px;
@@ -2432,7 +2432,8 @@ html .vl-multiselect .vl-select-head-item {
   justify-content: space-between;
   align-items: center;
   gap: 5px;
-  background-color:#e6e7e8;
+  background-color:#e0eff5;
+  color: #3e7691;
   border-radius: 40px;
 }
 #overview-controls-div .slr-form div:first-child {
@@ -2441,18 +2442,17 @@ html .vl-multiselect .vl-select-head-item {
 #overview-controls-div .slr-form .button {
   padding: 5px 8px;
   border-radius: 20px;
-  background-color: #e6e7e8;
+  background-color: #f5fafc;
   cursor: pointer;
-  border: 1px solid #b1b3b6;
-  ;
+  border: 1px solid #bacfd9;
 }
 #overview-controls-div .slr-form .button:hover {
-  background-color: #bcbcbc;
-  border: 1px solid #b1b3b6;
+  background-color: #bacfd9;
+  border: 1px solid #bacfd9;
 }
 #overview-controls-div .slr-form .button.active {
   background-color: #ffffff;
-  border: 1px solid #b1b3b6;
+  border: 1px solid #6591a7;
 }
 
 
@@ -2472,7 +2472,8 @@ html .vl-multiselect .vl-select-head-item {
 }
 #overview-controls-region-form .vl-select-head {
   height: 41px;
-  background-color: #e6e7e8;
+  background-color: #e0eff5;
+  color: #3e7691;
   border: none;
   border-radius: 30px;
   padding: 11px 18px;
@@ -2481,18 +2482,20 @@ html .vl-multiselect .vl-select-head-item {
   top: 0.75em;
   right: 12px;
   font-size: 1em;
+  color: #3e7691;
 }
 #overview-controls-region-form .vl-select-body-parent {
   border-radius: 20px;
   overflow: hidden;
   max-height: fit-content;
-  border: none;
-  background-color: #e6e7e8;
+  border: 1px solid #3e7691;
+  background-color: #e0eff5;
   padding: 10px 0;
   top: 105%;
+  color: #3e7691;
 }
 #overview-controls-region-form .vl-select-body td:hover {
-  background: #86898f;
+  background: #3e7691B0;
 }
 
 
@@ -2575,4 +2578,16 @@ html .vl-multiselect .vl-select-head-item {
   padding: 5px 10px;
   background-color: #c94040;
   color: white;
+}
+
+
+#home-demo-graphic-div {
+  width: 100%;
+  height: 300px;
+  background-color: #CCC;
+  margin: 40px 0;
+}
+
+#page-home .introduction-div ul li{
+  padding-bottom: 1rem;
 }

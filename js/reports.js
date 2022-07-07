@@ -22,7 +22,7 @@ function initPageReports() {
     report_domain_dropdown.setOnChange(filterReportResults);
     
     // Graph Dropdown
-    report_graphs = [["report-exposure-graph", "Asset Exposure"], ["report-exposure-graph2", "Graph Two"], ["report-exposure-graph3", "Graph Three"]];
+    report_graphs = [["report-exposure-graph", "Asset Exposure"], ["report-exposure-graph2", "Graph Two (pending)"], ["report-exposure-graph3", "Graph Three (pending)"]];
     report_graph_dropdown = new vlDropDown("report-graph-dropdown");
     report_graph_dropdown.populate(report_graphs);
     report_graph_dropdown.setOnChange(function(value_code) {
@@ -553,6 +553,10 @@ function openAssetReport(asset_id) {
     // Clear Exposure Graph
     //report_exposure_graph.setData([], 'exposure', 'cumsum');
     //report_exposure_graph.areaGraph();
+
+
+    //Import for debugging only
+    //vlQuickImport(`${import_url}/data/non-study-area.json`, 'json', function (d) {return;});
 
     // Import & Update Exposure Graph
     var hazard_scenario = getHazardScenarioTif();

@@ -48,7 +48,7 @@ function setPage(page) {
 
 
 function initPageHome() {
-    for (var i = 1; i <= 7; i ++) {
+    for (var i = 1; i <= 5; i ++) {
         var collapser = new vlCollapsing('home-collapse-' + i, 'home-collapsing-'+i);
         collapser.collapse();
     }
