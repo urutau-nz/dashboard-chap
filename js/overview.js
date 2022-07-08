@@ -209,7 +209,9 @@ function updateBigGraph() {
     var filtered_data = consquence_rating_data.filter(d => {
         return d.region.toLowerCase() == overview_region_dropdown.value && d.SLR == overview_slr_value;
     });
+    filtered_data.sort((a,b) => b.consequence_low - a.consequence_low);
     filtered_data.sort((a,b) => b.consequence_high - a.consequence_high);
+    filtered_data.sort((a,b) => (b.consequence_high + b.consequence_low) / 2 - (a.consequence_high + a.consequence_low) / 2);
     filtered_data.sort((a,b) => b.consequence_mean - a.consequence_mean);
 
     // Separate out column names
@@ -374,12 +376,15 @@ function openSubdomainSection(consequence_row) {
     var domain = consequence_row.domain.toLowerCase();
     if (domain == 'social') domain = 'human';
     setOverviewTab(domain);
-
+    
+    console.log(consequence_row, overview_graph_sections);
     var result = Object.values(overview_graph_sections).filter(d => d.title == consequence_row.subdomain);
-    overview_collapsables[result[0].id].open();
-    setTimeout(function () {
-        $(`#${result[0].id}`).siblings()[0].scrollIntoView();
-    }, 100);
+    if (result.length > 0) {
+        overview_collapsables[result[0].id].open();
+        setTimeout(function () {
+            $(`#${result[0].id}`).siblings()[0].scrollIntoView();
+        }, 100);
+    }
 }
 
 function updateSubdomainGraphs() {

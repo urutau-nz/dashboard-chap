@@ -295,7 +295,9 @@ function tncButtonClick() {
 
 
 
-
+var text_context = [
+  [["exposure", "exposed"], "Something is exposed when it has the potential to be impacted by coastal hazards."]
+];
   
   
 
@@ -317,6 +319,20 @@ function initMap() {
 
     // Initialize other aspects
     initFilters();
+
+    /*
+    for (var pair of text_context) {
+      for (var term of pair[0]) {
+        console.log($("p,div:not(:has(div))").text())
+        $("p,div:not(:has(div))").each(function() {
+          console.log($(this).html());
+          $(this).html().replace(term, `<span title="${pair[1]}" style="font-weight:bold">${term}</span>`);
+        });
+        $("p,div:not(:has(div))").each(function() {
+          $(this).html().replace(capitalize(term), `<span title="${pair[1]}" style="font-weight:bold">${capitalize(term)}</span>`);
+        });
+      }
+     }*/
 
     // Let user in
     tncCheckboxChange();

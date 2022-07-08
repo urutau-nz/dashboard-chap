@@ -1108,7 +1108,7 @@ html body .vl-select-body-parent {
 
 #reports-report-table .vulnerability-pie-td>div{
   width: 100%;
-  height: 180;
+  height: 150;
 }
 
 #reports-report-table .data-source-text-td {
@@ -2318,8 +2318,8 @@ body .vl-map-tooltip .other-hazards-div img {
 
 
 html .vl-multiselect .vl-select-head-item {
-  background-color: #e1e9ee;
-  border: 1px solid #89959f;
+  background-color: #fff;
+  border: 1px solid #6591a7;
   margin: 1px;
   padding: 4px 6px;
 
@@ -2580,7 +2580,7 @@ html .vl-multiselect .vl-select-head-item {
 
 
 
-#map-map-div-tooltip .study-mouse-over {
+#map-map-div-tooltip .study-mouse-over, #reports-map-div-tooltip .study-mouse-over  {
   padding: 5px 10px;
   background-color: #c94040;
   color: white;
