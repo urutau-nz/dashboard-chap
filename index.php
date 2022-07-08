@@ -271,29 +271,29 @@
                   <tr>
                     <td style="height: 0;">
                       <div id="overview-menu">
-                        <div id="overview-menu-human-td" onclick="setOverviewTab('human')">
+                        <div id="overview-menu-human-td" onclick="setOverviewTab('human')" onmouseover="translateOverviewTab('human', true)" onmouseout="translateOverviewTab('human', false)">
                           
-                          <img src="icons/Human-Tab-Colour.png"><div style="color: #4763B0">Social</div>
+                          <img src="icons/Human-Tab-Colour.png"><div style="color: #4763B0" id="human-text">Social</div>
                           <div class="shadow"></div>
                         </div>
-                        <div id="overview-menu-cultural-td" onclick="setOverviewTab('cultural')">
+                        <div id="overview-menu-cultural-td" onclick="setOverviewTab('cultural')" onmouseover="translateOverviewTab('cultural', true)" onmouseout="translateOverviewTab('cultural', false)">
                           
-                          <img src="icons/Cultural-Tab-Colour.png"><div style="color: #751240">Cultural</div>
+                          <img src="icons/Cultural-Tab-Colour.png"><div style="color: #751240" id="cultural-text">Cultural</div>
                           <div class="shadow"></div>
                         </div>
-                        <div id="overview-menu-natural-td" onclick="setOverviewTab('natural')">
+                        <div id="overview-menu-natural-td" onclick="setOverviewTab('natural')" onmouseover="translateOverviewTab('natural', true)" onmouseout="translateOverviewTab('natural', false)">
                           
-                          <img src="icons/Natural-Tab-Colour.png"><div style="color: #477D45">Natural</div>
+                          <img src="icons/Natural-Tab-Colour.png"><div style="color: #477D45" id="natural-text">Natural</div>
                           <div class="shadow"></div>
                         </div>
-                        <div id="overview-menu-built-td" onclick="setOverviewTab('built')" >
+                        <div id="overview-menu-built-td" onclick="setOverviewTab('built')" onmouseover="translateOverviewTab('built', true)" onmouseout="translateOverviewTab('built', false)">
                           
-                          <img src="icons/Built-Tab-Colour.png"><div style="color: #F58C1F">Built</div>
+                          <img src="icons/Built-Tab-Colour.png"><div style="color: #F58C1F" id="built-text">Built</div>
                           <div class="shadow"></div>
                         </div>
-                        <div id="overview-menu-overview-td" onclick="setOverviewTab('overview')" class="active">
+                        <div id="overview-menu-overview-td" onclick="setOverviewTab('overview')" onmouseover="translateOverviewTab('overview', true)" onmouseout="translateOverviewTab('overview', false)" class="active">
                           
-                          <img src="icons/Overview-Tab-Colour.png"><div style="color: #12A3A3">Overview</div>
+                          <img src="icons/Overview-Tab-Colour.png"><div style="color: #12A3A3" id="overview-text">Overview</div>
                           <div class="shadow"></div>
                         </div>
                       </div>
@@ -735,6 +735,33 @@
                             </td>
                           </tr>
                           <tr>
+                            <td class="vulnerability-title-td" colspan="2">
+                              <h1><div>ASSET&nbsp;</div><div style="font-weight: 700;">RESULTS</div></h1> 
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="results-graph-title-td" colspan="2">
+                              <!-- <div style="font-weight: 700; text-align: center;">
+                                ASSET EXPOSURE
+                              </div> -->
+                              <div id="report-graph-dropdown"></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="report-exposure-graph" colspan="2">
+                                <div>  
+                                  <div id="report-exposure-graph"></div>
+                                  <div id="report-exposure-graph2" class="hide">Second graph to be placed here.</div>
+                                  <div id="report-exposure-graph3" class="hide">Third graph to be placed here.</div>
+                                </div>
+                              </td>
+                          </tr>
+                          <tr>
+                            <td class="separator-td" colspan="2">
+                              <div></div>
+                            </td>
+                          </tr>
+                          <tr>
                             <td class="data-source-section">
                               <table style="width: 100%">
                                 <tr>
@@ -757,33 +784,6 @@
                                 </tr>
                                 <tr>
                                   <td id="report-uncertainty-text2" class="data-source-text-td" colspan="2"></td>
-                                </tr>
-                                <tr>
-                                  <td class="separator-td" colspan="2">
-                                    <div></div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="vulnerability-title-td" colspan="2">
-                                    <h1><div>ASSET&nbsp;</div><div style="font-weight: 700;">RESULTS</div></h1> 
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="results-graph-title-td" colspan="2">
-                                    <!-- <div style="font-weight: 700; text-align: center;">
-                                      ASSET EXPOSURE
-                                    </div> -->
-                                    <div id="report-graph-dropdown"></div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="report-exposure-graph" colspan="2">
-                                      <div>  
-                                        <div id="report-exposure-graph"></div>
-                                        <div id="report-exposure-graph2" class="hide">Second graph to be placed here.</div>
-                                        <div id="report-exposure-graph3" class="hide">Third graph to be placed here.</div>
-                                      </div>
-                                    </td>
                                 </tr>
                               </table>
                             </td>

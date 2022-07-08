@@ -387,6 +387,7 @@ function updateSubdomainGraphs() {
         updateSubdomainGraph(section_name);
     }
 }
+
 function updateSubdomainGraph(section_name) {
     var section = overview_graph_sections[section_name];
 
@@ -471,10 +472,49 @@ function updateSubdomainGraph(section_name) {
     }
 }
 
+//Translates the tab text in the overview page to Te Reo when the mouse cursor hovers
+//over the button.
+function translateOverviewTab(tab, isMouseOver) {
+    //Translate only non-overview tabs on mouseover
+    var isTraslating = isMouseOver && tab != "overview";
+
+    //Change font size slightly to accomodate longer Te Reo titles
+    if(isTraslating) {
+        $(`#${tab}-text`).css("font-size", "1rem");
+        $(`#${tab}-text`).css("white-space", "nowrap");
+    } else {
+        $(`#${tab}-text`).css("font-size", "1.2rem");
+        $(`#${tab}-text`).css("white-space", "pre");
+    }
+
+    //Then translate the text
+    switch(tab) {
+    case "overview":
+        break;
+    case "built":
+        if(isTraslating) $("#built-text").text("Taiao Hanga");
+        else $("#built-text").text("Built");
+        break;
+    case "natural":
+        if(isTraslating) $("#natural-text").text("Te Taiao");
+        else $("#natural-text").text("Natural");
+        break;
+    case "cultural":
+        if(isTraslating) $("#cultural-text").text("Kaupapa Māori");
+        else $("#cultural-text").text("Cultural");
+        break;
+    case "human":
+        if(isTraslating) $("#human-text").text("Pāpori");
+        else $("#human-text").text("Social");
+        break;
+    }
+}
+
 
 function setOverviewTab(tab) {
     if (tab != current_overview_tab) {
         $(`#overview-menu-${current_overview_tab}-td`).removeClass("active");
+        $(`#overview-menu-${current_overview_tab}-td`).css("display", "inherit");
         $('#overview-info-table').removeClass(current_overview_tab);
         $('#overview-info-table').addClass(tab)
 
@@ -482,27 +522,33 @@ function setOverviewTab(tab) {
 
         // Activate Tab
         $(`#overview-menu-${current_overview_tab}-td`).addClass("active");
+        $(`#overview-menu-${current_overview_tab}-td`).css("display", "none");
 
         
         switch(tab) {
             case "overview": {
-                $("#overview-summary-td .title").html(`<h1>Overview</h1>`);
+                $("#overview-summary-td .title").html(`<img src="icons/Overview-Tab-Colour.png" width="100px">
+                <h1><div style="color: rgb(18, 163, 163);">Overview</div></h1>`);
 
             } break;
             case "built": {
-                $("#overview-summary-td .title").html(`<h1>Built <span class="field">Domain</span></h1>`);
+                $("#overview-summary-td .title").html(`<img src="icons/Built-Tab-Colour.png" width="100px">
+                <h1><div style="color: rgb(245, 140, 31);">Built Domain</div></h1>`);
 
             } break;
             case "natural": {
-                $("#overview-summary-td .title").html(`<h1>Natural <span class="field">Domain</span></h1>`);
+                $("#overview-summary-td .title").html(`<img src="icons/Natural-Tab-Colour.png" width="100px">
+                <h1><div style="color: rgb(71, 125, 69);">Natural Domain</div></h1>`);
 
             } break;
             case "cultural": {
-                $("#overview-summary-td .title").html(`<h1>Cultural <span class="field">Domain</span></h1>`);
+                $("#overview-summary-td .title").html(`<img src="icons/Cultural-Tab-Colour.png" width="100px">
+                <h1><div style="color: rgb(117, 18, 64);">Cultural Domain</div></h1>`);
 
             } break;
             case "human": {
-                $("#overview-summary-td .title").html(`<h1>Social <span class="field">Domain</span></h1>`);
+                $("#overview-summary-td .title").html(`<img src="icons/Human-Tab-Colour.png" width="100px">
+                <h1><div style="color: rgb(71, 99, 176);">Social Domain</div></h1>`);
 
             } break;
         }

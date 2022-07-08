@@ -266,9 +266,15 @@ body .vl-select-body td:hover {
   box-shadow: 0 0 0.5rem #0004;
 }
 
+#overview-summary-td .title{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 1rem 0rem 1rem 1rem;
+}
+
 #overview-summary-td .title h1 {
   font-size: 2rem;
-  margin: 1.5rem 2rem 0.5rem 2rem;
   color: #3e7691;
 }
 
