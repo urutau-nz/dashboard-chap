@@ -209,7 +209,9 @@ function updateBigGraph() {
     var filtered_data = consquence_rating_data.filter(d => {
         return d.region.toLowerCase() == overview_region_dropdown.value && d.SLR == overview_slr_value;
     });
+    filtered_data.sort((a,b) => b.consequence_low - a.consequence_low);
     filtered_data.sort((a,b) => b.consequence_high - a.consequence_high);
+    filtered_data.sort((a,b) => (b.consequence_high + b.consequence_low) / 2 - (a.consequence_high + a.consequence_low) / 2);
     filtered_data.sort((a,b) => b.consequence_mean - a.consequence_mean);
 
     // Separate out column names

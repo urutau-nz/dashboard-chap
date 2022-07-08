@@ -8,7 +8,7 @@ var report_graphs;
 var report_graph_dropdown;
 var report_region_dropdown;
 
-var report_vulnerability_graphs = [];
+var report_vulnerability_chart = null;
 var report_exposure_graph = null;
 
 var report_relevant_instances = null; // Asset Instance data relevant to this asset, hazard & region
@@ -186,18 +186,9 @@ function initPageReports() {
     zoom.addTo(report_map.map);
 
     
-    // Create Report Vulnerability Graphs
-    var low_graph = new vlCircleBar("report-vulnerability-graph1", "Pie Chart<br>Pending",
-                611, 1000, "#32b888", "ASSETS");
-    report_vulnerability_graphs.push(low_graph)
 
-    var medium_graph = new vlCircleBar("report-vulnerability-graph2", "Medium<br>Vulnerability",
-                376, 1000, "#db7900", "ASSETS");
-    report_vulnerability_graphs.push(medium_graph)
-    
-    var high_graph = new vlCircleBar("report-vulnerability-graph3", "High<br>Vulnerability",
-                123, 1000, "#c94040", "ASSETS");
-    report_vulnerability_graphs.push(high_graph)
+    // Create vulnerability chart
+    report_vulnerability_chart = new vlPieChart('report-vulnerability-graph1', '', [], ['#666', '#32b888', '#db7900', '#c94040']);
 
 
     // Create exposure Graph
@@ -539,15 +530,8 @@ function openAssetReport(asset_id) {
     report_exposure_graph.title(graph_title);
     
     // Edit Vulnerability Graphs
-    report_vulnerability_graphs[0].max_value = 1;
-    report_vulnerability_graphs[1].max_value = 1;
-    report_vulnerability_graphs[2].max_value = 1;
-    report_vulnerability_graphs[0].value = 0;
-    report_vulnerability_graphs[1].value = 0;
-    report_vulnerability_graphs[2].value = 0;
-    report_vulnerability_graphs[0].graph();
-    report_vulnerability_graphs[1].graph();
-    report_vulnerability_graphs[2].graph();
+    report_vulnerability_chart.values = [];
+    report_vulnerability_chart.graph();
 
 
     // Clear Exposure Graph
@@ -617,16 +601,9 @@ function openAssetReport(asset_id) {
 
             }
         }
-        if (has_data) {
-            report_vulnerability_graphs[0].max_value = any_vulnerability_count;
-            report_vulnerability_graphs[1].max_value = any_vulnerability_count;
-            report_vulnerability_graphs[2].max_value = any_vulnerability_count;
-            report_vulnerability_graphs[0].value = low_vulnerability_count;
-            report_vulnerability_graphs[1].value = med_vulnerability_count;
-            report_vulnerability_graphs[2].value = high_vulnerability_count;
-            report_vulnerability_graphs[0].graph();
-            report_vulnerability_graphs[1].graph();
-            report_vulnerability_graphs[2].graph();
+        if (any_vulnerability_count + unspecified_vulnerability_count > 0) {
+            report_vulnerability_chart.values = [unspecified_vulnerability_count, low_vulnerability_count, med_vulnerability_count, high_vulnerability_count];
+            report_vulnerability_chart.graph();
         }
 
 
