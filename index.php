@@ -129,7 +129,7 @@
                   </div>
                   <div class="introduction-div">
                     <h2>Welcome to the Ōtautahi Christchurch Coastal Risk Explorer.</h2>
-                      <br>This explorer shows which assets located along the coastlines, rivers and estuaries of Ōtautahi Christchurch will be impacted by <a href="">sea level rise</a> through coastal flooding, erosion and rising groundwater.  It helps us understand what assets are most exposed and vulnerable to <a href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards">coastal hazards</a> so that Council, communities and rūnanga can work together through the <a href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/">coastal hazards adaptation planning programme</a>.
+                      <br>This explorer shows which assets located along the coastlines, rivers and estuaries of Ōtautahi Christchurch will be impacted by <a target="_blank" href="">sea level rise</a> through coastal flooding, erosion and rising groundwater.  It helps us understand what assets are most exposed and vulnerable to <a target="_blank" href="https://ccc.govt.nz/environment/coast/adapting-to-coastal-hazards/coastalhazards">coastal hazards</a> so that Council, communities and rūnanga can work together through the <a target="_blank" href="https://ccc.govt.nz/environment/coast/adapting-to-sea-level-rise/our-coastal-hazards-adaptation-planning-programme/">coastal hazards adaptation planning programme</a>.
                       to develop plans for the future.  We will work with communities to make sure we haven’t missed assets that people value most. 
                   </div>
                   <div id="home-demo-graphic-div">
@@ -278,7 +278,7 @@
                         </div>
                         <div id="overview-menu-cultural-td" onclick="setOverviewTab('cultural')" onmouseover="translateOverviewTab('cultural', true)" onmouseout="translateOverviewTab('cultural', false)">
                           
-                          <img src="icons/Cultural-Tab-Colour.png"><div style="color: #751240" id="cultural-text">Cultural</div>
+                          <img src="icons/Cultural-Tab-Colour.png"><div style="color: #751240; font-size: 1rem; white-space: nowrap;" id="cultural-text">Kaupapa Māori</div>
                           <div class="shadow"></div>
                         </div>
                         <div id="overview-menu-natural-td" onclick="setOverviewTab('natural')" onmouseover="translateOverviewTab('natural', true)" onmouseout="translateOverviewTab('natural', false)">
@@ -316,7 +316,7 @@
                                     <p>
                                       This risk explorer shows us how Ōtautahi Christchurch may be impacted across the built, natural, cultural, social  domains by coastal hazards as sea levels rise. 
                                       <br><br>
-                                      You can explore the risk in each domain by clicking through the domain tabs above or by clicking on the ‘sub-domains’ shown in the graph to the right. These sub-domains break down the risks in each of the Built (orange), Natural (green), Kaupapa Māori (red) and Social (blue) domains. You will notice some bars are more transparent than others, this represents how certain we are in the information being shown. The more transparent the bar, the less certain we are. You can read more about how we calculate the risk on the home page 
+                                      You can explore the risk in each domain by clicking through the domain tabs above or by clicking on the ‘sub-domains’ shown in the graph to the right. These sub-domains break down the risks in each of the Built (orange), Natural (green), Kaupapa Māori (red) and Social (blue) domains. The evidence column represents how certain we are in the information being shown. The more blocks, the more certain we are. You can read more about You can read more about how we calculate the risk on the home page 
                                       <a onclick="setPage('home')">here</a>.
                                       <br><br>
                                       For those of you looking for even more detail, you can find a complete breakdown of risk by the different assets (people, places or things of value) that make up a sub-domain in the Risk by Asset tab,
@@ -329,7 +329,7 @@
                                 <tr>
                                   <td class="domain-summary-td">
                                     <div>
-                                      <div class="collapse summary" id="overview-collapse-1"><ul><li>Summary</li></ul></div>
+                                      
                                       <div class="collapsing" id="overview-collapsing-1">
                                         <p>
                                           The built domain has information on physical infrastructure and assets such as housing, transport, drinking water, waste and stormwater, utilities such as energy and communications, waste and coastal defences. Built assets exist to support communities and are therefore intrinsily connected to the human domain as they provide shelter, drinking water, electricity to heat and cook with, and the ability to travel around the district. 
@@ -339,43 +339,8 @@
                                     <div>
                                       <div><h2>Risk to the Built Environment Domain</h2></div>
                                     </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-2"><ul><li>Risk to potable water supply</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-2">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-3"><ul><li>Risk to buildings</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-3">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-4"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-4">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-5"><ul><li>Risk to wastewater and stormwater</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-5">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-6"><ul><li>Risk to transportation</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-6">
-                                        Select hazard:
-                                        <br>
-                                        Select Vulnerability:
-                                        <br>
-                                        Select adaptation area:
-                                        <br>
-                                        Figures:
-                                        <br>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-7"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-7">
-                                      </div>
+                                    <div class="subdomain-collapsables-div">
+                                      
                                     </div>
                                   </td>
                                 </tr>
@@ -389,7 +354,7 @@
                                 <tr>
                                   <td class="domain-summary-td">
                                     <div>
-                                      <div class="collapse summary" id="overview-collapse-28"><ul><li>Summary</li></ul></div>
+                                      
                                       <div class="collapsing" id="overview-collapsing-28">
                                         <p>
                                           Māori social, cultural, spiritual and economic wellbeing are disproportionately threatened by rising sea levels through the loss and degradation of land, water and cultural assets such as marae to coastal hazards. The interconnectedness of these taonga (both physical and non-physical), the perspectives of Tangata Whenua, and Te Ao Māori (a Māori world view), will  be considered throughout the adaptation planning process to ensure the outcomes align with and enhance these values.
@@ -399,48 +364,8 @@
                                     <div>
                                       <div><h2>Risk to the Cultural Domain</h2></div>
                                     </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-22"><ul><li>Risk to potable water supply</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-22">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-23"><ul><li>Risk to buildings</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-23">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-24"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-24">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-25"><ul><li>Risk to wastewater and stormwater</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-25">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-26"><ul><li>Risk to transportation</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-26">
-                                        Select hazard:
-                                        <br>
-                                        Select Vulnerability:
-                                        <br>
-                                        Select adaptation area:
-                                        <br>
-                                        Figures:
-                                        <br>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-27"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-27">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-32"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-32">
-                                      </div>
+                                    <div class="subdomain-collapsables-div">
+                                      
                                     </div>
                                   </td>
                                 </tr>
@@ -454,7 +379,7 @@
                                 <tr>
                                   <td class="domain-summary-td">
                                     <div>
-                                      <div class="collapse summary" id="overview-collapse-14"><ul><li>Summary</li></ul></div>
+                                      
                                       <div class="collapsing" id="overview-collapsing-14">
                                         <p>
                                           The natural domain has information on the presence of native flora, fauna and ecosystems on land and in freshwater and marine environments. These he kura taiao (living treasures) are what remains of the indigenous land cover and habitat that once covered our district. They hold great ecological, cultural, and social significance and as kaitiaki it is our responsibility to protect the integrity of these species and ecosystems, many of which are recognised nationally and internationally for their significance. 
@@ -464,48 +389,8 @@
                                     <div>
                                       <div><h2>Risk to the Natural Domain</h2></div>
                                     </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-8"><ul><li>Risk to potable water supply</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-8">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-9"><ul><li>Risk to buildings</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-9">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-10"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-10">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-11"><ul><li>Risk to wastewater and stormwater</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-11">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-12"><ul><li>Risk to transportation</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-12">
-                                        Select hazard:
-                                        <br>
-                                        Select Vulnerability:
-                                        <br>
-                                        Select adaptation area:
-                                        <br>
-                                        Figures:
-                                        <br>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-13"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-13">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-29"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-29">
-                                      </div>
+                                    <div class="subdomain-collapsables-div">
+                                      
                                     </div>
                                   </td>
                                 </tr>
@@ -519,7 +404,7 @@
                                 <tr>
                                   <td class="domain-summary-td">
                                     <div>
-                                      <div class="collapse summary" id="overview-collapse-21"><ul><li>Summary</li></ul></div>
+                                      
                                       <div class="collapsing" id="overview-collapsing-21">
                                         <p>
                                           The social domain has information on indicators of social vulnerability. These acknowledge that some communities and people may have less ability to prepare for, respond to, and recover from coastal hazards than others. Throughout the adaptation planning process we will be engaging with communities that are at risk of coastal hazards and providing opportunities for the contribution of information that we can use to increase our understanding of social vulnerability and ensure communities are supported. 
@@ -529,53 +414,8 @@
                                     <div>
                                       <div><h2>Risk to the Social Domain</h2></div>
                                     </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-15"><ul><li>Risk to potable water supply</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-15">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-16"><ul><li>Risk to buildings</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-16">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-17"><ul><li>Risk to landfills and contaminated sites</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-17">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-18"><ul><li>Risk to wastewater and stormwater</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-18">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-19"><ul><li>Risk to transportation</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-19">
-                                        Select hazard:
-                                        <br>
-                                        Select Vulnerability:
-                                        <br>
-                                        Select adaptation area:
-                                        <br>
-                                        Figures:
-                                        <br>
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-20"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-20">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-30"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-30">
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div class="collapse" id="overview-collapse-31"><ul><li>Risk to electricity, energy, and communications</li></ul></div>
-                                      <div class="collapsing" id="overview-collapsing-31">
-                                      </div>
+                                    <div class="subdomain-collapsables-div">
+                                      
                                     </div>
                                   </td>
                                 </tr>
@@ -609,6 +449,7 @@
                 </div>
                 <div id="overview-display-div">
                     <div id="overview-display-graph"></div>
+                    <div id="overview-display-subtitle"></div>
                 </div>
               </td>
             </tr>
@@ -688,7 +529,7 @@
                                             <img class="vulnerability-asset-type-icon" src="icons/Risk-Red.svg" width="100%">
                                           </div>
                                         </td>
-                                        <td id="report-exposure-text3" class="vulnerability-bullet-text-td"></td>
+                                        <td id="report-exposure-text3" class="vulnerability-bullet-text-td">aaa</td>
                                       </tr>
                                     </table>
                                   </td>
@@ -700,25 +541,33 @@
                                         <td class="vulnerability-icon-td">
                                           <div class="color-box low-vulnerability"></div>
                                         </td>
-                                        <td id="report-vulnerability-result1" class="vulnerability-bullet-text-td"></td>
+                                        <td id="report-vulnerability-result1" class="vulnerability-bullet-text-td">
+                                          <img src="icons/QMark-Dot-Black.svg" class="vulnerability-help-icon">
+                                        </td>
                                       </tr>
                                       <tr>
                                         <td class="vulnerability-icon-td">
                                           <div class="color-box medium-vulnerability"></div>
                                         </td>
-                                        <td id="report-vulnerability-result2" class="vulnerability-bullet-text-td"></td>
+                                        <td id="report-vulnerability-result2" class="vulnerability-bullet-text-td">
+                                          <img src="icons/QMark-Dot-Black.svg" class="vulnerability-help-icon">
+                                        </td>
                                       </tr>
                                       <tr>
                                         <td class="vulnerability-icon-td">
                                           <div class="color-box high-vulnerability"></div>
                                         </td>
-                                        <td id="report-vulnerability-result3" class="vulnerability-bullet-text-td"></td>
+                                        <td id="report-vulnerability-result3" class="vulnerability-bullet-text-td">
+                                          <img src="icons/QMark-Dot-Black.svg" class="vulnerability-help-icon">
+                                        </td>
                                       </tr>
                                       <tr>
                                         <td class="vulnerability-icon-td">
                                           <div class="color-box unspecified-vulnerability"></div>
                                         </td>
-                                        <td id="report-vulnerability-result4" class="vulnerability-bullet-text-td"></td>
+                                        <td id="report-vulnerability-result4" class="vulnerability-bullet-text-td">
+                                          <img src="icons/QMark-Dot-Black.svg" class="vulnerability-help-icon">
+                                        </td>
                                       </tr>
                                     </table>
                                   </td>
@@ -815,8 +664,13 @@
 
                   </div>
                 </div>
-                <div id="report-cog-overlay">
-                  <img title="Under Development" src="icons/Cog-Blue.svg">
+                <div id="report-cog-overlay" class="map-toolbar-parent">
+                  <div class="map-toolbar">
+                    <img class="cog-image" src="icons/Cog-Blue.svg">
+                    <div class="map-toolbar-tools">
+                      <!-- Auto filled with tools by code -->
+                    </div>
+                  </div>
                 </div>
                 <div class="basemap-switch-overlay">
                   <div class="normal front">
@@ -835,8 +689,13 @@
         </div>
         <div class="page" id="page-map">
           <div id="map-map-div"></div>
-          <div id="map-cog-overlay">
-            <img title="Under Development" src="icons/Cog-Blue.svg">
+          <div id="map-cog-overlay" class="map-toolbar-parent">
+            <div class="map-toolbar">
+              <img class="cog-image" src="icons/Cog-Blue.svg">
+              <div class="map-toolbar-tools">
+                <!-- Auto filled with tools by code -->
+              </div>
+            </div>
           </div>
           <div class="basemap-switch-overlay">
             <div class="normal front">

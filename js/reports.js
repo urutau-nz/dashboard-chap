@@ -163,9 +163,9 @@ function initPageReports() {
     $("#report-searchbar").on('input', filterReportResults);
 
     // Create Report Map
-    report_map = new vlMap('reports-map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
+    report_map = new vlMap('reports-map-div', {"attributionControl": false, inertia: false,  center: [-43.530918, 172.636744], zoom: 11, minZoom : 10, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
     report_map.basemap('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                            {"detectRetina": false, "minZoom": 4,
+                            {"detectRetina": false, "minZoom": 10,
                             "noWrap": false, "subdomains": "abc"});
     
     report_map.createPane('labels', 650);
@@ -188,7 +188,7 @@ function initPageReports() {
     
 
     // Create vulnerability chart
-    report_vulnerability_chart = new vlPieChart('report-vulnerability-graph1', '', [], ['#666', '#32b888', '#db7900', '#c94040']);
+    report_vulnerability_chart = new vlPieChart('report-vulnerability-graph1', '', [], ['#666', '#FFC000', '#FF6000', '#ff0000']);
 
 
     // Create exposure Graph
@@ -444,11 +444,11 @@ function reportAssetInstanceColor(instance) {
     if (instance) {
         // Determine color by vulnerability (in future! TODO)
         if (instance.vulnerability == "high") {
-            var color = "#c94040"; // RED
+            var color = "#FF0000"; // RED
         } else if (instance.vulnerability == "medium") {
-            var color = "#db7900"; // ORANGE
+            var color = "#FF6000"; // ORANGE
         } else if (instance.vulnerability == "low") {
-            var color = "#32b888"; // GREEN
+            var color = "#FFC000"; // GREEN
         } else {
             var color = "#666"; // GREY - unknown vulnerability
         }
@@ -565,6 +565,12 @@ function openAssetReport(asset_id) {
         report_exposure_graph.areaGraph();
     });
 
+    //Clear vulnerability lines to allow prepend / append to work appropriately
+    $("#report-vulnerability-result1").html('');
+    $("#report-vulnerability-result2").html('');
+    $("#report-vulnerability-result3").html('');
+    $("#report-vulnerability-result4").html('');
+
     // Load Asset Instance Data (per-asset-id data)    and then make map
     var current_hazard = getHazard();
     vlQuickImport(report_asset_selected.instances_file_name, 'csv', function (instances) {
@@ -642,20 +648,20 @@ function openAssetReport(asset_id) {
 
         // Change risk level texts
         // (that's the stuff that says: 0 assets are classed as low vulnerability.)
-        var exposure_text_3 = `${report_asset_selected.name}: <b>${any_vulnerability_count}</b> assets out of <b>${num_instances}</b> are exposed.`;
-        $("#report-exposure-text3").html(exposure_text_3);
+        // var exposure_text_3 = `${report_asset_selected.name}: <b>${any_vulnerability_count}</b> assets out of <b>${num_instances}</b> are exposed.`;
+        // $("#report-exposure-text3").html(exposure_text_3);
 
-        var low_text = `<b>${low_vulnerability_count}</b> assets are classed as <b>low</b> vulnerability.`
-        $("#report-vulnerability-result1").html(low_text);
+        // var low_text = `<b>${low_vulnerability_count}</b> assets are classed as <b>low</b> vulnerability.`
+        // $("#report-vulnerability-result1").prepend(low_text);
 
-        var med_text = `<b>${med_vulnerability_count}</b> assets are classed as <b>medium</b> vulnerability.`
-        $("#report-vulnerability-result2").html(med_text);
+        // var med_text = `<b>${med_vulnerability_count}</b> assets are classed as <b>medium</b> vulnerability.`
+        // $("#report-vulnerability-result2").prepend(med_text);
 
-        var high_text = `<b>${high_vulnerability_count}</b> assets are classed as <b>high</b> vulnerability.`
-        $("#report-vulnerability-result3").html(high_text);
+        // var high_text = `<b>${high_vulnerability_count}</b> assets are classed as <b>high</b> vulnerability.`
+        // $("#report-vulnerability-result3").prepend(high_text);
 
-        var unspecified_text = `<b>${unspecified_vulnerability_count}</b> assets are classed as <b>unspecified</b> vulnerability.`
-        $("#report-vulnerability-result4").html(unspecified_text);
+        // var unspecified_text = `<b>${unspecified_vulnerability_count}</b> assets are classed as <b>unspecified</b> vulnerability.`
+        // $("#report-vulnerability-result4").prepend(unspecified_text);
 
     });
 
@@ -665,9 +671,41 @@ function openAssetReport(asset_id) {
     // Fill in report text
     var report = asset_descriptions.filter(d => d.asset_tag == asset_id && d.hazard_type == getHazard())[0];
 
+    var vulnerability_help_icon = `<img src="icons/QMark-Dot-Black.svg" class="vulnerability-help-icon">`;
+    $("#report-vulnerability-result1").append(vulnerability_help_icon);
+    $("#report-vulnerability-result2").append(vulnerability_help_icon);
+    $("#report-vulnerability-result3").append(vulnerability_help_icon);
+    $("#report-vulnerability-result4").append(vulnerability_help_icon);
+
+    $("#report-vulnerability-result1").append(`<div id="report-vulnerability-result1-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
+    <div class="vulnerability-highlight" style="background-color:#FFC000"></div></div>`);
+    $("#report-vulnerability-result2").append(`<div id="report-vulnerability-result2-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
+    <div class="vulnerability-highlight" style="background-color:#FF6000"></div></div>`);
+    $("#report-vulnerability-result3").append(`<div id="report-vulnerability-result3-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
+    <div class="vulnerability-highlight" style="background-color:#ff0000"></div></div>`);
+    $("#report-vulnerability-result4").append(`<div id="report-vulnerability-result4-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
+    <div class="vulnerability-highlight" style="background-color:#666"></div></div>`);
+
     if (report) {
         $("#report-exposure-text1").html(report.exposure_text_1);
         $("#report-exposure-text2").html(report.exposure_text_2);
+        
+        $("#report-vulnerability-result1-tooltip").append(`<div class="report-vulnerability-tooltip-text">${report.vulnerability_text_low}</div>`);
+        $("#report-vulnerability-result1 .vulnerability-help-icon").attr('onmouseover', `toggleTooltip(1, true)`);
+        $("#report-vulnerability-result1 .vulnerability-help-icon").attr('onmouseout', `toggleTooltip(1, false)`);
+
+        $("#report-vulnerability-result2-tooltip").append(`<div class="report-vulnerability-tooltip-text">${report.vulnerability_text_medium}</div>`);
+        $("#report-vulnerability-result2 .vulnerability-help-icon").attr('onmouseover', `toggleTooltip(2, true)`);
+        $("#report-vulnerability-result2 .vulnerability-help-icon").attr('onmouseout', `toggleTooltip(2, false)`);
+
+        $("#report-vulnerability-result3-tooltip").append(`<div class="report-vulnerability-tooltip-text">${report.vulnerability_text_high}</div>`);
+        $("#report-vulnerability-result3 .vulnerability-help-icon").attr('onmouseover', `toggleTooltip(3, true)`);
+        $("#report-vulnerability-result3 .vulnerability-help-icon").attr('onmouseout', `toggleTooltip(3, false)`);
+
+        $("#report-vulnerability-result4-tooltip").append(`<div class="report-vulnerability-tooltip-text">A vulnerability methodology has yet to be determined for this asset and scenario.</div>`);
+        $("#report-vulnerability-result4 .vulnerability-help-icon").attr('onmouseover', `toggleTooltip(4, true)`);
+        $("#report-vulnerability-result4 .vulnerability-help-icon").attr('onmouseout', `toggleTooltip(4, false)`);
+        
         $("#report-vulnerability-text1").html(report.vulnerability_text_1);
         $("#report-vulnerability-text2").html(report.vulnerability_text_low);
         $("#report-vulnerability-text3").html(report.vulnerability_text_medium);
@@ -681,6 +719,22 @@ function openAssetReport(asset_id) {
         $("#report-vulnerability-result3").html(report.vulnerability_result_high);
     }
 
+    var asset_exposure = exposure_summary.filter(d => d.asset == asset_id && d.hazard_type == getHazard() && d.hazard_scenario == getHazardScenarioTif())[0];
+    if(asset_exposure) {
+        //console.log("Asset exposure imported correctly");
+        //console.log(asset_exposure.statement_1);
+        $("#report-exposure-text3").html(asset_exposure.statement_1);
+        $("#report-vulnerability-result1").prepend(asset_exposure.statement_2);
+        $("#report-vulnerability-result2").prepend(asset_exposure.statement_3);
+        $("#report-vulnerability-result3").prepend(asset_exposure.statement_4);
+        $("#report-vulnerability-result4").prepend(asset_exposure.statement_5);
+    }
+
+}
+
+function toggleTooltip(num, doShow) {
+    //console.log("this works");
+    $(`#report-vulnerability-result${num}-tooltip`).css('visibility', doShow ? 'visible' : 'hidden');
 }
 
 

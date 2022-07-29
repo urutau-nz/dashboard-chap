@@ -119,11 +119,20 @@ function hideLoading() {
 function addLegendsToMap(given_map) {
     // Adds the necessary legends to both the report & map maps
     
-    given_map.addLegend("Inundation Depth", [
+    given_map.addLegend("Depth of flooding", [
+        ["<b>Direct</b>", "#ffffff"],
         ["0 - 20cm", "#8fd3d8"],
-        ["20 - 50cm", "#79b2c0"],
-        ["50 - 100cm", "#6290a8"],
-        ["100cm +", "#4c6e90"]
+        ["20 - 50cm", "#97C6E2"],
+        ["50 - 100cm", "#6FA8D1"],
+        ["100cm +", "#5286BA"],
+        ["<b>Indirect</b>", "#ffffff"],
+        ["0 - 20cm", "#D0ECCB"],
+        ["20 - 50cm", "#9ED69F"],
+        ["50 - 100cm", "#6FBF88"],
+        ["100cm +", "#4D9868"],
+        ["<hr>", "#ffffff"],
+        ["Flood Mitigation", "#E177FF"],
+        ["Planned Flood Mitigation", "#FF9999"],
     ], {
         legend_id: "inundation"
     });
@@ -135,18 +144,26 @@ function addLegendsToMap(given_map) {
         visible: false
     });
     given_map.addLegend("Probability of Erosion", [
-        ["1 - 33% &nbsp;(Unlikely)", "#EADACE"],
+        ["5 - 33% &nbsp;(Unlikely)", "#EADACE"],
         ["33 - 65%<br>(Likely as not)", "#C1A48B"],
-        ["66 - 100% &nbsp;(Likely)", "#8F7565"]
+        ["66 - 100% &nbsp;(Likely)", "#8F7565"],
+        ["<hr>", "#ffffff"],
+        ["Cliff instability setback", "#E177FF"],
+        ["Coastline segments", "#FF9999"],
+        ["Baseline shore position", "#020202"],
+        ["<hr>", "#ffffff"],
+        ["<b>Erosion protection</b>", "ffffff"],
+        ["Erosion mitigation", "#77D6FF"],
+        ["Planned erosion mitigation", "#FFFF00"]
     ], {
         legend_id: "erosion",
         visible: false
     });
 
     given_map.addLegend("Vulnerability", [
-        ["High", "#c94040"],
-        ["Medium", "#db7900"],
-        ["Low", "#32b888"],
+        ["High", "#FF0000"],
+        ["Medium", "#FF6000"],
+        ["Low", "#FFC000"],
         ["Undefined", "#666"]
     ], {
         legend_id: "vulnerability",
@@ -253,4 +270,81 @@ function initializeBasemapSwitch(tab_id, given_map) {
             $(`#${tab_id} .leaflet-labels-pane`).css('visibility', 'hidden');
         }
     });
+}
+
+
+
+
+// Stores the tools to be shown in the toolbar on both maps
+// Action functions should take the relevant leaflet map as a parameter
+var toolbar_tools = [
+    {
+        title: "Example",
+        img_url: "icons/Edit-Pencil-Blue.svg",
+        action: exampleTool
+    },
+    {
+        title: "Example",
+        img_url: "icons/Edit-Pencil-Blue.svg",
+        action: exampleTool
+    },
+    {
+        title: "Example",
+        img_url: "icons/Edit-Pencil-Blue.svg",
+        action: exampleTool
+    }
+];
+var active_map_tool = null;
+var active_map_tool_i = null;
+
+
+function createToolbars() {
+    $(`.map-toolbar-parent img`).on('click', function () {
+      var page_val = '';
+      if (current_page == 'map') {
+        page_val = 'map';
+      } else if (current_page == 'reports') {
+        page_val = 'report';
+      }
+      $(`#${page_val}-cog-overlay .map-toolbar`).toggleClass('active');
+    });
+
+    // Create Buttons
+    var tool_options = "";
+    for (var tool_obj_i in toolbar_tools) {
+        var tool_obj = toolbar_tools[tool_obj_i];
+
+        tool_options += `<div class="tool-button" title="${tool_obj.title}" onclick="mapToolAction(${tool_obj_i})">
+            <img src="${tool_obj.img_url}">
+        </div>`;
+    }
+
+    $(`.map-toolbar-tools`).html(tool_options);
+} 
+function mapToolAction(tool_i) {
+    $(`.map-toolbar-tools .tool-button`).removeClass('active');
+
+    if (active_map_tool_i != tool_i) {
+        /* This is new! run its action */
+        var relevant_map;
+        if (current_page == 'map') {
+            relevant_map = map_map;
+        } else if (current_page == 'reports') {
+            relevant_map = report_map;
+        }
+        toolbar_tools[tool_i].action(relevant_map);
+
+        /* Update tool to active */
+        active_map_tool_i = tool_i;
+        active_map_tool = toolbar_tools[tool_i];
+        $(`.map-toolbar-tools .tool-button:nth-child(${tool_i+1})`).addClass('active');
+    } else {
+        active_map_tool_i = null;
+        active_map_tool = null;
+    }
+    
+}
+
+function exampleTool(relevant_map) {
+
 }

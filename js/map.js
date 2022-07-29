@@ -80,9 +80,9 @@ function initPageMap() {
     
     
     // Create Map Map
-    map_map = new vlMap('map-map-div', {"attributionControl": false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 4, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
+    map_map = new vlMap('map-map-div', {"attributionControl": false, inertia: false, center: [-43.530918, 172.636744], zoom: 11, minZoom : 10, zoomControl: false, worldCopyJump: true, crs: L.CRS.EPSG3857});
     map_map.basemap('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png',
-                            {"detectRetina": false, "minZoom": 4,
+                            {"detectRetina": false, "minZoom": 10,
                             "noWrap": false, "subdomains": "abc"});
     
     map_map.createPane('labels', 650);
@@ -99,8 +99,6 @@ function initPageMap() {
     zoom.addTo(map_map.map);
     
     
-    // Update Hazard Layer on Map
-    updateMapHazard(map_map);
     
     // Create map Legends
     addLegendsToMap(map_map);
@@ -116,11 +114,17 @@ function initPageMap() {
 
     // Basemap init
     initializeBasemapSwitch('page-map', map_map);
+
+
+    // Update Hazard Layer on Map
+    updateMapHazard(map_map);
 }
 
 function openPageMap() {
     map_map.invalidateSize();
 
+    // Update Hazard Layer on Map
+    updateMapHazard(map_map);
 }
 function closePageMap() {
     
@@ -176,7 +180,7 @@ function populateNewLayerPopup(new_domain = null) {
         if (is_group) {
             // Store first asset in group as asset temporarily
             var asset = assets[asset_groups[asset_id][0]];
-            var letter = asset_id[0].toLowerCase();
+            var letter = remove_risk_to(asset_id)[0].toLowerCase();
         } else {
             var asset = assets[asset_id];
             var letter = asset.display_name[0].toLowerCase();
@@ -351,15 +355,15 @@ function setInfoLayer(asset_id) {
 
         } else if (asset_id == "liquefaction_risk") {
             layer_style = mapRiskInfoLayerStyle;
-            layer_color = '#32b888';
+            layer_color = '#FFC000';
 
         } else if (["river_flood_extent_1_in_500", "tsunami_extent"].includes(asset_id)) {
             layer_style = {radius: 4, fillColor: "#222", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.4};
             layer_color = '#222';
 
         } else {
-            layer_style = {radius: 4, fillColor: "#32b888", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.4};
-            layer_color = '#32b888';
+            layer_style = {radius: 4, fillColor: "#FFC000", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.4};
+            layer_color = '#FFC000';
         }
 
         // Set layer color
@@ -380,7 +384,6 @@ function setInfoLayer(asset_id) {
         $(`#map-layer-item-info`).removeClass('no-layer');
 
         // Show Legend
-        console.log("NOW NOW THING", asset);
         map_map.showLegend(asset.id);
 
         // Hide Loading in a bit
@@ -563,7 +566,7 @@ function mapSDIInfoLayerStyle(feature) {
     return {opacity: 1, fillColor: color, fillOpacity: 0.5, weight: 1, color: '#000'}
 }
 function mapRiskInfoLayerStyle(feature) {
-    var colors = {'high': '#c94040', 'med': '#db7900', 'low': '#32b888'};
+    var colors = {'high': '#ff0000', 'med': '#FF6000', 'low': '#FFC000'};
     var color = colors[feature.properties.value]; // VALUE is 0-10
     //if (!color) console.log(feature.properties)
     return {opacity: 1, fillColor: color, fillOpacity: 0.5, weight: 1, color: '#000'}
@@ -782,21 +785,21 @@ function addInfoLegendsToMap(given_map) {
         linear: true
     });
     given_map.addLegend("Sites of Cultural Significance (District Plan)", [
-        ["Area", "#32b888"]
+        ["Area", "#FFC000"]
     ], {
         legend_id: "cultural_significance",
         visible: false
     });
     given_map.addLegend("Sites of Ecological Significance (District Plan)", [
-        ["Area", "#32b888"]
+        ["Area", "#FFC000"]
     ], {
         legend_id: "Ecological_significance",
         visible: false
     });
     given_map.addLegend("Risk of Liquefaction", [
-        ["High", "#c94040"],
-        ["Medium", "#db7900"],
-        ["Low", "#32b888"]
+        ["High", "#ff0000"],
+        ["Medium", "#FF6000"],
+        ["Low", "#FFC000"]
     ], {
         legend_id: "liquefaction_risk",
         visible: false
@@ -814,7 +817,7 @@ function addInfoLegendsToMap(given_map) {
         visible: false
     });
     given_map.addLegend("Soil Type", [
-        ["Soil Description", "#32b888"]
+        ["Soil Description", "#FFC000"]
     ], {
         legend_id: "soil_type",
         visible: false

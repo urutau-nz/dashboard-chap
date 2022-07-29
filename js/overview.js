@@ -8,6 +8,7 @@ var overview_region_dropdown;
 var overview_slr_value = 20;
 
 var overview_graph_sections = { 
+    /*
     'built-potable-water': {id: 'overview-collapsing-2', file: 'built_Risk_to_potable_water_supply.csv', title: "Risk to potable water supply", data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
     'built-buildings':  {id: 'overview-collapsing-3', file: 'built_Risk_to_buildings_(residential,_commercial,_industrial,_miscellaneous_structures).csv', title: 'Risk to buildings', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
     'built-landfills':  {id: 'overview-collapsing-4', file: 'built_Risk_to_landfills_and_contaminated_sites.csv', title: 'Risk to landfills and contaminated sites', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null},
@@ -74,7 +75,7 @@ var overview_graph_sections = {
     },
     'cultural-maoriautonomy':  {id: 'overview-collapsing-32', file: '', 
         title: 'Risks to Māori/tangata whenua’s autonomy/te tiriti rights', data: null, hazardMenu: null, vulnerabilityMenu: null, areaMenu: null
-    },
+    }, */
 };
 var overview_graph_section_html = `
 <div class="graph-section">
@@ -87,17 +88,47 @@ var overview_graph_section_html = `
 
 
 function initPageOverview() {
-    var index = 1;
-    while(true) {
-        if ($(`#overview-collapse-${index}`).length == 0) {
-            break;
-        } 
-        var collapser = new vlCollapsing('overview-collapse-' + index, 'overview-collapsing-'+index);
-        if (!$(`#overview-collapse-${index}`).hasClass('summary')) {
-            collapser.collapse();
+
+    // Initialize overview_graph_sections
+    var met_subdomains = [];
+    for (var row_i in website_subdomains) {
+        if (row_i != 'columns') {
+            var row = website_subdomains[row_i];
+    
+            if (!met_subdomains.includes(row.subdomain)) {
+                met_subdomains.push(row.subdomain);
+
+                var new_object = {
+                    id: 'overview-collapsing-' + row_i,
+                    title: row.subdomain,
+                    data: {},
+                    hazardMenu: null,
+                    vulnerabilityMenu: null,
+                    areaMenu: null
+                }
+                new_object.data[row.element] = [row];
+    
+                $(`#overview-${row.domain}-table .subdomain-collapsables-div`).append(`
+                <div>
+                  <div class="collapse" id="overview-collapse-${row_i}"><ul><li>${new_object.title}</li></ul></div>
+                  <div class="collapsing" id="${new_object.id}">
+                  </div>
+                </div>`);
+                var collapser = new vlCollapsing('overview-collapse-' + row_i, new_object.id);
+                collapser.collapse();
+                overview_collapsables[new_object.id] = collapser;
+    
+                overview_graph_sections[row.subdomain] = new_object;
+    
+            } else {
+                // already met & set up subdomain
+                if (!overview_graph_sections[row.subdomain].data[row.element]) {
+                    overview_graph_sections[row.subdomain].data[row.element] = [row];
+                } else {
+                    overview_graph_sections[row.subdomain].data[row.element].push(row);
+                }
+            }
         }
-        overview_collapsables['overview-collapsing-'+index] = collapser;
-        index += 1;
     }
 
     // Add graphs
@@ -105,9 +136,6 @@ function initPageOverview() {
         var section_id = overview_graph_sections[section_name].id;
         var section = $(`#${section_id}`);
         section.html(overview_graph_section_html);
-
-        // Update title
-        $(`#${section_id}`).siblings().html(`<ul><li>${overview_graph_sections[section_name].title}</li></ul>`)
 
         var form_html = '';
         form_html += `<div id="${section_id}-hazard-form"></div>`;
@@ -162,7 +190,7 @@ function initPageOverview() {
 
         
         // Create graph
-        importSubdomainGraph(section_name, section_id, overview_graph_sections[section_name].file);
+        updateSubdomainGraph(section_name);
     }
 
     // Create Big Graph Region Dropdown
@@ -207,7 +235,8 @@ function overviewBigGraphSLR(slr) {
 
 function updateBigGraph() {
     var filtered_data = consquence_rating_data.filter(d => {
-        return d.region.toLowerCase() == overview_region_dropdown.value && d.SLR == overview_slr_value;
+        var isDomainOfTab = d.domain.toLowerCase() == current_overview_tab || current_overview_tab == "overview";
+        return d.region.toLowerCase() == overview_region_dropdown.value && d.SLR == overview_slr_value && isDomainOfTab;
     });
     filtered_data.sort((a,b) => b.consequence_low - a.consequence_low);
     filtered_data.sort((a,b) => b.consequence_high - a.consequence_high);
@@ -241,6 +270,15 @@ function updateBigGraph() {
     }
 
     $('#overview-display-graph').html('');
+
+    //Resize bar graph area based on number of subdomains included
+    var barHeight = 25;
+    var barMargin = 64;
+    var barSubtitleHeight = 27;
+    var barDivHeight = barHeight * filtered_data.length + barMargin + barSubtitleHeight;
+    barDivHeight = Math.min(barDivHeight, 600);
+    $('#overview-display-div').css('height', barDivHeight - barSubtitleHeight);
+    //console.log(`Data length: ${filtered_data.length} \n div height: ${barDivHeight}`);
 
     overview_big_graph = new vlGraph(`overview-display-graph`, final_data, 'subdomain', 'consequence_mean');
     overview_big_graph.x_axis_adjust(0);
@@ -314,7 +352,7 @@ function updateBigGraph() {
     overview_big_graph.color_column('domain');
     overview_big_graph.watermark('Draft data');
     overview_big_graph.x_value_in_hover(false);
-    overview_big_graph.colors({'Built': '#f9a53e', 'Natural': '#3ed98d', 'Cultural': '#ff6363', 'Social': '#61aacf'});
+    overview_big_graph.colors({'Built': '#f9a53e', 'Natural': '#3ed98d', 'Cultural': '#ff6363', 'Human': '#61aacf'});
     overview_big_graph.x_ticks(7);
     overview_big_graph.line_width(2);
     overview_big_graph.y_tick_size(1);
@@ -336,6 +374,14 @@ function updateBigGraph() {
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end");*/
 
+    //Resize rounded white box to accomodate subtitle after everything else was rendered to fit
+    $('#overview-display-div').css('height', barDivHeight);
+    var display_tab_name = current_overview_tab;
+    if(display_tab_name == 'human') display_tab_name = 'social';
+    if(display_tab_name != "overview")
+        $('#overview-display-subtitle').text(`Showing only subdomains in the ${display_tab_name} domain.`);
+    else
+    $('#overview-display-subtitle').text('Showing all subdomains.');
 
     // Add links to the graph
     $(`#overview-display-graph .vl-x-axis text`).each(function(index) {
@@ -348,33 +394,11 @@ function updateBigGraph() {
     })
 }
 
-function importSubdomainGraph(section_name, section_id, section_file) {
-    if (section_file && section_file.length > 1) {
-        vlQuickImport('data/overview_subdomain_graphs/' + section_file, 'csv', function (d) {
-            // Find all separate elements, collect their data
-            var d_by_element = {};
-    
-            for (var row of d) {
-                var element = row.element;
-    
-                if (!Object.keys(d_by_element).includes(element)) {
-                    d_by_element[element] = [];
-                }
-                d_by_element[element].push(row);
-            }
-    
-            overview_graph_sections[section_name].data = d_by_element;
-    
-            updateSubdomainGraph(section_name);
-        });
-    }
-
-}
 
 
 function openSubdomainSection(consequence_row) {
     var domain = consequence_row.domain.toLowerCase();
-    if (domain == 'social') domain = 'human';
+    if (domain == 'social') domain = 'human'; //Unneeded anymore
     setOverviewTab(domain);
     
     console.log(consequence_row, overview_graph_sections);
@@ -481,13 +505,13 @@ function updateSubdomainGraph(section_name) {
 //over the button.
 function translateOverviewTab(tab, isMouseOver) {
     //Translate only non-overview tabs on mouseover
-    var isTraslating = isMouseOver && tab != "overview";
+    var isTraslating = isMouseOver && tab != "overview" && tab != "cultural";
 
     //Change font size slightly to accomodate longer Te Reo titles
     if(isTraslating) {
         $(`#${tab}-text`).css("font-size", "1rem");
         $(`#${tab}-text`).css("white-space", "nowrap");
-    } else {
+    } else if(tab != "cultural") {
         $(`#${tab}-text`).css("font-size", "1.2rem");
         $(`#${tab}-text`).css("white-space", "pre");
     }
@@ -505,8 +529,8 @@ function translateOverviewTab(tab, isMouseOver) {
         else $("#natural-text").text("Natural");
         break;
     case "cultural":
-        if(isTraslating) $("#cultural-text").text("Kaupapa Māori");
-        else $("#cultural-text").text("Cultural");
+        // if(isTraslating) $("#cultural-text").text("Kaupapa Māori");
+        // else $("#cultural-text").text("Cultural");
         break;
     case "human":
         if(isTraslating) $("#human-text").text("Pāpori");
@@ -527,32 +551,32 @@ function setOverviewTab(tab) {
 
         // Activate Tab
         $(`#overview-menu-${current_overview_tab}-td`).addClass("active");
-        $(`#overview-menu-${current_overview_tab}-td`).css("display", "none");
+        //$(`#overview-menu-${current_overview_tab}-td`).css("display", "none");
 
         
         switch(tab) {
             case "overview": {
-                $("#overview-summary-td .title").html(`<img src="icons/Overview-Tab-Colour.png" width="100px">
+                $("#overview-summary-td .title").html(`<img src="icons/Overview-Tab-Circle.png" width="80px">
                 <h1><div style="color: rgb(18, 163, 163);">Overview</div></h1>`);
 
             } break;
             case "built": {
-                $("#overview-summary-td .title").html(`<img src="icons/Built-Tab-Colour.png" width="100px">
+                $("#overview-summary-td .title").html(`<img src="icons/Built-Tab-Circle.png" width="80px">
                 <h1><div style="color: rgb(245, 140, 31);">Built Domain</div></h1>`);
 
             } break;
             case "natural": {
-                $("#overview-summary-td .title").html(`<img src="icons/Natural-Tab-Colour.png" width="100px">
+                $("#overview-summary-td .title").html(`<img src="icons/Natural-Tab-Circle.png" width="80px">
                 <h1><div style="color: rgb(71, 125, 69);">Natural Domain</div></h1>`);
 
             } break;
             case "cultural": {
-                $("#overview-summary-td .title").html(`<img src="icons/Cultural-Tab-Colour.png" width="100px">
-                <h1><div style="color: rgb(117, 18, 64);">Cultural Domain</div></h1>`);
+                $("#overview-summary-td .title").html(`<img src="icons/Cultural-Tab-Circle.png" width="80px">
+                <h1><div style="color: rgb(117, 18, 64);">Kaupapa Māori (Cultural) Domain</div></h1>`);
 
             } break;
             case "human": {
-                $("#overview-summary-td .title").html(`<img src="icons/Human-Tab-Colour.png" width="100px">
+                $("#overview-summary-td .title").html(`<img src="icons/Human-Tab-Circle.png" width="80px">
                 <h1><div style="color: rgb(71, 99, 176);">Social Domain</div></h1>`);
 
             } break;
@@ -570,5 +594,8 @@ function setOverviewTab(tab) {
         for (var graph_name in overview_collapsable_graphs) {
             updateSubdomainGraph(graph_name);
         }
+
+        //Update big graph to filter by selected domain
+        updateBigGraph();
     }
 }

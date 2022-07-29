@@ -33,6 +33,9 @@ import_url + `/data/exposure_built.csv`,
 import_manager.addImport('asset_descriptions', 'Asset Descriptions CSV', 'csv', 
 import_url + `/data/reports.csv`);
 
+import_manager.addImport('exposure_summary', 'Exposure Summary CSV', 'csv', 
+import_url + `/data/exposure_summary.csv`);
+
 import_manager.addImport('built_points', 'Built Points CSV', 'csv', 
 import_url + `/data/built_points.csv`);
 
@@ -48,6 +51,9 @@ import_url + `/data/cultural_points.csv`);
 import_manager.addImport('consquence_rating', 'Consequence Rating CSV', 'csv', 
 import_url + `/data/subdomain_consequence_rating.csv`);
 
+import_manager.addImport('website_subdomains', 'Website Subdomains CSV', 'csv', 
+import_url + `/data/website_subdomains.csv`);
+
 
 import_manager.onComplete(importsComplete);
 import_manager.runImports();
@@ -59,17 +65,25 @@ var asset_info;
 var assets;
 var informative_assets = {};
 var asset_descriptions;
+var exposure_summary;
 var built_points;
 var human_points;
 var natural_points;
 var cultural_points;
 var non_study_area;
 var consquence_rating_data;
+var website_subdomains;
 
 var groups_and_single_layers = [];
 
 var asset_groups = {};
 
+
+var remove_risk_to = function (str) { 
+  if (str.toLowerCase().startsWith('risks to')) { return str.slice(9) }
+  else if (str.toLowerCase().startsWith('risk to')) { return str.slice(8) }
+  return str;
+}
 
 function importsComplete(imports) {
 
@@ -83,14 +97,18 @@ function importsComplete(imports) {
   cultural_points = imports['cultural_points'];
   asset_descriptions = imports['asset_descriptions'];
   consquence_rating_data = imports['consquence_rating'];
+  website_subdomains = imports['website_subdomains'];
+  exposure_summary = imports['exposure_summary'];
 
   // Sorts into domains, then sorts by display_name/groupname, then sorts in-group assets by display name
   asset_info.sort((x, y) => {
     if (x.domain == y.domain) {
       var x_val = x.display_name;
       var y_val = y.display_name;
-      if (x.asset_group) x_val = x.asset_group;
-      if (y.asset_group) y_val = y.asset_group;
+      if (x.asset_group) x_val = remove_risk_to(x.asset_group);
+      if (y.asset_group) y_val = remove_risk_to(y.asset_group);
+      x_val = x_val.toLowerCase();
+      y_val = y_val.toLowerCase();
       if (x_val < y_val) {return -1;}
       if (x_val > y_val) {return 1;}
       if (x_val == y_val) {
@@ -337,7 +355,8 @@ function initMap() {
     // Let user in
     tncCheckboxChange();
 
+    createToolbars();
+
     hideLoading();
   }
 }
-
