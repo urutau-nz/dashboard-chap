@@ -90,13 +90,13 @@ var overview_graph_section_html = `
 function initPageOverview() {
 
     // Initialize overview_graph_sections
-    var met_subdomains = [];
+    var met_subdomains = {'human': [], 'cultural': [], 'built': [], 'natural': []};
     for (var row_i in website_subdomains) {
         if (row_i != 'columns') {
             var row = website_subdomains[row_i];
     
-            if (!met_subdomains.includes(row.subdomain)) {
-                met_subdomains.push(row.subdomain);
+            if (!met_subdomains[row.domain].includes(row.subdomain)) {
+                met_subdomains[row.domain].push(row.subdomain);
 
                 var new_object = {
                     id: 'overview-collapsing-' + row_i,
@@ -572,7 +572,7 @@ function setOverviewTab(tab) {
             } break;
             case "cultural": {
                 $("#overview-summary-td .title").html(`<img src="icons/Cultural-Tab-Circle.png" width="80px">
-                <h1><div style="color: rgb(117, 18, 64);">Kaupapa Māori (Cultural) Domain</div></h1>`);
+                <h1><div style="color: rgb(117, 18, 64);">Kaupapa Māori Domain (subject to ongoing engagement)</div></h1>`);
 
             } break;
             case "human": {

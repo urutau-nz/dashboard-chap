@@ -357,12 +357,12 @@
                                       
                                       <div class="collapsing" id="overview-collapsing-28">
                                         <p>
-                                          Māori social, cultural, spiritual and economic wellbeing are disproportionately threatened by rising sea levels through the loss and degradation of land, water and cultural assets such as marae to coastal hazards. The interconnectedness of these taonga (both physical and non-physical), the perspectives of Tangata Whenua, and Te Ao Māori (a Māori world view), will  be considered throughout the adaptation planning process to ensure the outcomes align with and enhance these values.
+                                          Māori social, cultural, spiritual and economic wellbeing are disproportionately threatened by rising sea levels through the loss and degradation of land, water and cultural assets such as marae to coastal hazards. The interconnectedness of these taonga (both physical and non-physical), the perspectives of Tangata Whenua, and Te Ao Māori (a Māori world view), will  be considered throughout the adaptation planning process to ensure the outcomes align with and enhance these values. <b>Risks to this domain are being developed by and with iwi/hapu using a values based framework.</b>
                                         </p>
                                       </div>
                                     </div>
                                     <div>
-                                      <div><h2>Risk to the Cultural Domain</h2></div>
+                                      <div><h2>Risk to the Kaupapa Māori Domain (subject to ongoing engagement)</h2></div>
                                     </div>
                                     <div class="subdomain-collapsables-div">
                                       

@@ -47,6 +47,7 @@ function setPage(page) {
 
 
 
+
 function initPageHome() {
     for (var i = 1; i <= 5; i ++) {
         var collapser = new vlCollapsing('home-collapse-' + i, 'home-collapsing-'+i);
@@ -136,7 +137,7 @@ function addLegendsToMap(given_map) {
     ], {
         legend_id: "inundation"
     });
-    given_map.addLegend("Groundwater Height (85th PCTL)", [
+    given_map.addLegend("Probability of groundwater rising sometimes", [
         ["Within 70cm of ground surface", "#CBCCFA"],
         ["Up to or above ground surface", "#9790C1"]
     ], {

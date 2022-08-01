@@ -515,6 +515,7 @@ function getHazardInfo() {
     }
 
 }
+
 function getHazardScenarioTif() {
     // GET THE CURRENT HAZARD SCENARIO FILENAME
     var target_hazard = getHazardInfo();

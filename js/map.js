@@ -344,7 +344,6 @@ function setInfoLayer(asset_id) {
 
         // Add the informative layer
         var asset = informative_assets[asset_id];
-        map_info_asset = asset;
 
         // Determine Style & Color
         var layer_style = null;
@@ -357,7 +356,7 @@ function setInfoLayer(asset_id) {
             layer_style = mapRiskInfoLayerStyle;
             layer_color = '#FFC000';
 
-        } else if (["river_flood_extent_1_in_500", "tsunami_extent"].includes(asset_id)) {
+        } else if (["river_flood_extent_1_in_500", "tsunami_extent", "vertical_land_movement"].includes(asset_id)) {
             layer_style = {radius: 4, fillColor: "#222", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.4};
             layer_color = '#222';
 
@@ -781,6 +780,15 @@ function addInfoLegendsToMap(given_map) {
         ["10 SDI", "#e38ffdBB"]
     ], {
         legend_id: "social_deprivation",
+        visible: false,
+        linear: true
+    });
+    given_map.addLegend("Vertical Land Movement", [
+        ["-4 mm/year", "#116496"],
+        ["|", ""],
+        ["+ 2mm/year", "#d69f7f"]
+    ], {
+        legend_id: "vertical_land_movement",
         visible: false,
         linear: true
     });
