@@ -2711,3 +2711,33 @@ html .vl-multiselect .vl-select-head-item {
 .map-toolbar .map-toolbar-tools .tool-button.active img {
   background-color: #3e769140;
 }
+
+
+#overview-display-graph .vl-graph-watermark {
+  fill: rgba(62, 118, 145, 0.3) !important;
+}
+
+
+#hazard-settings-popup .sediment-tr {
+  display: none;
+}
+#hazard-settings-popup .sediment-tr>td>div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 0.9rem;
+  color: #335c5b;
+  font-weight: 600;
+  gap: 3px;
+  padding-top: 6px;
+}
+#hazard-settings-popup .sediment-tr>td>div>div {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 8px;
+  padding-left: 8px;
+}
+#hazard-settings-popup .sediment-tr input {
+  margin: 0;
+}

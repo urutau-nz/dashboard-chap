@@ -350,7 +350,7 @@ function updateBigGraph() {
         }
     });
     overview_big_graph.color_column('domain');
-    overview_big_graph.watermark('Draft data');
+    overview_big_graph.watermark('Dummy data');
     overview_big_graph.x_value_in_hover(false);
     overview_big_graph.colors({'Built': '#f9a53e', 'Natural': '#3ed98d', 'Cultural': '#ff6363', 'Human': '#61aacf'});
     overview_big_graph.x_ticks(7);

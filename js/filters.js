@@ -1,7 +1,8 @@
 var hazard_settings_default_values = {
     slr: 80,
     hazard: 'inundation',
-    frequency: 1
+    frequency: 1,
+    year: 2130
 }
 
 
@@ -71,6 +72,29 @@ var hazard_popup = new vlPopup('Hazard Settings', `
         <div class="frequency-slider slider" id="frequency-slider"></div>
     </td>
 </tr> 
+<tr class="sediment-tr">
+    <td>
+        <h3>Sediment Scenario</h3>
+    </td>
+</tr>
+<tr class="sediment-tr">
+    <td colspan="3">
+        <div>
+            <div>
+                <input type="radio" value="increased" id="sediment-increased-radio" name="sediment">
+                <label for="sediment-increased-radio">Increased Sediment Supply (+28%)</label>
+            </div>
+            <div>
+                <input type="radio" value="default" id="sediment-default-radio" name="sediment" checked>
+                <label for="sediment-default-radio">No Change (default)</label>
+            </div>
+            <div>
+                <input type="radio" value="decreased" id="sediment-decreased-radio" name="sediment">
+                <label for="sediment-decreased-radio">Decreased Sediment Supply (-11%)</label>
+            </div>
+        </div>
+    </td>
+</tr>
 </table>`, {
     exit_type: 'x',
     on_exit: onHazardPopupClosed,
@@ -88,6 +112,7 @@ var hazardMenu = null;
 var SLRSlider = null;
 var frequencySlider = null;
 var yearSlider = null;
+var sedimentValue = "default";
 
 
 var yearLabels = {2020: '2020', 2050: '2050', 2080: '2080', 2130: '2130', 2150: '2150+'};
@@ -144,12 +169,26 @@ function initFilters() {
             $(".frequency-tr").css('display', 'none');
         }
 
+
         onHazardValuesChanged();
 
         // Update SLRs to the new hazard's SLR options
         //mapSLRSlider.recreate(0, 2, hazard_slrs[filter_values.hazard.toLowerCase()], true);
         SLRSlider.recreate(0, 200, hazard_slrs[getHazard()], true);
         updateSLRPointers(yearSlider.value);
+        
+        /* Filter SLRs if erosion */
+        if (value == 'Erosion') {
+            /* Filter the SLR slider by available sea levels */
+            var available_levels = hazard_info.filter(d => d.hazard_type == 'erosion' && 
+                                                    d.year == getYear()).reduce((a,b) => {
+                                                        if (!a.includes(b.slr)) a.push(b.slr);
+                                                        return a;
+                                                    }, []);
+            SLRSlider.filterValues(function (d) {
+                return available_levels.includes(d);
+            });
+        }
     }
     hazardMenu.setOnChange(hazard_onchange);
 
@@ -199,12 +238,22 @@ function initFilters() {
         $(".year-label").html(`<h3>${label}</h3>`); 
         updateSLRPointers(value);
         if (getHazard() == 'erosion') {
+            /* Filter the SLR slider by available sea levels */
+            var available_levels = hazard_info.filter(d => d.hazard_type == 'erosion' && 
+                                                    d.year == getYear()).reduce((a,b) => {
+                                                        if (!a.includes(b.slr)) a.push(b.slr);
+                                                        return a;
+                                                    }, []);
+            SLRSlider.filterValues(function (d) {
+                return available_levels.includes(d);
+            });
+
             /* Only effects hazard if erosion */
             onHazardValuesChanged();
         }
     }
     yearSlider.setOnChange(year_onchange);
-    yearSlider.setValue(2150);
+    yearSlider.setValue(hazard_settings_default_values.year);
 
 
 
@@ -218,7 +267,17 @@ function initFilters() {
 
     $(".slr-pointers-div").html(pointer_contents);
 
-    updateSLRPointers(2150);
+    updateSLRPointers(hazard_settings_default_values.year);
+
+
+
+    // SEDIMENT
+    $(`#hazard-settings-popup .sediment-tr input`).on('change', function () {
+        if (this.value != sedimentValue) {
+            sedimentValue = this.value;
+            onHazardValuesChanged();
+        }
+    });
 
 
     // Update Hazard to be the above
@@ -273,6 +332,13 @@ function updateSLRPointers(value) {
 function onHazardValuesChanged() {
     // Triggered by changing hazard form items, before the changes are applied
     $('#hazard-popup-apply-button').addClass('active');
+
+    // If Erosion, 2130, 150cm, show sediment options
+    if (getHazard() == 'erosion' && getYear() == 2130 && getSLR() == 150) {
+        $("#hazard-settings-popup .sediment-tr").css("display", "table-row");
+    } else {
+        $("#hazard-settings-popup .sediment-tr").css("display", "none");
+    }
 }
 
 function updateHazard() {
@@ -290,6 +356,15 @@ function updateHazard() {
         summary += ' (' + SLRSlider.value + 'cm';
         if (hazardMenu.value == 'Inundation') summary += ', ARI ' + getFrequency();
         if (hazardMenu.value == 'Erosion') summary += ', ' + getYear();
+        if (hazardMenu.value == 'Erosion' && getYear() == 2130 && getSLR() == 150) {
+            if (sedimentValue == 'increased') {
+                summary += ', +28%';
+            } else if (sedimentValue == 'decreased') {
+                summary += ', -11%';
+            } else {
+                summary += ', +0%';
+            }
+        }
         summary += ')';
         $('.hazard-summary').text(summary);
     
