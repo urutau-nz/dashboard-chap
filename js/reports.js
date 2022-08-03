@@ -188,7 +188,7 @@ function initPageReports() {
     
 
     // Create vulnerability chart
-    report_vulnerability_chart = new vlPieChart('report-vulnerability-graph1', '', [], ['#666', '#FFC000', '#FF6000', '#ff0000']);
+    report_vulnerability_chart = new vlPieChart('report-vulnerability-graph1', '', [], ['#666', '#FFC000', '#FF6000', '#ff0000', '#fa74ff']);
 
 
     // Create exposure Graph
@@ -449,12 +449,14 @@ function reportAssetInstanceColor(instance) {
             var color = "#FF6000"; // ORANGE
         } else if (instance.vulnerability == "low") {
             var color = "#FFC000"; // GREEN
+        } else if (instance.vulnerability == "Potentially Vulnerable") {
+            var color = "#fa74ff"; // PINK
         } else {
-            var color = "#666"; // GREY - unknown vulnerability
+            var color = "#666"; // DARK GREY - unknown vulnerability
         }
     } else {
         // There's no instance data for this instance.
-            var color = "#BBB"; // DARK GREY - no provided value
+            var color = "#BBB"; // GREY - no provided value
     }
     return color;
 }
@@ -586,6 +588,7 @@ function openAssetReport(asset_id) {
         var low_vulnerability_count = 0;
         var med_vulnerability_count = 0;
         var high_vulnerability_count = 0;
+        var potential_vulnerability_count = 0;
         var unspecified_vulnerability_count = 0;
         var num_instances = report_relevant_instances.length;
         var has_data = true;
@@ -605,10 +608,14 @@ function openAssetReport(asset_id) {
                 any_vulnerability_count += 1;
                 high_vulnerability_count += 1;
 
+            } else if (instance.vulnerability == 'Potentially Vulnerable') {
+                any_vulnerability_count += 1;
+                potential_vulnerability_count += 1;
+
             }
         }
         if (any_vulnerability_count + unspecified_vulnerability_count > 0) {
-            report_vulnerability_chart.values = [unspecified_vulnerability_count, low_vulnerability_count, med_vulnerability_count, high_vulnerability_count];
+            report_vulnerability_chart.values = [unspecified_vulnerability_count, low_vulnerability_count, med_vulnerability_count, high_vulnerability_count, potential_vulnerability_count];
             report_vulnerability_chart.graph();
         }
 
@@ -675,6 +682,7 @@ function openAssetReport(asset_id) {
     $("#report-vulnerability-result1").append(vulnerability_help_icon);
     $("#report-vulnerability-result2").append(vulnerability_help_icon);
     $("#report-vulnerability-result3").append(vulnerability_help_icon);
+    $("#report-vulnerability-result5").append(vulnerability_help_icon);
     $("#report-vulnerability-result4").append(vulnerability_help_icon);
 
     $("#report-vulnerability-result1").append(`<div id="report-vulnerability-result1-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
@@ -683,6 +691,8 @@ function openAssetReport(asset_id) {
     <div class="vulnerability-highlight" style="background-color:#FF6000"></div></div>`);
     $("#report-vulnerability-result3").append(`<div id="report-vulnerability-result3-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
     <div class="vulnerability-highlight" style="background-color:#ff0000"></div></div>`);
+    $("#report-vulnerability-result5").append(`<div id="report-vulnerability-result5-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
+    <div class="vulnerability-highlight" style="background-color:#fa74ff"></div></div>`);
     $("#report-vulnerability-result4").append(`<div id="report-vulnerability-result4-tooltip" class="vl-map-tooltip" style="text-align: center; width: 100%; top: 45px; left: 10px; font-family: 'Source Sans Pro', sans-serif;">
     <div class="vulnerability-highlight" style="background-color:#666"></div></div>`);
 
@@ -701,6 +711,10 @@ function openAssetReport(asset_id) {
         $("#report-vulnerability-result3-tooltip").append(`<div class="report-vulnerability-tooltip-text">${report.vulnerability_text_high}</div>`);
         $("#report-vulnerability-result3 .vulnerability-help-icon").attr('onmouseover', `toggleTooltip(3, true)`);
         $("#report-vulnerability-result3 .vulnerability-help-icon").attr('onmouseout', `toggleTooltip(3, false)`);
+        
+        $("#report-vulnerability-result5-tooltip").append(`<div class="report-vulnerability-tooltip-text">${report.vulnerability_text_potential}</div>`);
+        $("#report-vulnerability-result5 .vulnerability-help-icon").attr('onmouseover', `toggleTooltip(5, true)`);
+        $("#report-vulnerability-result5 .vulnerability-help-icon").attr('onmouseout', `toggleTooltip(5, false)`);
 
         $("#report-vulnerability-result4-tooltip").append(`<div class="report-vulnerability-tooltip-text">A vulnerability methodology has yet to be determined for this asset and scenario.</div>`);
         $("#report-vulnerability-result4 .vulnerability-help-icon").attr('onmouseover', `toggleTooltip(4, true)`);

@@ -165,6 +165,7 @@ function addLegendsToMap(given_map) {
         ["High", "#FF0000"],
         ["Medium", "#FF6000"],
         ["Low", "#FFC000"],
+        ["Potential", "#fa74ff"],
         ["Undefined", "#666"]
     ], {
         legend_id: "vulnerability",
@@ -280,13 +281,13 @@ function initializeBasemapSwitch(tab_id, given_map) {
 // Action functions should take the relevant leaflet map as a parameter
 var toolbar_tools = [
     {
-        title: "Example",
-        img_url: "icons/Edit-Pencil-Blue.svg",
-        action: exampleTool
+        title: "Line",
+        img_url: "icons/Map-Line-Blue.svg",
+        action: lineTool
     },
     {
-        title: "Example",
-        img_url: "icons/Edit-Pencil-Blue.svg",
+        title: "Polygon",
+        img_url: "icons/Map-Shape-Blue.svg",
         action: exampleTool
     },
     {
@@ -346,6 +347,7 @@ function mapToolAction(tool_i) {
     
 }
 
-function exampleTool(relevant_map) {
-
+function lineTool(relevant_map) {
+    relevant_map.dragging.disable();
+    var lineTraceMode = True;
 }

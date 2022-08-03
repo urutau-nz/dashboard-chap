@@ -344,6 +344,7 @@ function setInfoLayer(asset_id) {
 
         // Add the informative layer
         var asset = informative_assets[asset_id];
+        map_info_asset = asset;
 
         // Determine Style & Color
         var layer_style = null;

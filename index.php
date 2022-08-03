@@ -563,6 +563,14 @@
                                       </tr>
                                       <tr>
                                         <td class="vulnerability-icon-td">
+                                          <div class="color-box potential-vulnerability"></div>
+                                        </td>
+                                        <td id="report-vulnerability-result5" class="vulnerability-bullet-text-td">
+                                          <img src="icons/QMark-Dot-Black.svg" class="vulnerability-help-icon">
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="vulnerability-icon-td">
                                           <div class="color-box unspecified-vulnerability"></div>
                                         </td>
                                         <td id="report-vulnerability-result4" class="vulnerability-bullet-text-td">

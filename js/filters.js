@@ -417,6 +417,8 @@ function esriOutlineStyle(symbol) {
         var style_obj = { dashArray: '5,5' }
     } else if (style == 'esriSLSSolid') {
         var style_obj = {}
+    } else if (style == 'esriSLSDashDot') {
+        var style_obj = { dashArray: '8,5,1,5' }
     } else {
         console.log(">> ESRI OUTLINE > NEW STYLE:", symbol);
     }
@@ -484,14 +486,12 @@ function updateMapHazard(relevant_map) {
 
         $('#hazard-description').text(hazard_set.hazard_comment);
         
-        console.log("HAZARD SET", hazard_set);
         var tryAddGeoIndex = function(geo_i) {
             if (hazard_set[`additional_layer${geo_i}_rest_id`] != null) {
                 var geo_id = hazard_set[`additional_layer${geo_i}_rest_id`];
                 var geojson_url = `https://gis.ccc.govt.nz/arcgis/rest/services/CorporateSolution/ChristchurchCoastalHazardViewer/MapServer/${geo_id}/query?f=geojson&outSR=4326&resultType=tile&returnExceededLimitFeatures=false&spatialRel=esriSpatialRelIntersects&where=1%3D1&geometryType=esriGeometryEnvelope` 
                 vlQuickImport(`https://gis.ccc.govt.nz/arcgis/rest/services/CorporateSolution/ChristchurchCoastalHazardViewer/MapServer/${geo_id}?f=pjson`, 'json',
                 function (d) {
-                    console.log(d);
                     var name = d['description'];
 
 
@@ -517,7 +517,8 @@ function updateMapHazard(relevant_map) {
                     }
                 
                     
-                    relevant_map.loadGeoLayer(geojson_url, myStyle, {layer_id: `hazard-geo-${geo_i}`});
+                    var geolay = relevant_map.loadGeoLayer(geojson_url, myStyle, {layer_id: `hazard-geo-${geo_i}`, pane: 'shadow'});
+                    relevant_map.moveLayerToBack(geolay);
                 });
             }
         }
@@ -569,7 +570,12 @@ function getHazardInfo() {
         var target_hazards = hazard_info.filter(d => d.hazard_type == getHazard() && 
                             d.slr == getSLR() && 
                             (d.hazard_type != "inundation" || d.ari == getFrequency()) && 
-                            (d.hazard_type != "erosion" || d.year == getYear()));
+                            (d.hazard_type != "erosion" || d.year == getYear()) && 
+                            (!(getHazard() == "erosion" && getYear() == 2130 && getSLR() == 150) || 
+                                (sedimentValue == 'increased' && d.increased_sediment == 'TRUE') ||
+                                (sedimentValue == 'decreased' && d.decreased_sediment == 'TRUE') ||
+                                (sedimentValue == 'default' && d.increased_sediment == null && d.decreased_sediment == null)
+                            ));
 
         if (target_hazards.length > 1) {
             target_hazards.sort(function(a, b) {

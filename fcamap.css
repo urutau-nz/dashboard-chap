@@ -2553,6 +2553,9 @@ html .vl-multiselect .vl-select-head-item {
 .high-vulnerability {
   background-color: #ff0000;
 }
+.potential-vulnerability {
+  background-color: #fa74ff;
+}
 .unspecified-vulnerability {
   background-color: #666;
 }
