@@ -348,6 +348,29 @@ function mapToolAction(tool_i) {
 }
 
 function lineTool(relevant_map) {
-    relevant_map.dragging.disable();
-    var lineTraceMode = True;
+    console.log("Line Tool function called");
+    freezeMap(relevant_map);
+
+    var lineTraceMode = true;
+    console.log(relevant_map.map.dragging);
+}
+
+function exampleTool(relevant_map) {
+    unfreezeMap(relevant_map);
+}
+
+function freezeMap(relevant_map) {
+    //Disable zoom + pan
+    relevant_map.map.dragging.disable();
+    relevant_map.map.doubleClickZoom.disable();
+    relevant_map.map.scrollWheelZoom.disable();
+    relevant_map.map.touchZoom.disable();
+}
+
+function unfreezeMap(relevant_map) {
+    //Disable zoom + pan
+    relevant_map.map.dragging.enable();
+    relevant_map.map.doubleClickZoom.enable();
+    relevant_map.map.scrollWheelZoom.enable();
+    relevant_map.map.touchZoom.enable();
 }
