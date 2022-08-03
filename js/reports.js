@@ -582,7 +582,11 @@ function openAssetReport(asset_id) {
         report_map.removeLayer(report_map_asset_layer);
         
         report_relevant_instances = instances.filter(d => d.hazard_scenario == hazard_scenario && d.hazard_type == current_hazard);
-        
+        var exposed_asset_ids = report_relevant_instances.reduce((a, b) => {
+            a.push(b.asset_id);
+            return a;
+        }, []);
+
         // Update the vulnerability graphs to these instances
         var any_vulnerability_count = 0;
         var low_vulnerability_count = 0;
@@ -631,7 +635,10 @@ function openAssetReport(asset_id) {
                     hover: true,
                     hover_style: { radius: 12, weight: 8 },
                     onmouseover: reportMapOnMouseOver,
-                    filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; }
+                    filter: function(feature) { 
+                        return (feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all") &&
+                        exposed_asset_ids.includes(feature.properties.asset_id); 
+                    }
                 });
 
         } else {
@@ -648,7 +655,10 @@ function openAssetReport(asset_id) {
                     hover_style: { opacity: 1, weight: relevant_style.weight * 1.4, fillOpacity: 0.5},
                     not_hover_style: { opacity: 0.4, weight: relevant_style.weight * 0.6, fillOpacity: 0.1},
                     onmouseover: reportMapOnMouseOver,
-                    filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; }
+                    filter: function(feature) { 
+                        return (feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all") &&
+                        exposed_asset_ids.includes(feature.properties.asset_id); 
+                    }
                 });
         }
 

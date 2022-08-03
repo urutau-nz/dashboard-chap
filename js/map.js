@@ -484,7 +484,11 @@ function addLayerToMap(asset_id) {
         // Successfully loaded vulnerability data!
         
         map_relevant_instances[asset_id] = instances.filter(d => d.hazard_scenario == hazard_scenario && d.hazard_type == current_hazard);
-        
+        var exposed_asset_ids = map_relevant_instances[asset_id].reduce((a, b) => {
+            a.push(b.asset_id);
+            return a;
+        }, []);
+
         // Hide Loading in a bit
         setTimeout(hideLoading, 500);
 
@@ -498,7 +502,10 @@ function addLayerToMap(asset_id) {
                         hover: map_hover_info_type == "asset",
                         hover_style: { radius: 12, weight: 8 },
                         onmouseover: mapMapOnMouseOver,
-                        filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; },
+                        filter: function(feature) { 
+                            return (feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all") &&
+                                exposed_asset_ids.includes(feature.properties.asset_id); 
+                        },
                         properties: {
                             asset_key: asset_id
                         },
@@ -519,7 +526,10 @@ function addLayerToMap(asset_id) {
                         hover_style: { opacity: 1, weight: relevant_style.weight * 1.4, fillOpacity: 0.5},
                         //not_hover_style: { opacity: 0.4, weight: relevant_style.weight * 0.6, fillOpacity: 0.1},
                         onmouseover: mapMapOnMouseOver,
-                        filter: function(feature) { return feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all"; },
+                        filter: function(feature) { 
+                            return (feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all") &&
+                                exposed_asset_ids.includes(feature.properties.asset_id); 
+                        },
                         properties: {
                             asset_key: asset_id
                         }
@@ -550,12 +560,15 @@ function updateMapLayer(asset_id) {
         // Successfully loaded instances data!
                 
         map_relevant_instances[asset_id] = instances.filter(d => d.hazard_scenario == hazard_scenario && d.hazard_type == current_hazard);
+        var exposed_asset_ids = map_relevant_instances[asset_id].reduce((a, b) => {
+            a.push(b.asset_id);
+            return a;
+        }, []);
 
-        var settings = map_map.getSettings(layer_id);
-
-        if (settings.layer_type == 'topojson') {
-            map_map.applySettings(layer_id, (asset.type == 'polygon' ? mapMapTopoPolygonStyle : mapMapTopoPolylineStyle));
-        }
+        map_map.applySettings(layer_id, {filter: function(feature) { 
+            return (feature.properties.region == getCurrentRegionId() || getCurrentRegionId() == "all") &&
+                exposed_asset_ids.includes(feature.properties.asset_id); 
+        }});
     });
 }
 
